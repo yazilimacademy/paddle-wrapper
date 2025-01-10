@@ -1,6 +1,7 @@
 using Microsoft.OpenApi.Models;
 using PaddleWrapper.Core.Extensions;
 using System.Reflection;
+using System.Text.Json;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -44,6 +45,29 @@ builder.Services.AddLogging(logging =>
 });
 
 WebApplication app = builder.Build();
+
+// Global error handling
+app.Use(async (context, next) =>
+{
+    try
+    {
+        await next();
+    }
+    catch (Exception ex)
+    {
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        context.Response.ContentType = "application/json";
+
+        var response = new
+        {
+            success = false,
+            response = (string)null,
+            error = ex.Message
+        };
+
+        await context.Response.WriteAsync(JsonSerializer.Serialize(response));
+    }
+});
 
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())

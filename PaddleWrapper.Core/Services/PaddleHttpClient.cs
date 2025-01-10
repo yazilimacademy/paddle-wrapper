@@ -26,6 +26,8 @@ namespace PaddleWrapper.Core.Services
             {
                 _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_options.ApiKey}");
             }
+
+            _httpClient.DefaultRequestHeaders.Add("Paddle-Version", _options.ApiVersion);
         }
 
         public async Task<T> GetAsync<T>(string endpoint)
