@@ -29,7 +29,8 @@ namespace PaddleWrapper.Services
         public async Task<WebhookSettings[]> ListWebhookSettingsAsync(CancellationToken cancellationToken = default)
         {
             _logger.LogInformation("Retrieving webhook settings");
-            return await _client.GetAsync<WebhookSettings[]>("notification-settings", cancellationToken);
+            var response = await _client.GetAsync<WebhookResponse<WebhookSettings[]>>("notification-settings", cancellationToken);
+            return response.Data;
         }
 
         /// <summary>
@@ -38,7 +39,8 @@ namespace PaddleWrapper.Services
         public async Task<WebhookSettings> CreateWebhookSettingsAsync(WebhookSettings settings, CancellationToken cancellationToken = default)
         {
             _logger.LogInformation("Creating webhook settings");
-            return await _client.PostAsync<WebhookSettings, WebhookSettings>("notification-settings", settings, cancellationToken);
+            var response = await _client.PostAsync<WebhookSettings, WebhookResponse<WebhookSettings>>("notification-settings", settings, cancellationToken);
+            return response.Data;
         }
 
         /// <summary>
@@ -47,7 +49,8 @@ namespace PaddleWrapper.Services
         public async Task<WebhookSettings> UpdateWebhookSettingsAsync(string endpointId, WebhookSettings settings, CancellationToken cancellationToken = default)
         {
             _logger.LogInformation("Updating webhook settings with ID: {EndpointId}", endpointId);
-            return await _client.PatchAsync<WebhookSettings, WebhookSettings>($"notification-settings/{endpointId}", settings, cancellationToken);
+            var response = await _client.PatchAsync<WebhookSettings, WebhookResponse<WebhookSettings>>($"notification-settings/{endpointId}", settings, cancellationToken);
+            return response.Data;
         }
 
         /// <summary>

@@ -4,6 +4,10 @@ using PaddleWrapper.Events.Webhooks;
 using PaddleWrapper.Interfaces;
 using PaddleWrapper.Models.Webhooks;
 using PaddleWrapper.Services;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Xunit;
 
 namespace PaddleWrapper.Tests.Services
 {
@@ -24,23 +28,28 @@ namespace PaddleWrapper.Tests.Services
         public async Task ListWebhookSettingsAsync_ShouldReturnWebhookSettings()
         {
             // Arrange
-            WebhookSettings[] expectedSettings = new[]
+            var expectedSettings = new[]
             {
                 new WebhookSettings
                 {
+                    EndpointUrl = "https://api.example.com/webhooks",
                     Active = true,
                     ApiVersion = "1.0",
-                    EndpointUrl = "https://api.example.com/webhooks",
                     SubscribedEvents = new[] { "subscription.created", "subscription.updated" }
                 }
             };
 
+            var response = new WebhookResponse<WebhookSettings[]>
+            {
+                Data = expectedSettings
+            };
+
             _mockClient
-                .Setup(x => x.GetAsync<WebhookSettings[]>("notification-settings", It.IsAny<CancellationToken>()))
-                .ReturnsAsync(expectedSettings);
+                .Setup(x => x.GetAsync<WebhookResponse<WebhookSettings[]>>("notification-settings", It.IsAny<CancellationToken>()))
+                .ReturnsAsync(response);
 
             // Act
-            WebhookSettings[] result = await _service.ListWebhookSettingsAsync();
+            var result = await _service.ListWebhookSettingsAsync();
 
             // Assert
             Assert.NotNull(result);
@@ -55,20 +64,25 @@ namespace PaddleWrapper.Tests.Services
         public async Task CreateWebhookSettingsAsync_ShouldCreateAndReturnWebhookSettings()
         {
             // Arrange
-            WebhookSettings newSettings = new()
+            var newSettings = new WebhookSettings
             {
+                EndpointUrl = "https://api.example.com/webhooks",
                 Active = true,
                 ApiVersion = "1.0",
-                EndpointUrl = "https://api.example.com/webhooks",
                 SubscribedEvents = new[] { "subscription.created" }
             };
 
+            var response = new WebhookResponse<WebhookSettings>
+            {
+                Data = newSettings
+            };
+
             _mockClient
-                .Setup(x => x.PostAsync<WebhookSettings, WebhookSettings>("notification-settings", newSettings, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(newSettings);
+                .Setup(x => x.PostAsync<WebhookSettings, WebhookResponse<WebhookSettings>>("notification-settings", newSettings, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(response);
 
             // Act
-            WebhookSettings result = await _service.CreateWebhookSettingsAsync(newSettings);
+            var result = await _service.CreateWebhookSettingsAsync(newSettings);
 
             // Assert
             Assert.NotNull(result);
@@ -82,21 +96,26 @@ namespace PaddleWrapper.Tests.Services
         public async Task UpdateWebhookSettingsAsync_ShouldUpdateAndReturnWebhookSettings()
         {
             // Arrange
-            string endpointId = "whk_123";
-            WebhookSettings updatedSettings = new()
+            var endpointId = "whk_123";
+            var updatedSettings = new WebhookSettings
             {
+                EndpointUrl = "https://api.example.com/webhooks/updated",
                 Active = false,
                 ApiVersion = "1.1",
-                EndpointUrl = "https://api.example.com/webhooks/updated",
                 SubscribedEvents = new[] { "subscription.created", "subscription.canceled" }
             };
 
+            var response = new WebhookResponse<WebhookSettings>
+            {
+                Data = updatedSettings
+            };
+
             _mockClient
-                .Setup(x => x.PatchAsync<WebhookSettings, WebhookSettings>($"notification-settings/{endpointId}", updatedSettings, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(updatedSettings);
+                .Setup(x => x.PatchAsync<WebhookSettings, WebhookResponse<WebhookSettings>>($"notification-settings/{endpointId}", updatedSettings, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(response);
 
             // Act
-            WebhookSettings result = await _service.UpdateWebhookSettingsAsync(endpointId, updatedSettings);
+            var result = await _service.UpdateWebhookSettingsAsync(endpointId, updatedSettings);
 
             // Assert
             Assert.NotNull(result);
@@ -110,8 +129,8 @@ namespace PaddleWrapper.Tests.Services
         public async Task DeleteWebhookSettingsAsync_ShouldDeleteWebhookSettings()
         {
             // Arrange
-            string endpointId = "whk_123";
-            bool deleteCompleted = false;
+            var endpointId = "whk_123";
+            var deleteCompleted = false;
 
             _mockClient
                 .Setup(x => x.DeleteAsync($"notification-settings/{endpointId}", It.IsAny<CancellationToken>()))
@@ -130,11 +149,11 @@ namespace PaddleWrapper.Tests.Services
         public async Task WebhookEvent_ShouldDeserializeCorrectly()
         {
             // Arrange
-            WebhookEvent webhookEvent = new()
+            var webhookEvent = new WebhookEvent
             {
                 EventId = "evt_123",
-                OccurredAt = DateTime.UtcNow,
                 EventType = "subscription.created",
+                OccurredAt = DateTime.UtcNow,
                 Data = new { subscription_id = "sub_123" }
             };
 
