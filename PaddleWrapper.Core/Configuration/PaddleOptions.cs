@@ -6,8 +6,8 @@ namespace PaddleWrapper.Core.Configuration
         public string VendorId { get; set; }
         public string WebhookSecret { get; set; }
         public int TimeoutSeconds { get; set; } = 30;
+        public string BaseUrl { get; set; } = "https://api.paddle.com";
         public RetryOptions RetryOptions { get; set; } = new RetryOptions();
-        public string BaseUrl { get; set; } = "https://vendors.paddle.com/api/2.0";
         public CompressionOptions CompressionOptions { get; set; } = new CompressionOptions();
     }
 

@@ -7,7 +7,7 @@ namespace PaddleWrapper.Core.Services.Customers
     public class CustomerService : ICustomerService
     {
         private readonly PaddleHttpClient _httpClient;
-        private const string BaseEndpoint = "customer";
+        private const string BaseEndpoint = "customers";
 
         public CustomerService(PaddleHttpClient httpClient)
         {
