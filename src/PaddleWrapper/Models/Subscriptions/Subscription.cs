@@ -150,7 +150,7 @@ namespace PaddleWrapper.Models.Subscriptions
         /// Payment terms in days
         /// </summary>
         [JsonProperty("payment_terms")]
-        public int? PaymentTerms { get; set; }
+        public object PaymentTerms { get; set; }
 
         /// <summary>
         /// Purchase order number
