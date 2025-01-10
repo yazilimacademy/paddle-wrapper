@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
 using PaddleWrapper.Interfaces;
 using PaddleWrapper.Models.Webhooks;
+using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -39,7 +40,12 @@ namespace PaddleWrapper.Services
         public async Task<WebhookSettings> CreateWebhookSettingsAsync(WebhookSettings settings, CancellationToken cancellationToken = default)
         {
             _logger.LogInformation("Creating webhook settings");
-            var response = await _client.PostAsync<WebhookSettings, WebhookResponse<WebhookSettings>>("notification-settings", settings, cancellationToken);
+
+            // Validate settings
+            Validator.ValidateObject(settings, new ValidationContext(settings), validateAllProperties: true);
+
+            var request = new WebhookRequest { Data = settings };
+            var response = await _client.PostAsync<WebhookRequest, WebhookResponse<WebhookSettings>>("notification-settings", request, cancellationToken);
             return response.Data;
         }
 
@@ -49,7 +55,12 @@ namespace PaddleWrapper.Services
         public async Task<WebhookSettings> UpdateWebhookSettingsAsync(string endpointId, WebhookSettings settings, CancellationToken cancellationToken = default)
         {
             _logger.LogInformation("Updating webhook settings with ID: {EndpointId}", endpointId);
-            var response = await _client.PatchAsync<WebhookSettings, WebhookResponse<WebhookSettings>>($"notification-settings/{endpointId}", settings, cancellationToken);
+
+            // Validate settings
+            Validator.ValidateObject(settings, new ValidationContext(settings), validateAllProperties: true);
+
+            var request = new WebhookRequest { Data = settings };
+            var response = await _client.PatchAsync<WebhookRequest, WebhookResponse<WebhookSettings>>($"notification-settings/{endpointId}", request, cancellationToken);
             return response.Data;
         }
 

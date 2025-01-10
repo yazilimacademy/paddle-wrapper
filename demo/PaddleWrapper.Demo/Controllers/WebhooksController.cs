@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using PaddleWrapper.Events.Webhooks;
 using PaddleWrapper.Interfaces;
 using PaddleWrapper.Models.Webhooks;
+using System.Threading.Tasks;
 
 namespace PaddleWrapper.Demo.Controllers
 {
@@ -31,18 +32,28 @@ namespace PaddleWrapper.Demo.Controllers
         /// Creates a new webhook endpoint
         /// </summary>
         [HttpPost]
-        public async Task<ActionResult<WebhookSettings>> CreateWebhookSettings(WebhookSettings settings)
+        public async Task<ActionResult<WebhookSettings>> CreateWebhookSettings([FromBody] WebhookRequest request)
         {
-            return await _webhookService.CreateWebhookSettingsAsync(settings);
+            if (request?.Data == null)
+            {
+                return BadRequest(new { error = "Request data is required" });
+            }
+
+            return await _webhookService.CreateWebhookSettingsAsync(request.Data);
         }
 
         /// <summary>
         /// Updates an existing webhook endpoint
         /// </summary>
         [HttpPatch("{endpointId}")]
-        public async Task<ActionResult<WebhookSettings>> UpdateWebhookSettings(string endpointId, WebhookSettings settings)
+        public async Task<ActionResult<WebhookSettings>> UpdateWebhookSettings(string endpointId, [FromBody] WebhookRequest request)
         {
-            return await _webhookService.UpdateWebhookSettingsAsync(endpointId, settings);
+            if (request?.Data == null)
+            {
+                return BadRequest(new { error = "Request data is required" });
+            }
+
+            return await _webhookService.UpdateWebhookSettingsAsync(endpointId, request.Data);
         }
 
         /// <summary>
@@ -61,7 +72,7 @@ namespace PaddleWrapper.Demo.Controllers
         [HttpPost("receive")]
         public async Task<IActionResult> ReceiveWebhook([FromBody] WebhookEvent webhookEvent)
         {
-            _logger.LogInformation("Webhook event received: {EventType} with ID: {EventId}",
+            _logger.LogInformation("Webhook event received: {EventType} with ID: {EventId}", 
                 webhookEvent.EventType, webhookEvent.EventId);
 
             // Process based on event type

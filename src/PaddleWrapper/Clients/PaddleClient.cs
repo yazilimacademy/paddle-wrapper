@@ -107,7 +107,7 @@ namespace PaddleWrapper.Clients
                 {
                     string errorContent = await result.Content.ReadAsStringAsync();
                     _logger.LogError("Request failed with status {StatusCode}. Response: {Response}", result.StatusCode, errorContent);
-                    throw new PaddleException($"Request failed with status code {result.StatusCode}", result.StatusCode);
+                    throw new PaddleException($"Request failed with status code {result.StatusCode}. Response: {errorContent}", result.StatusCode);
                 }
                 return result;
             });

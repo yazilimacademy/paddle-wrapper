@@ -32,7 +32,9 @@ namespace PaddleWrapper.Tests.Services
             {
                 new WebhookSettings
                 {
-                    EndpointUrl = "https://api.example.com/webhooks",
+                    Type = "webhook",
+                    Description = "Test webhook endpoint",
+                    Destination = "https://api.example.com/webhooks",
                     Active = true,
                     ApiVersion = "1.0",
                     SubscribedEvents = new[] { "subscription.created", "subscription.updated" }
@@ -54,7 +56,7 @@ namespace PaddleWrapper.Tests.Services
             // Assert
             Assert.NotNull(result);
             Assert.Single(result);
-            Assert.Equal(expectedSettings[0].EndpointUrl, result[0].EndpointUrl);
+            Assert.Equal(expectedSettings[0].Destination, result[0].Destination);
             Assert.Equal(expectedSettings[0].Active, result[0].Active);
             Assert.Equal(expectedSettings[0].ApiVersion, result[0].ApiVersion);
             Assert.Equal(expectedSettings[0].SubscribedEvents, result[0].SubscribedEvents);
@@ -66,19 +68,19 @@ namespace PaddleWrapper.Tests.Services
             // Arrange
             var newSettings = new WebhookSettings
             {
-                EndpointUrl = "https://api.example.com/webhooks",
+                Type = "webhook",
+                Description = "Test webhook endpoint",
+                Destination = "https://api.example.com/webhooks",
                 Active = true,
                 ApiVersion = "1.0",
                 SubscribedEvents = new[] { "subscription.created" }
             };
 
-            var response = new WebhookResponse<WebhookSettings>
-            {
-                Data = newSettings
-            };
+            var request = new WebhookRequest { Data = newSettings };
+            var response = new WebhookResponse<WebhookSettings> { Data = newSettings };
 
             _mockClient
-                .Setup(x => x.PostAsync<WebhookSettings, WebhookResponse<WebhookSettings>>("notification-settings", newSettings, It.IsAny<CancellationToken>()))
+                .Setup(x => x.PostAsync<WebhookRequest, WebhookResponse<WebhookSettings>>("notification-settings", request, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(response);
 
             // Act
@@ -86,7 +88,7 @@ namespace PaddleWrapper.Tests.Services
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(newSettings.EndpointUrl, result.EndpointUrl);
+            Assert.Equal(newSettings.Destination, result.Destination);
             Assert.Equal(newSettings.Active, result.Active);
             Assert.Equal(newSettings.ApiVersion, result.ApiVersion);
             Assert.Equal(newSettings.SubscribedEvents, result.SubscribedEvents);
@@ -99,19 +101,19 @@ namespace PaddleWrapper.Tests.Services
             var endpointId = "whk_123";
             var updatedSettings = new WebhookSettings
             {
-                EndpointUrl = "https://api.example.com/webhooks/updated",
+                Type = "webhook",
+                Description = "Updated webhook endpoint",
+                Destination = "https://api.example.com/webhooks/updated",
                 Active = false,
                 ApiVersion = "1.1",
                 SubscribedEvents = new[] { "subscription.created", "subscription.canceled" }
             };
 
-            var response = new WebhookResponse<WebhookSettings>
-            {
-                Data = updatedSettings
-            };
+            var request = new WebhookRequest { Data = updatedSettings };
+            var response = new WebhookResponse<WebhookSettings> { Data = updatedSettings };
 
             _mockClient
-                .Setup(x => x.PatchAsync<WebhookSettings, WebhookResponse<WebhookSettings>>($"notification-settings/{endpointId}", updatedSettings, It.IsAny<CancellationToken>()))
+                .Setup(x => x.PatchAsync<WebhookRequest, WebhookResponse<WebhookSettings>>($"notification-settings/{endpointId}", request, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(response);
 
             // Act
@@ -119,7 +121,7 @@ namespace PaddleWrapper.Tests.Services
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(updatedSettings.EndpointUrl, result.EndpointUrl);
+            Assert.Equal(updatedSettings.Destination, result.Destination);
             Assert.Equal(updatedSettings.Active, result.Active);
             Assert.Equal(updatedSettings.ApiVersion, result.ApiVersion);
             Assert.Equal(updatedSettings.SubscribedEvents, result.SubscribedEvents);
