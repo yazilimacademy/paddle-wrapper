@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using PaddleWrapper.Clients;
 using PaddleWrapper.Configuration;
 using PaddleWrapper.Interfaces;
 using PaddleWrapper.Services;

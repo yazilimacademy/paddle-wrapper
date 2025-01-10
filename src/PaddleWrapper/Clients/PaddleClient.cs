@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PaddleWrapper.Services
+namespace PaddleWrapper.Clients
 {
     /// <summary>
     /// Implementation of the Paddle API client
