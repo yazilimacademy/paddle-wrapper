@@ -239,10 +239,3 @@ $RECYCLE.BIN/
 
 #React.JS
 .module-cache
-
-#Cursor
-.cursorrules
-.cursorignore
-
-#SDKs
-SDKs

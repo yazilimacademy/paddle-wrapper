@@ -1,182 +1,148 @@
-<div align="center">
-  <img src=".images/PaddleWrapper.png" alt="PaddleWrapper Logo" width="128"/>
-  <h2>PaddleWrapper</h2>
-  
-  🚀 A modern, powerful, and developer-friendly .NET SDK for Paddle API. Accelerate your development process with type-safe API design, comprehensive documentation, and rich feature set.
+# PaddleWrapper
 
-  [![NuGet](https://img.shields.io/nuget/v/PaddleWrapper.svg)](https://www.nuget.org/packages/PaddleWrapper/)
-  [![Downloads](https://img.shields.io/nuget/dt/PaddleWrapper.svg)](https://www.nuget.org/packages/PaddleWrapper/)
-  [![License](https://img.shields.io/github/license/yazilimacademy/paddle-wrapper.svg)](LICENSE)
-</div>
+PaddleWrapper, Paddle ödeme sistemi için .NET tabanlı bir istemci kütüphanesidir. Bu kütüphane, Paddle API'si ile kolay entegrasyon sağlar.
 
-## Features
+## Özellikler
 
-- ⚡ Async/await first design
-- 🛠️ Built with modern C# features
-- 🎯 Full support for Paddle API v2
-- 📝 Comprehensive XML documentation
-- 🌐 Supports both .NET Standard 2.0 and 2.1
-- 🔒 Type-safe API with full IntelliSense support
-- 📦 No external dependencies except System.Text.Json
+- ✨ Paddle API 2.0 desteği
+- 🚀 Async/await desteği
+- 💉 .NET Core DI entegrasyonu
+- 🔒 Tip güvenli modeller
+- 📝 Kapsamlı dokümantasyon
+- 🔄 Otomatik retry mekanizması
+- 🛡️ Circuit breaker pattern
+- 📡 Webhook desteği
+- 🧪 Kapsamlı unit testler
 
-## Installation
+## Kurulum
 
-Install via NuGet Package Manager:
+NuGet üzerinden paketi yükleyin:
 
 ```bash
-Install-Package PaddleWrapper
+dotnet add package PaddleWrapper.Core
 ```
 
-Or via .NET CLI:
+## Kullanım
 
-```bash
-dotnet add package PaddleWrapper
-```
-
-## Quick Start
+### 1. Servisleri Kaydetme
 
 ```csharp
-// Initialize the client
-var client = new PaddleClient("your-api-key");
-
-// List all products
-var products = await client.Products.ListAsync();
-
-// Get a specific product
-var product = await client.Products.GetAsync("prod_123");
-
-// Create a new customer
-var customer = await client.Customers.CreateAsync(new Customer 
+services.AddPaddleServices(options =>
 {
-    Email = "customer@example.com",
-    Name = "John Doe"
+    options.ApiKey = "YOUR_API_KEY";
+    options.VendorId = "YOUR_VENDOR_ID";
+    options.WebhookSecret = "YOUR_WEBHOOK_SECRET";
+    
+    // Retry ayarları (opsiyonel)
+    options.RetryOptions.MaxRetries = 3;
+    options.RetryOptions.CircuitBreakerThreshold = 5;
+    options.RetryOptions.CircuitBreakerDurationSeconds = 30;
 });
+```
 
-// Create a subscription
-var subscription = await client.Subscriptions.CreateAsync(new Subscription 
+### 2. Ürün İşlemleri
+
+```csharp
+public class ProductManager
 {
-    CustomerId = customer.Id,
-    Items = new[] 
+    private readonly IProductService _productService;
+
+    public ProductManager(IProductService productService)
     {
-        new SubscriptionItem 
-        {
-            PriceId = "pri_123",
-            Quantity = 1
-        }
+        _productService = productService;
     }
-});
-```
 
-## Supported APIs
-
-- ✅ Products API
-- ✅ Prices API
-- ✅ Customers API
-- ✅ Transactions API
-- ✅ Subscriptions API
-- ✅ Webhooks API
-- ✅ Notifications API
-- ✅ Discounts API
-- ✅ Addresses API
-- ✅ Businesses API
-
-## Detailed Usage Examples
-
-### Working with Products
-
-```csharp
-// List all products
-var products = await client.Products.ListAsync();
-
-// Get a specific product
-var product = await client.Products.GetAsync("prod_123");
-
-// Create a new product
-var newProduct = await client.Products.CreateAsync(new Product 
-{
-    Name = "My Product",
-    Description = "Product description"
-});
-
-// Update a product
-var updatedProduct = await client.Products.UpdateAsync("prod_123", product);
-```
-
-### Working with Subscriptions
-
-```csharp
-// Create a subscription
-var subscription = await client.Subscriptions.CreateAsync(new Subscription 
-{
-    CustomerId = "ctm_123",
-    Items = new[] 
+    public async Task<Product> GetProductAsync(int productId)
     {
-        new SubscriptionItem 
-        {
-            PriceId = "pri_123",
-            Quantity = 1
-        }
+        var response = await _productService.GetProductAsync(productId);
+        return response.Response;
     }
-});
 
-// Pause a subscription
-await client.Subscriptions.PauseAsync("sub_123");
-
-// Resume a subscription
-await client.Subscriptions.ResumeAsync("sub_123");
-
-// Cancel a subscription
-await client.Subscriptions.CancelAsync("sub_123");
-```
-
-### Error Handling
-
-```csharp
-try 
-{
-    var product = await client.Products.GetAsync("prod_123");
-} 
-catch (HttpRequestException ex) 
-{
-    // Handle API errors
-    Console.WriteLine($"API error: {ex.Message}");
+    public async Task<Product[]> ListProductsAsync()
+    {
+        var response = await _productService.ListProductsAsync();
+        return response.Response;
+    }
 }
 ```
 
-## Target Frameworks
+### 3. Webhook İşlemleri
 
-- .NET Standard 2.0
-- .NET Standard 2.1
+```csharp
+public class CustomWebhookHandler : WebhookHandler
+{
+    public CustomWebhookHandler(IOptions<PaddleOptions> options)
+        : base(options)
+    {
+    }
 
-This means the library can be used in:
-- .NET Core 2.0+
-- .NET 5+
-- .NET Framework 4.6.1+
-- Xamarin.iOS 10.14+
-- Xamarin.Mac 3.8+
-- Xamarin.Android 8.0+
-- Universal Windows Platform 10.0.16299+
-- Unity 2018.1+
+    protected override async Task HandlePaymentSucceededAsync(WebhookEvent webhookEvent)
+    {
+        // Başarılı ödeme işlemlerini burada yönetin
+        var paymentData = webhookEvent.Data;
+        await ProcessPaymentAsync(paymentData);
+    }
 
-## Contributing
+    protected override async Task HandleSubscriptionCreatedAsync(WebhookEvent webhookEvent)
+    {
+        // Yeni abonelik işlemlerini burada yönetin
+        var subscriptionData = webhookEvent.Data;
+        await ProcessSubscriptionAsync(subscriptionData);
+    }
+}
+```
 
-Contributions are welcome! Feel free to submit a Pull Request. Please read our [Contributing Guidelines](CONTRIBUTING.md) before submitting a PR.
+### 4. Hata Yönetimi
 
-## License
+```csharp
+try
+{
+    var product = await _productService.GetProductAsync(123);
+}
+catch (PaddleAuthenticationException ex)
+{
+    // API kimlik doğrulama hatası
+}
+catch (PaddleValidationException ex)
+{
+    // İstek doğrulama hatası
+}
+catch (PaddleApiException ex)
+{
+    // Genel API hatası
+    Console.WriteLine($"Error Code: {ex.ErrorCode}");
+    Console.WriteLine($"Error Type: {ex.ErrorType}");
+}
+```
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## Özellikler ve Limitler
 
-## Acknowledgments
+- **Retry Mekanizması**: Geçici hatalar için otomatik yeniden deneme
+- **Circuit Breaker**: Ardışık hataları izleme ve sistemi koruma
+- **Webhook Doğrulama**: HMAC-SHA256 ile webhook güvenliği
+- **Loglama**: Detaylı hata ve işlem logları
+- **Thread Safety**: Thread-safe implementasyon
 
-- Inspired by official Paddle SDKs for other languages
-- Thanks to Paddle for their excellent API documentation
+## Katkıda Bulunma
 
-## Support
+1. Fork edin
+2. Feature branch oluşturun (`git checkout -b feature/amazing-feature`)
+3. Değişikliklerinizi commit edin (`git commit -m 'Add some amazing feature'`)
+4. Branch'inizi push edin (`git push origin feature/amazing-feature`)
+5. Pull Request oluşturun
 
-If you encounter any issues or need help, please:
-1. Search in [existing issues](https://github.com/yazilimacademy/paddle-wrapper/issues)
-2. Create a new issue if your problem is not addressed yet
+## Test
 
-## Disclaimer
+Unit testleri çalıştırmak için:
 
-This is an unofficial SDK and is not affiliated with, maintained, authorized, endorsed or sponsored by Paddle.
+```bash
+dotnet test
+```
+
+## Lisans
+
+MIT
+
+## Destek
+
+Sorunlarınız için GitHub Issues kullanabilir veya doğrudan iletişime geçebilirsiniz.
