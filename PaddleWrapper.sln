@@ -7,13 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaddleWrapper.Core", "Paddl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaddleWrapper.Tests", "PaddleWrapper.Tests\PaddleWrapper.Tests.csproj", "{1FA08452-EEB6-4EB2-B5AA-00DB2358FAAA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaddleWrapper.Demo", "demo\PaddleWrapper.Demo\PaddleWrapper.Demo.csproj", "{ADEE4B88-98C3-5DB5-63ED-F9E3336D373E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{B7D079F8-2B6E-43FB-B01E-2FE430811710}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -24,5 +23,12 @@ Global
 		{1FA08452-EEB6-4EB2-B5AA-00DB2358FAAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1FA08452-EEB6-4EB2-B5AA-00DB2358FAAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1FA08452-EEB6-4EB2-B5AA-00DB2358FAAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADEE4B88-98C3-5DB5-63ED-F9E3336D373E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADEE4B88-98C3-5DB5-63ED-F9E3336D373E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADEE4B88-98C3-5DB5-63ED-F9E3336D373E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADEE4B88-98C3-5DB5-63ED-F9E3336D373E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
