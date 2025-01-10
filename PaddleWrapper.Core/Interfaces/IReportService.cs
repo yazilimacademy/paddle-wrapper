@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using PaddleWrapper.Core.Models;
 using PaddleWrapper.Core.Models.Report;
 
@@ -50,4 +48,4 @@ namespace PaddleWrapper.Core.Interfaces
         /// </summary>
         Task<PaddleResponse<Report>> CreateTransactionReportAsync(DateTime startDate, DateTime endDate, string groupBy = "day");
     }
-} 
+}

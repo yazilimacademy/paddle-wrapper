@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using PaddleWrapper.Core.Models;
 using PaddleWrapper.Core.Models.Subscription;
 
@@ -13,4 +12,4 @@ namespace PaddleWrapper.Core.Interfaces
         Task<PaddleResponse<Subscription>> PauseSubscriptionAsync(int subscriptionId);
         Task<PaddleResponse<Subscription>> ResumeSubscriptionAsync(int subscriptionId);
     }
-} 
+}

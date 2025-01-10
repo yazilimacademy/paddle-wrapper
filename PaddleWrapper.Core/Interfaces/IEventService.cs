@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using PaddleWrapper.Core.Models;
 using PaddleWrapper.Core.Models.Event;
 
@@ -49,4 +48,4 @@ namespace PaddleWrapper.Core.Interfaces
         /// </summary>
         Task<PaddleResponse<EventType[]>> GetEventTypesAsync();
     }
-} 
+}

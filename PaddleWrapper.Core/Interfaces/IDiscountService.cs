@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using PaddleWrapper.Core.Models;
 using PaddleWrapper.Core.Models.Discount;
 
@@ -39,4 +38,4 @@ namespace PaddleWrapper.Core.Interfaces
         /// </summary>
         Task<PaddleResponse<bool>> ValidateDiscountAsync(string code);
     }
-} 
+}

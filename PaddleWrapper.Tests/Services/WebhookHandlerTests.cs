@@ -1,11 +1,10 @@
-using System;
-using System.Text;
-using System.Security.Cryptography;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
 using Moq;
 using PaddleWrapper.Core.Configuration;
 using PaddleWrapper.Core.Services;
+using System.Security.Cryptography;
+using System.Text;
 using Xunit;
 
 namespace PaddleWrapper.Tests.Services
@@ -31,11 +30,11 @@ namespace PaddleWrapper.Tests.Services
         public void ValidateWebhookSignature_ValidSignature_ReturnsTrue()
         {
             // Arrange
-            var payload = "test_payload";
-            var signature = ComputeSignature(payload, _options.WebhookSecret);
+            string payload = "test_payload";
+            string signature = ComputeSignature(payload, _options.WebhookSecret);
 
             // Act
-            var result = _webhookHandler.ValidateWebhookSignature(payload, signature);
+            bool result = _webhookHandler.ValidateWebhookSignature(payload, signature);
 
             // Assert
             result.Should().BeTrue();
@@ -45,11 +44,11 @@ namespace PaddleWrapper.Tests.Services
         public void ValidateWebhookSignature_InvalidSignature_ReturnsFalse()
         {
             // Arrange
-            var payload = "test_payload";
-            var invalidSignature = "invalid_signature";
+            string payload = "test_payload";
+            string invalidSignature = "invalid_signature";
 
             // Act
-            var result = _webhookHandler.ValidateWebhookSignature(payload, invalidSignature);
+            bool result = _webhookHandler.ValidateWebhookSignature(payload, invalidSignature);
 
             // Assert
             result.Should().BeFalse();
@@ -60,11 +59,11 @@ namespace PaddleWrapper.Tests.Services
         {
             // Arrange
             _options.WebhookSecret = null;
-            var payload = "test_payload";
-            var signature = "some_signature";
+            string payload = "test_payload";
+            string signature = "some_signature";
 
             // Act & Assert
-            Assert.Throws<InvalidOperationException>(() => 
+            Assert.Throws<InvalidOperationException>(() =>
                 _webhookHandler.ValidateWebhookSignature(payload, signature));
         }
 
@@ -72,7 +71,7 @@ namespace PaddleWrapper.Tests.Services
         public void ParseWebhookEvent_ValidPayload_ReturnsEvent()
         {
             // Arrange
-            var payload = @"{
+            string payload = @"{
                 ""event_type"": ""subscription_created"",
                 ""event_id"": ""evt_123"",
                 ""occurred_at"": ""2023-01-01T12:00:00Z"",
@@ -80,7 +79,7 @@ namespace PaddleWrapper.Tests.Services
             }";
 
             // Act
-            var result = _webhookHandler.ParseWebhookEvent(payload);
+            Core.Models.Webhook.WebhookEvent result = _webhookHandler.ParseWebhookEvent(payload);
 
             // Assert
             result.Should().NotBeNull();
@@ -92,18 +91,18 @@ namespace PaddleWrapper.Tests.Services
         public void ParseWebhookEvent_InvalidPayload_ThrowsException()
         {
             // Arrange
-            var invalidPayload = "invalid_json";
+            string invalidPayload = "invalid_json";
 
             // Act & Assert
-            Assert.Throws<InvalidOperationException>(() => 
+            Assert.Throws<InvalidOperationException>(() =>
                 _webhookHandler.ParseWebhookEvent(invalidPayload));
         }
 
         private string ComputeSignature(string payload, string secret)
         {
-            using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(secret));
-            var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(payload));
+            using HMACSHA256 hmac = new(Encoding.UTF8.GetBytes(secret));
+            byte[] hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(payload));
             return BitConverter.ToString(hash).Replace("-", "").ToLower();
         }
     }
-} 
+}

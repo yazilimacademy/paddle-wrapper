@@ -1,6 +1,3 @@
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -36,20 +33,20 @@ namespace PaddleWrapper.Tests.Services
         public async Task GetEventAsync_ValidId_ReturnsEvent()
         {
             // Arrange
-            var expectedEvent = new Event 
-            { 
+            Event expectedEvent = new()
+            {
                 Id = "evt_123",
                 Type = "subscription.created",
                 OccurredAt = DateTime.UtcNow
             };
-            var expectedResponse = new PaddleResponse<Event> { Success = true, Response = expectedEvent };
+            PaddleResponse<Event> expectedResponse = new() { Success = true, Response = expectedEvent };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var eventService = new EventService(paddleHttpClient);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            EventService eventService = new(paddleHttpClient);
 
             // Act
-            var result = await eventService.GetEventAsync("evt_123");
+            PaddleResponse<Event> result = await eventService.GetEventAsync("evt_123");
 
             // Assert
             result.Should().NotBeNull();
@@ -64,19 +61,19 @@ namespace PaddleWrapper.Tests.Services
         public async Task ListEventsAsync_ReturnsEvents()
         {
             // Arrange
-            var expectedEvents = new[]
+            Event[] expectedEvents = new[]
             {
                 new Event { Id = "evt_123", Type = "subscription.created", OccurredAt = DateTime.UtcNow },
                 new Event { Id = "evt_124", Type = "payment.succeeded", OccurredAt = DateTime.UtcNow }
             };
-            var expectedResponse = new PaddleResponse<Event[]> { Success = true, Response = expectedEvents };
+            PaddleResponse<Event[]> expectedResponse = new() { Success = true, Response = expectedEvents };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var eventService = new EventService(paddleHttpClient);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            EventService eventService = new(paddleHttpClient);
 
             // Act
-            var result = await eventService.ListEventsAsync();
+            PaddleResponse<Event[]> result = await eventService.ListEventsAsync();
 
             // Assert
             result.Should().NotBeNull();
@@ -91,19 +88,19 @@ namespace PaddleWrapper.Tests.Services
         public async Task GetCustomerEventsAsync_ValidCustomerId_ReturnsCustomerEvents()
         {
             // Arrange
-            var expectedEvents = new[]
+            Event[] expectedEvents = new[]
             {
                 new Event { Id = "evt_123", Type = "customer.updated", OccurredAt = DateTime.UtcNow },
                 new Event { Id = "evt_124", Type = "customer.created", OccurredAt = DateTime.UtcNow }
             };
-            var expectedResponse = new PaddleResponse<Event[]> { Success = true, Response = expectedEvents };
+            PaddleResponse<Event[]> expectedResponse = new() { Success = true, Response = expectedEvents };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var eventService = new EventService(paddleHttpClient);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            EventService eventService = new(paddleHttpClient);
 
             // Act
-            var result = await eventService.GetCustomerEventsAsync("cus_123");
+            PaddleResponse<Event[]> result = await eventService.GetCustomerEventsAsync("cus_123");
 
             // Assert
             result.Should().NotBeNull();
@@ -118,14 +115,14 @@ namespace PaddleWrapper.Tests.Services
         public async Task RetryEventAsync_ValidEventId_ReturnsSuccess()
         {
             // Arrange
-            var expectedResponse = new PaddleResponse<bool> { Success = true, Response = true };
+            PaddleResponse<bool> expectedResponse = new() { Success = true, Response = true };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var eventService = new EventService(paddleHttpClient);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            EventService eventService = new(paddleHttpClient);
 
             // Act
-            var result = await eventService.RetryEventAsync("evt_123");
+            PaddleResponse<bool> result = await eventService.RetryEventAsync("evt_123");
 
             // Assert
             result.Should().NotBeNull();
@@ -137,14 +134,14 @@ namespace PaddleWrapper.Tests.Services
         public async Task MarkEventAsync_ValidEventIdAndStatus_ReturnsSuccess()
         {
             // Arrange
-            var expectedResponse = new PaddleResponse<bool> { Success = true, Response = true };
+            PaddleResponse<bool> expectedResponse = new() { Success = true, Response = true };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var eventService = new EventService(paddleHttpClient);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            EventService eventService = new(paddleHttpClient);
 
             // Act
-            var result = await eventService.MarkEventAsync("evt_123", "processed");
+            PaddleResponse<bool> result = await eventService.MarkEventAsync("evt_123", "processed");
 
             // Assert
             result.Should().NotBeNull();
@@ -152,4 +149,4 @@ namespace PaddleWrapper.Tests.Services
             result.Response.Should().BeTrue();
         }
     }
-} 
+}

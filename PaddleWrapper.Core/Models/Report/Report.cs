@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace PaddleWrapper.Core.Models.Report
 {
     /// <summary>
@@ -105,4 +102,4 @@ namespace PaddleWrapper.Core.Models.Report
         /// </summary>
         public string FileFormat { get; set; }
     }
-} 
+}

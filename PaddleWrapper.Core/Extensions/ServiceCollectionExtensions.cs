@@ -1,4 +1,3 @@
-using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using PaddleWrapper.Core.Configuration;
@@ -6,16 +5,16 @@ using PaddleWrapper.Core.Http;
 using PaddleWrapper.Core.Interfaces;
 using PaddleWrapper.Core.Models.Bulk;
 using PaddleWrapper.Core.Services;
+using PaddleWrapper.Core.Services.Adjustments;
 using PaddleWrapper.Core.Services.Bulk;
 using PaddleWrapper.Core.Services.Cache;
-using PaddleWrapper.Core.Services.Discounts;
 using PaddleWrapper.Core.Services.Customers;
-using PaddleWrapper.Core.Services.Adjustments;
+using PaddleWrapper.Core.Services.Discounts;
 using PaddleWrapper.Core.Services.Events;
 using PaddleWrapper.Core.Services.Notifications;
 using PaddleWrapper.Core.Services.Prices;
-using PaddleWrapper.Core.Services.Transactions;
 using PaddleWrapper.Core.Services.Reports;
+using PaddleWrapper.Core.Services.Transactions;
 
 namespace PaddleWrapper.Core.Extensions
 {
@@ -30,9 +29,9 @@ namespace PaddleWrapper.Core.Extensions
             services.AddMemoryCache();
             services.AddScoped<IPaddleCache, MemoryPaddleCache>();
 
-            var sp = services.BuildServiceProvider();
-            var logger = sp.GetRequiredService<IPaddleLogger>();
-            var options = sp.GetRequiredService<IOptions<PaddleOptions>>();
+            ServiceProvider sp = services.BuildServiceProvider();
+            IPaddleLogger logger = sp.GetRequiredService<IPaddleLogger>();
+            IOptions<PaddleOptions> options = sp.GetRequiredService<IOptions<PaddleOptions>>();
 
             services.AddHttpClient<PaddleHttpClient>()
                 .AddHttpMessageHandler(() => new CompressionHandler(logger, options))
@@ -56,8 +55,8 @@ namespace PaddleWrapper.Core.Extensions
 
             // Bulk işlem servisleri
             services.AddScoped(typeof(IBulkOperationHandler<,>), typeof(BulkOperationHandler<,>));
-            
+
             return services;
         }
     }
-} 
+}

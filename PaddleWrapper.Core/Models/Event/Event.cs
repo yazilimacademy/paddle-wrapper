@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace PaddleWrapper.Core.Models.Event
 {
     /// <summary>
@@ -99,4 +96,4 @@ namespace PaddleWrapper.Core.Models.Event
         /// </summary>
         public Dictionary<string, string> CustomFields { get; set; }
     }
-} 
+}

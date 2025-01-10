@@ -1,6 +1,3 @@
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -38,15 +35,15 @@ namespace PaddleWrapper.Tests.Services
         public async Task GetProductAsync_ValidId_ReturnsProduct()
         {
             // Arrange
-            var expectedProduct = new Product { Id = 1, Name = "Test Product" };
-            var expectedResponse = new PaddleResponse<Product> { Success = true, Response = expectedProduct };
+            Product expectedProduct = new() { Id = 1, Name = "Test Product" };
+            PaddleResponse<Product> expectedResponse = new() { Success = true, Response = expectedProduct };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var productService = new ProductService(paddleHttpClient, _cacheMock.Object, _loggerMock.Object);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            ProductService productService = new(paddleHttpClient, _cacheMock.Object, _loggerMock.Object);
 
             // Act
-            var result = await productService.GetProductAsync(1);
+            PaddleResponse<Product> result = await productService.GetProductAsync(1);
 
             // Assert
             result.Should().NotBeNull();
@@ -60,19 +57,19 @@ namespace PaddleWrapper.Tests.Services
         public async Task ListProductsAsync_ReturnsProducts()
         {
             // Arrange
-            var expectedProducts = new[]
+            Product[] expectedProducts = new[]
             {
                 new Product { Id = 1, Name = "Product 1" },
                 new Product { Id = 2, Name = "Product 2" }
             };
-            var expectedResponse = new PaddleResponse<Product[]> { Success = true, Response = expectedProducts };
+            PaddleResponse<Product[]> expectedResponse = new() { Success = true, Response = expectedProducts };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var productService = new ProductService(paddleHttpClient, _cacheMock.Object, _loggerMock.Object);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            ProductService productService = new(paddleHttpClient, _cacheMock.Object, _loggerMock.Object);
 
             // Act
-            var result = await productService.ListProductsAsync();
+            PaddleResponse<Product[]> result = await productService.ListProductsAsync();
 
             // Assert
             result.Should().NotBeNull();
@@ -87,19 +84,19 @@ namespace PaddleWrapper.Tests.Services
         public async Task CreateProductAsync_ValidProduct_ReturnsCreatedProduct()
         {
             // Arrange
-            var newProduct = new Product { Name = "New Product", BasePrice = 99.99m };
-            var expectedResponse = new PaddleResponse<Product>
+            Product newProduct = new() { Name = "New Product", BasePrice = 99.99m };
+            PaddleResponse<Product> expectedResponse = new()
             {
                 Success = true,
                 Response = new Product { Id = 1, Name = "New Product", BasePrice = 99.99m }
             };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var productService = new ProductService(paddleHttpClient, _cacheMock.Object, _loggerMock.Object);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            ProductService productService = new(paddleHttpClient, _cacheMock.Object, _loggerMock.Object);
 
             // Act
-            var result = await productService.CreateProductAsync(newProduct);
+            PaddleResponse<Product> result = await productService.CreateProductAsync(newProduct);
 
             // Assert
             result.Should().NotBeNull();
@@ -114,19 +111,19 @@ namespace PaddleWrapper.Tests.Services
         public async Task UpdateProductAsync_ValidProduct_ReturnsUpdatedProduct()
         {
             // Arrange
-            var updatedProduct = new Product { Id = 1, Name = "Updated Product", BasePrice = 149.99m };
-            var expectedResponse = new PaddleResponse<Product>
+            Product updatedProduct = new() { Id = 1, Name = "Updated Product", BasePrice = 149.99m };
+            PaddleResponse<Product> expectedResponse = new()
             {
                 Success = true,
                 Response = new Product { Id = 1, Name = "Updated Product", BasePrice = 149.99m }
             };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var productService = new ProductService(paddleHttpClient, _cacheMock.Object, _loggerMock.Object);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            ProductService productService = new(paddleHttpClient, _cacheMock.Object, _loggerMock.Object);
 
             // Act
-            var result = await productService.UpdateProductAsync(1, updatedProduct);
+            PaddleResponse<Product> result = await productService.UpdateProductAsync(1, updatedProduct);
 
             // Assert
             result.Should().NotBeNull();
@@ -137,4 +134,4 @@ namespace PaddleWrapper.Tests.Services
             result.Response.BasePrice.Should().Be(149.99m);
         }
     }
-} 
+}

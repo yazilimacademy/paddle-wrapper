@@ -1,4 +1,3 @@
-using System;
 using Newtonsoft.Json;
 
 namespace PaddleWrapper.Core.Models.Subscription
@@ -50,4 +49,4 @@ namespace PaddleWrapper.Core.Models.Subscription
         [JsonProperty("date")]
         public DateTime Date { get; set; }
     }
-} 
+}

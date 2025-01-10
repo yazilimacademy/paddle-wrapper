@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace PaddleWrapper.Core.Models.Price
 {
     /// <summary>
@@ -78,4 +75,4 @@ namespace PaddleWrapper.Core.Models.Price
         /// </summary>
         public DateTime UpdatedAt { get; set; }
     }
-} 
+}

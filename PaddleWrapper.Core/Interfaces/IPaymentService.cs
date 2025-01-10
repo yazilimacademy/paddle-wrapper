@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using PaddleWrapper.Core.Models;
 using PaddleWrapper.Core.Models.Payment;
 
@@ -12,4 +11,4 @@ namespace PaddleWrapper.Core.Interfaces
         Task<PaddleResponse<Payment>> RefundPaymentAsync(string paymentId, decimal? amount = null);
         Task<PaddleResponse<Payment[]>> ListRefundsAsync(string paymentId);
     }
-} 
+}

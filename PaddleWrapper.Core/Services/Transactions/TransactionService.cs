@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using PaddleWrapper.Core.Interfaces;
 using PaddleWrapper.Core.Models;
 using PaddleWrapper.Core.Models.Transaction;
@@ -57,4 +55,4 @@ namespace PaddleWrapper.Core.Services.Transactions
             return await _httpClient.PostAsync<PaddleResponse<Transaction>>($"{BaseEndpoint}/{transactionId}/metadata", new { metadata });
         }
     }
-} 
+}

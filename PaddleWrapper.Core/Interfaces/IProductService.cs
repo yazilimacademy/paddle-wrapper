@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using PaddleWrapper.Core.Models;
 using PaddleWrapper.Core.Models.Bulk;
 using PaddleWrapper.Core.Models.Product;
@@ -31,4 +29,4 @@ namespace PaddleWrapper.Core.Interfaces
             IEnumerable<Product> products,
             BulkOperationOptions options = null);
     }
-} 
+}

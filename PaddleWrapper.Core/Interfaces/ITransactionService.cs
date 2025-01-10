@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using PaddleWrapper.Core.Models;
 using PaddleWrapper.Core.Models.Transaction;
 
@@ -49,4 +48,4 @@ namespace PaddleWrapper.Core.Interfaces
         /// </summary>
         Task<PaddleResponse<Transaction>> UpdateTransactionMetadataAsync(string transactionId, Dictionary<string, string> metadata);
     }
-} 
+}

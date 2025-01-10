@@ -1,6 +1,3 @@
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -36,20 +33,20 @@ namespace PaddleWrapper.Tests.Services
         public async Task GetPriceAsync_ValidId_ReturnsPrice()
         {
             // Arrange
-            var expectedPrice = new Price 
-            { 
+            Price expectedPrice = new()
+            {
                 Id = "pri_123",
                 UnitPrice = 99.99m,
                 Currency = "USD"
             };
-            var expectedResponse = new PaddleResponse<Price> { Success = true, Response = expectedPrice };
+            PaddleResponse<Price> expectedResponse = new() { Success = true, Response = expectedPrice };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var priceService = new PriceService(paddleHttpClient);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            PriceService priceService = new(paddleHttpClient);
 
             // Act
-            var result = await priceService.GetPriceAsync("pri_123");
+            PaddleResponse<Price> result = await priceService.GetPriceAsync("pri_123");
 
             // Assert
             result.Should().NotBeNull();
@@ -64,28 +61,28 @@ namespace PaddleWrapper.Tests.Services
         public async Task CreatePriceAsync_ValidPrice_ReturnsCreatedPrice()
         {
             // Arrange
-            var newPrice = new Price 
-            { 
+            Price newPrice = new()
+            {
                 UnitPrice = 149.99m,
                 Currency = "EUR"
             };
-            var expectedResponse = new PaddleResponse<Price>
+            PaddleResponse<Price> expectedResponse = new()
             {
                 Success = true,
-                Response = new Price 
-                { 
+                Response = new Price
+                {
                     Id = "pri_123",
                     UnitPrice = 149.99m,
                     Currency = "EUR"
                 }
             };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var priceService = new PriceService(paddleHttpClient);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            PriceService priceService = new(paddleHttpClient);
 
             // Act
-            var result = await priceService.CreatePriceAsync(newPrice);
+            PaddleResponse<Price> result = await priceService.CreatePriceAsync(newPrice);
 
             // Assert
             result.Should().NotBeNull();
@@ -100,19 +97,19 @@ namespace PaddleWrapper.Tests.Services
         public async Task ListPricesAsync_ReturnsPrices()
         {
             // Arrange
-            var expectedPrices = new[]
+            Price[] expectedPrices = new[]
             {
                 new Price { Id = "pri_123", UnitPrice = 99.99m, Currency = "USD" },
                 new Price { Id = "pri_124", UnitPrice = 149.99m, Currency = "EUR" }
             };
-            var expectedResponse = new PaddleResponse<Price[]> { Success = true, Response = expectedPrices };
+            PaddleResponse<Price[]> expectedResponse = new() { Success = true, Response = expectedPrices };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var priceService = new PriceService(paddleHttpClient);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            PriceService priceService = new(paddleHttpClient);
 
             // Act
-            var result = await priceService.ListPricesAsync();
+            PaddleResponse<Price[]> result = await priceService.ListPricesAsync();
 
             // Assert
             result.Should().NotBeNull();
@@ -127,23 +124,23 @@ namespace PaddleWrapper.Tests.Services
         public async Task AddRegionalPricingAsync_ValidData_ReturnsUpdatedPrice()
         {
             // Arrange
-            var expectedResponse = new PaddleResponse<Price>
+            PaddleResponse<Price> expectedResponse = new()
             {
                 Success = true,
-                Response = new Price 
-                { 
+                Response = new Price
+                {
                     Id = "pri_123",
                     UnitPrice = 89.99m,
                     Currency = "GBP"
                 }
             };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var priceService = new PriceService(paddleHttpClient);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            PriceService priceService = new(paddleHttpClient);
 
             // Act
-            var result = await priceService.AddRegionalPricingAsync("pri_123", "GB", 89.99m);
+            PaddleResponse<Price> result = await priceService.AddRegionalPricingAsync("pri_123", "GB", 89.99m);
 
             // Assert
             result.Should().NotBeNull();
@@ -153,4 +150,4 @@ namespace PaddleWrapper.Tests.Services
             result.Response.Currency.Should().Be("GBP");
         }
     }
-} 
+}

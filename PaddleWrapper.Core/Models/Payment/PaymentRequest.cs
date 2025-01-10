@@ -40,4 +40,4 @@ namespace PaddleWrapper.Core.Models.Payment
         [JsonProperty("return_url")]
         public string ReturnUrl { get; set; }
     }
-} 
+}

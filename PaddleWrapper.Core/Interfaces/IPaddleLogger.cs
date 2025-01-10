@@ -1,5 +1,3 @@
-using System;
-
 namespace PaddleWrapper.Core.Interfaces
 {
     public interface IPaddleLogger
@@ -10,4 +8,4 @@ namespace PaddleWrapper.Core.Interfaces
         void LogError(string message, Exception exception = null);
         void LogCritical(string message, Exception exception = null);
     }
-} 
+}

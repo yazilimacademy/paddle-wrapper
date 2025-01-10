@@ -1,5 +1,3 @@
-using System;
-
 namespace PaddleWrapper.Core.Configuration
 {
     public class PaddleOptions
@@ -45,4 +43,4 @@ namespace PaddleWrapper.Core.Configuration
         /// </summary>
         public string[] SupportedEncodings { get; set; } = new[] { "gzip", "deflate" };
     }
-} 
+}

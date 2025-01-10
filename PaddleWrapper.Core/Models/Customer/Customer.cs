@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace PaddleWrapper.Core.Models.Customer
 {
     /// <summary>
@@ -79,4 +76,4 @@ namespace PaddleWrapper.Core.Models.Customer
         /// </summary>
         public string Currency { get; set; }
     }
-} 
+}

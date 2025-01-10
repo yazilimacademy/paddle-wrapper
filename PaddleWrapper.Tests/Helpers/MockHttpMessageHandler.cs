@@ -1,5 +1,5 @@
-using System.Net;
 using Newtonsoft.Json;
+using System.Net;
 
 namespace PaddleWrapper.Tests
 {
@@ -18,7 +18,7 @@ namespace PaddleWrapper.Tests
             HttpRequestMessage request,
             CancellationToken cancellationToken)
         {
-            var response = new HttpResponseMessage(_statusCode)
+            HttpResponseMessage response = new(_statusCode)
             {
                 Content = new StringContent(JsonConvert.SerializeObject(_response))
             };

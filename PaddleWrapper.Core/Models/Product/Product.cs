@@ -1,4 +1,3 @@
-using System;
 using Newtonsoft.Json;
 
 namespace PaddleWrapper.Core.Models.Product
@@ -29,4 +28,4 @@ namespace PaddleWrapper.Core.Models.Product
         [JsonProperty("updated_at")]
         public DateTime UpdatedAt { get; set; }
     }
-} 
+}

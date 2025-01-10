@@ -1,5 +1,3 @@
-using System;
-
 namespace PaddleWrapper.Core.Models.Discount
 {
     /// <summary>
@@ -72,4 +70,4 @@ namespace PaddleWrapper.Core.Models.Discount
         /// </summary>
         public DateTime UpdatedAt { get; set; }
     }
-} 
+}

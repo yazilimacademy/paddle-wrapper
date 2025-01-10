@@ -1,11 +1,9 @@
-using System;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using PaddleWrapper.Core.Configuration;
 using PaddleWrapper.Core.Models.Webhook;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace PaddleWrapper.Core.Services
 {
@@ -35,11 +33,13 @@ namespace PaddleWrapper.Core.Services
         public bool ValidateWebhookSignature(string payload, string signature)
         {
             if (string.IsNullOrEmpty(_options.WebhookSecret))
+            {
                 throw new InvalidOperationException("Webhook secret is not configured");
+            }
 
-            using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(_options.WebhookSecret));
-            var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(payload));
-            var computedSignature = BitConverter.ToString(computedHash).Replace("-", "").ToLower();
+            using HMACSHA256 hmac = new(Encoding.UTF8.GetBytes(_options.WebhookSecret));
+            byte[] computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(payload));
+            string computedSignature = BitConverter.ToString(computedHash).Replace("-", "").ToLower();
 
             return computedSignature == signature.ToLower();
         }
@@ -155,4 +155,4 @@ namespace PaddleWrapper.Core.Services
             return Task.CompletedTask;
         }
     }
-} 
+}

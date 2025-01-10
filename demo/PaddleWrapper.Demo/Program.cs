@@ -1,9 +1,8 @@
 using Microsoft.OpenApi.Models;
-using PaddleWrapper.Core.Configuration;
 using PaddleWrapper.Core.Extensions;
 using System.Reflection;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
 builder.Services.AddControllers()
@@ -26,8 +25,8 @@ builder.Services.AddSwaggerGen(c =>
     });
 
     // Include XML comments
-    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    string xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    string xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     c.IncludeXmlComments(xmlPath);
 });
 
@@ -44,7 +43,7 @@ builder.Services.AddLogging(logging =>
     logging.AddDebug();
 });
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
@@ -61,4 +60,4 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 
-app.Run(); 
+app.Run();

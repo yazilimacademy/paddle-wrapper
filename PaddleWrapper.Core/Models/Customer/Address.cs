@@ -1,5 +1,3 @@
-using System;
-
 namespace PaddleWrapper.Core.Models.Customer
 {
     /// <summary>
@@ -62,4 +60,4 @@ namespace PaddleWrapper.Core.Models.Customer
         /// </summary>
         public DateTime UpdatedAt { get; set; }
     }
-} 
+}

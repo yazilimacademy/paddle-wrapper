@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using PaddleWrapper.Core.Interfaces;
 using PaddleWrapper.Core.Models;
 using PaddleWrapper.Core.Models.Bulk;
@@ -42,14 +39,14 @@ namespace PaddleWrapper.Core.Services
         /// <exception cref="PaddleApiException">API isteği başarısız olduğunda fırlatılır.</exception>
         public async Task<PaddleResponse<Product>> GetProductAsync(int productId)
         {
-            var cacheKey = $"product_{productId}";
-            var cachedResponse = await _cache.GetAsync<PaddleResponse<Product>>(cacheKey);
+            string cacheKey = $"product_{productId}";
+            PaddleResponse<Product> cachedResponse = await _cache.GetAsync<PaddleResponse<Product>>(cacheKey);
             if (cachedResponse != null)
             {
                 return cachedResponse;
             }
 
-            var response = await _httpClient.GetAsync<PaddleResponse<Product>>($"{BaseEndpoint}/{productId}");
+            PaddleResponse<Product> response = await _httpClient.GetAsync<PaddleResponse<Product>>($"{BaseEndpoint}/{productId}");
             if (response.Success)
             {
                 await _cache.SetAsync(cacheKey, response, _defaultCacheTime);
@@ -66,7 +63,7 @@ namespace PaddleWrapper.Core.Services
         /// <exception cref="PaddleApiException">API isteği başarısız olduğunda fırlatılır.</exception>
         public async Task<PaddleResponse<Product>> UpdateProductAsync(int productId, Product product)
         {
-            var response = await _httpClient.PostAsync<PaddleResponse<Product>>($"{BaseEndpoint}/{productId}", product);
+            PaddleResponse<Product> response = await _httpClient.PostAsync<PaddleResponse<Product>>($"{BaseEndpoint}/{productId}", product);
             if (response.Success)
             {
                 await _cache.RemoveAsync($"product_{productId}");
@@ -82,14 +79,14 @@ namespace PaddleWrapper.Core.Services
         /// <exception cref="PaddleApiException">API isteği başarısız olduğunda fırlatılır.</exception>
         public async Task<PaddleResponse<Product[]>> ListProductsAsync()
         {
-            var cacheKey = "products_list";
-            var cachedResponse = await _cache.GetAsync<PaddleResponse<Product[]>>(cacheKey);
+            string cacheKey = "products_list";
+            PaddleResponse<Product[]> cachedResponse = await _cache.GetAsync<PaddleResponse<Product[]>>(cacheKey);
             if (cachedResponse != null)
             {
                 return cachedResponse;
             }
 
-            var response = await _httpClient.GetAsync<PaddleResponse<Product[]>>(BaseEndpoint);
+            PaddleResponse<Product[]> response = await _httpClient.GetAsync<PaddleResponse<Product[]>>(BaseEndpoint);
             if (response.Success)
             {
                 await _cache.SetAsync(cacheKey, response, _defaultCacheTime);
@@ -105,7 +102,7 @@ namespace PaddleWrapper.Core.Services
         /// <exception cref="PaddleApiException">API isteği başarısız olduğunda fırlatılır.</exception>
         public async Task<PaddleResponse<Product>> CreateProductAsync(Product product)
         {
-            var response = await _httpClient.PostAsync<PaddleResponse<Product>>(BaseEndpoint, product);
+            PaddleResponse<Product> response = await _httpClient.PostAsync<PaddleResponse<Product>>(BaseEndpoint, product);
             if (response.Success)
             {
                 await _cache.RemoveAsync("products_list");
@@ -118,10 +115,10 @@ namespace PaddleWrapper.Core.Services
             IEnumerable<Product> products,
             BulkOperationOptions options = null)
         {
-            var handler = new BulkOperationHandler<Product, Product>(
+            BulkOperationHandler<Product, Product> handler = new(
                 async product =>
                 {
-                    var response = await CreateProductAsync(product);
+                    PaddleResponse<Product> response = await CreateProductAsync(product);
                     if (!response.Success)
                     {
                         throw new Exception($"Failed to create product: {response.Error?.Message}");
@@ -130,7 +127,7 @@ namespace PaddleWrapper.Core.Services
                 },
                 _logger);
 
-            var result = await handler.ProcessAsync(products, options);
+            BulkOperationResult<Product> result = await handler.ProcessAsync(products, options);
 
             // Bulk işlem başarılı olduğunda cache'i temizle
             if (result.Success)
@@ -146,10 +143,10 @@ namespace PaddleWrapper.Core.Services
             IEnumerable<Product> products,
             BulkOperationOptions options = null)
         {
-            var handler = new BulkOperationHandler<Product, Product>(
+            BulkOperationHandler<Product, Product> handler = new(
                 async product =>
                 {
-                    var response = await UpdateProductAsync(product.Id, product);
+                    PaddleResponse<Product> response = await UpdateProductAsync(product.Id, product);
                     if (!response.Success)
                     {
                         throw new Exception($"Failed to update product {product.Id}: {response.Error?.Message}");
@@ -158,13 +155,13 @@ namespace PaddleWrapper.Core.Services
                 },
                 _logger);
 
-            var result = await handler.ProcessAsync(products, options);
+            BulkOperationResult<Product> result = await handler.ProcessAsync(products, options);
 
             // Bulk işlem başarılı olduğunda cache'i temizle
             if (result.Success)
             {
                 await _cache.RemoveAsync("products_list");
-                foreach (var product in products)
+                foreach (Product product in products)
                 {
                     await _cache.RemoveAsync($"product_{product.Id}");
                 }
@@ -173,4 +170,4 @@ namespace PaddleWrapper.Core.Services
             return result;
         }
     }
-} 
+}

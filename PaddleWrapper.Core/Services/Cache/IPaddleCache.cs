@@ -1,6 +1,3 @@
-using System;
-using System.Threading.Tasks;
-
 namespace PaddleWrapper.Core.Services.Cache
 {
     /// <summary>
@@ -31,4 +28,4 @@ namespace PaddleWrapper.Core.Services.Cache
         /// <param name="key">Silinecek verinin cache anahtarı.</param>
         Task RemoveAsync(string key);
     }
-} 
+}

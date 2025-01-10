@@ -1,6 +1,3 @@
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -36,20 +33,20 @@ namespace PaddleWrapper.Tests.Services
         public async Task GetCustomerAsync_ValidId_ReturnsCustomer()
         {
             // Arrange
-            var expectedCustomer = new Customer 
-            { 
-                Id = "cus_123", 
+            Customer expectedCustomer = new()
+            {
+                Id = "cus_123",
                 Email = "test@example.com",
                 Name = "Test Customer"
             };
-            var expectedResponse = new PaddleResponse<Customer> { Success = true, Response = expectedCustomer };
+            PaddleResponse<Customer> expectedResponse = new() { Success = true, Response = expectedCustomer };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var customerService = new CustomerService(paddleHttpClient);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            CustomerService customerService = new(paddleHttpClient);
 
             // Act
-            var result = await customerService.GetCustomerAsync("cus_123");
+            PaddleResponse<Customer> result = await customerService.GetCustomerAsync("cus_123");
 
             // Assert
             result.Should().NotBeNull();
@@ -64,28 +61,28 @@ namespace PaddleWrapper.Tests.Services
         public async Task CreateCustomerAsync_ValidCustomer_ReturnsCreatedCustomer()
         {
             // Arrange
-            var newCustomer = new Customer 
-            { 
+            Customer newCustomer = new()
+            {
                 Email = "new@example.com",
                 Name = "New Customer"
             };
-            var expectedResponse = new PaddleResponse<Customer>
+            PaddleResponse<Customer> expectedResponse = new()
             {
                 Success = true,
-                Response = new Customer 
-                { 
+                Response = new Customer
+                {
                     Id = "cus_123",
                     Email = "new@example.com",
                     Name = "New Customer"
                 }
             };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var customerService = new CustomerService(paddleHttpClient);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            CustomerService customerService = new(paddleHttpClient);
 
             // Act
-            var result = await customerService.CreateCustomerAsync(newCustomer);
+            PaddleResponse<Customer> result = await customerService.CreateCustomerAsync(newCustomer);
 
             // Assert
             result.Should().NotBeNull();
@@ -100,19 +97,19 @@ namespace PaddleWrapper.Tests.Services
         public async Task GetCustomerAddressesAsync_ValidCustomerId_ReturnsAddresses()
         {
             // Arrange
-            var expectedAddresses = new[]
+            Address[] expectedAddresses = new[]
             {
                 new Address { Id = "addr_123", CountryCode = "US" },
                 new Address { Id = "addr_124", CountryCode = "GB" }
             };
-            var expectedResponse = new PaddleResponse<Address[]> { Success = true, Response = expectedAddresses };
+            PaddleResponse<Address[]> expectedResponse = new() { Success = true, Response = expectedAddresses };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var customerService = new CustomerService(paddleHttpClient);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            CustomerService customerService = new(paddleHttpClient);
 
             // Act
-            var result = await customerService.GetCustomerAddressesAsync("cus_123");
+            PaddleResponse<Address[]> result = await customerService.GetCustomerAddressesAsync("cus_123");
 
             // Assert
             result.Should().NotBeNull();
@@ -127,20 +124,20 @@ namespace PaddleWrapper.Tests.Services
         public async Task GetCustomerBusinessAsync_ValidCustomerId_ReturnsBusiness()
         {
             // Arrange
-            var expectedBusiness = new Business 
-            { 
+            Business expectedBusiness = new()
+            {
                 Id = "biz_123",
                 Name = "Test Business",
                 TaxNumber = "123456789"
             };
-            var expectedResponse = new PaddleResponse<Business> { Success = true, Response = expectedBusiness };
+            PaddleResponse<Business> expectedResponse = new() { Success = true, Response = expectedBusiness };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var customerService = new CustomerService(paddleHttpClient);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            CustomerService customerService = new(paddleHttpClient);
 
             // Act
-            var result = await customerService.GetCustomerBusinessAsync("cus_123");
+            PaddleResponse<Business> result = await customerService.GetCustomerBusinessAsync("cus_123");
 
             // Assert
             result.Should().NotBeNull();
@@ -151,4 +148,4 @@ namespace PaddleWrapper.Tests.Services
             result.Response.TaxNumber.Should().Be("123456789");
         }
     }
-} 
+}

@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using PaddleWrapper.Core.Interfaces;
 using PaddleWrapper.Core.Models;
 using PaddleWrapper.Core.Models.Adjustment;
@@ -55,4 +54,4 @@ namespace PaddleWrapper.Core.Services.Adjustments
             return await _httpClient.PostAsync<PaddleResponse<Adjustment>>($"{BaseEndpoint}/{adjustmentId}/approve", null);
         }
     }
-} 
+}

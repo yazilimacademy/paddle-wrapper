@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using PaddleWrapper.Core.Models;
 using PaddleWrapper.Core.Models.Price;
 
@@ -49,4 +48,4 @@ namespace PaddleWrapper.Core.Interfaces
         /// </summary>
         Task<PaddleResponse<Price>> AddRegionalPricingAsync(string priceId, string countryCode, decimal amount);
     }
-} 
+}

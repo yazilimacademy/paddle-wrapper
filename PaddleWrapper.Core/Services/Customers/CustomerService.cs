@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using PaddleWrapper.Core.Interfaces;
 using PaddleWrapper.Core.Models;
 using PaddleWrapper.Core.Models.Customer;
@@ -65,4 +64,4 @@ namespace PaddleWrapper.Core.Services.Customers
             return await _httpClient.PostAsync<PaddleResponse<Business>>($"{BaseEndpoint}/{customerId}/business", business);
         }
     }
-} 
+}

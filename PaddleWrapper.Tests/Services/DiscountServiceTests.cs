@@ -1,6 +1,3 @@
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -36,21 +33,21 @@ namespace PaddleWrapper.Tests.Services
         public async Task GetDiscountAsync_ValidId_ReturnsDiscount()
         {
             // Arrange
-            var expectedDiscount = new Discount 
-            { 
+            Discount expectedDiscount = new()
+            {
                 Id = "disc_123",
                 Code = "TEST10",
                 Amount = 10,
                 Type = "percentage"
             };
-            var expectedResponse = new PaddleResponse<Discount> { Success = true, Response = expectedDiscount };
+            PaddleResponse<Discount> expectedResponse = new() { Success = true, Response = expectedDiscount };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var discountService = new DiscountService(paddleHttpClient);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            DiscountService discountService = new(paddleHttpClient);
 
             // Act
-            var result = await discountService.GetDiscountAsync("disc_123");
+            PaddleResponse<Discount> result = await discountService.GetDiscountAsync("disc_123");
 
             // Assert
             result.Should().NotBeNull();
@@ -66,17 +63,17 @@ namespace PaddleWrapper.Tests.Services
         public async Task CreateDiscountAsync_ValidDiscount_ReturnsCreatedDiscount()
         {
             // Arrange
-            var newDiscount = new Discount 
-            { 
+            Discount newDiscount = new()
+            {
                 Code = "NEW20",
                 Amount = 20,
                 Type = "percentage"
             };
-            var expectedResponse = new PaddleResponse<Discount>
+            PaddleResponse<Discount> expectedResponse = new()
             {
                 Success = true,
-                Response = new Discount 
-                { 
+                Response = new Discount
+                {
                     Id = "disc_123",
                     Code = "NEW20",
                     Amount = 20,
@@ -84,12 +81,12 @@ namespace PaddleWrapper.Tests.Services
                 }
             };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var discountService = new DiscountService(paddleHttpClient);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            DiscountService discountService = new(paddleHttpClient);
 
             // Act
-            var result = await discountService.CreateDiscountAsync(newDiscount);
+            PaddleResponse<Discount> result = await discountService.CreateDiscountAsync(newDiscount);
 
             // Assert
             result.Should().NotBeNull();
@@ -105,19 +102,19 @@ namespace PaddleWrapper.Tests.Services
         public async Task ListDiscountsAsync_ReturnsDiscounts()
         {
             // Arrange
-            var expectedDiscounts = new[]
+            Discount[] expectedDiscounts = new[]
             {
                 new Discount { Id = "disc_123", Code = "TEST10", Amount = 10, Type = "percentage" },
                 new Discount { Id = "disc_124", Code = "TEST20", Amount = 20, Type = "percentage" }
             };
-            var expectedResponse = new PaddleResponse<Discount[]> { Success = true, Response = expectedDiscounts };
+            PaddleResponse<Discount[]> expectedResponse = new() { Success = true, Response = expectedDiscounts };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var discountService = new DiscountService(paddleHttpClient);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            DiscountService discountService = new(paddleHttpClient);
 
             // Act
-            var result = await discountService.ListDiscountsAsync();
+            PaddleResponse<Discount[]> result = await discountService.ListDiscountsAsync();
 
             // Assert
             result.Should().NotBeNull();
@@ -132,14 +129,14 @@ namespace PaddleWrapper.Tests.Services
         public async Task ValidateDiscountAsync_ValidCode_ReturnsValidationResult()
         {
             // Arrange
-            var expectedResponse = new PaddleResponse<bool> { Success = true, Response = true };
+            PaddleResponse<bool> expectedResponse = new() { Success = true, Response = true };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var discountService = new DiscountService(paddleHttpClient);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            DiscountService discountService = new(paddleHttpClient);
 
             // Act
-            var result = await discountService.ValidateDiscountAsync("TEST10");
+            PaddleResponse<bool> result = await discountService.ValidateDiscountAsync("TEST10");
 
             // Assert
             result.Should().NotBeNull();
@@ -147,4 +144,4 @@ namespace PaddleWrapper.Tests.Services
             result.Response.Should().BeTrue();
         }
     }
-} 
+}

@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using PaddleWrapper.Core.Interfaces;
 using PaddleWrapper.Core.Models;
 using PaddleWrapper.Core.Models.Report;
-using System.Threading.Tasks;
 
 namespace PaddleWrapper.Demo.Controllers
 {
@@ -53,7 +51,7 @@ namespace PaddleWrapper.Demo.Controllers
         [HttpGet("{reportId}/download")]
         public async Task<IActionResult> DownloadReport(string reportId)
         {
-            var response = await _reportService.DownloadReportAsync(reportId);
+            PaddleResponse<byte[]> response = await _reportService.DownloadReportAsync(reportId);
             if (!response.Success)
             {
                 return BadRequest(response.Error);
@@ -61,4 +59,4 @@ namespace PaddleWrapper.Demo.Controllers
             return File(response.Response, "application/octet-stream", $"report_{reportId}.csv");
         }
     }
-} 
+}

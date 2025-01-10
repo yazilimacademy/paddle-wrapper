@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using PaddleWrapper.Core.Interfaces;
 using PaddleWrapper.Core.Models;
 using PaddleWrapper.Core.Models.Event;
@@ -55,4 +54,4 @@ namespace PaddleWrapper.Core.Services.Events
             return await _httpClient.GetAsync<PaddleResponse<EventType[]>>($"{BaseEndpoint}/types");
         }
     }
-} 
+}

@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using PaddleWrapper.Core.Interfaces;
 using PaddleWrapper.Core.Models;
 using PaddleWrapper.Core.Models.Subscription;
@@ -45,4 +44,4 @@ namespace PaddleWrapper.Core.Services
             return await _httpClient.PostAsync<PaddleResponse<Subscription>>($"{BaseEndpoint}/{subscriptionId}/resume", null);
         }
     }
-} 
+}

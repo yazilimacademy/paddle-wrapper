@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using PaddleWrapper.Core.Interfaces;
 using PaddleWrapper.Core.Models;
 using PaddleWrapper.Core.Models.Price;
@@ -55,4 +54,4 @@ namespace PaddleWrapper.Core.Services.Prices
             return await _httpClient.PostAsync<PaddleResponse<Price>>($"{BaseEndpoint}/{priceId}/regional", new { countryCode, amount });
         }
     }
-} 
+}

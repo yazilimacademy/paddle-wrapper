@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using PaddleWrapper.Core.Interfaces;
 using PaddleWrapper.Core.Models.Bulk;
 
@@ -33,8 +29,8 @@ namespace PaddleWrapper.Core.Services.Bulk
             BulkOperationOptions options = null)
         {
             options ??= new BulkOperationOptions();
-            var result = new BulkOperationResult<TOutput>();
-            var itemsList = items.ToList();
+            BulkOperationResult<TOutput> result = new();
+            List<TInput> itemsList = items.ToList();
             _totalItems = itemsList.Count;
             _processedItems = 0;
             _status = BulkOperationStatus.InProgress;
@@ -56,7 +52,7 @@ namespace PaddleWrapper.Core.Services.Bulk
                     {
                         try
                         {
-                            var output = await _processor(item.Item);
+                            TOutput? output = await _processor(item.Item);
                             return new { Success = true, Result = output, Error = default(BulkOperationError), Index = item.Index };
                         }
                         catch (Exception ex)
@@ -126,10 +122,16 @@ namespace PaddleWrapper.Core.Services.Bulk
         }
 
         /// <inheritdoc/>
-        public BulkOperationStatus GetStatus() => _status;
+        public BulkOperationStatus GetStatus()
+        {
+            return _status;
+        }
 
         /// <inheritdoc/>
-        public double GetProgress() => _progress;
+        public double GetProgress()
+        {
+            return _progress;
+        }
     }
 
     /// <summary>
@@ -147,4 +149,4 @@ namespace PaddleWrapper.Core.Services.Bulk
                 .SelectMany(group => group.Select(x => x.Task));
         }
     }
-} 
+}

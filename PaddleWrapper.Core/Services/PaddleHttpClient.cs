@@ -1,12 +1,9 @@
-using System;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using PaddleWrapper.Core.Configuration;
 using PaddleWrapper.Core.Exceptions;
 using PaddleWrapper.Core.Interfaces;
+using System.Net;
 
 namespace PaddleWrapper.Core.Services
 {
@@ -24,7 +21,7 @@ namespace PaddleWrapper.Core.Services
 
             _httpClient.BaseAddress = new Uri(_options.BaseUrl);
             _httpClient.Timeout = TimeSpan.FromSeconds(_options.TimeoutSeconds);
-            
+
             if (!string.IsNullOrEmpty(_options.ApiKey))
             {
                 _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_options.ApiKey}");
@@ -36,7 +33,7 @@ namespace PaddleWrapper.Core.Services
             try
             {
                 _logger.LogDebug($"Making GET request to {endpoint}");
-                var response = await _httpClient.GetAsync(endpoint);
+                HttpResponseMessage response = await _httpClient.GetAsync(endpoint);
                 return await HandleResponseAsync<T>(response);
             }
             catch (Exception ex) when (ex is not PaddleException)
@@ -51,8 +48,8 @@ namespace PaddleWrapper.Core.Services
             try
             {
                 _logger.LogDebug($"Making POST request to {endpoint}");
-                var content = data != null ? new StringContent(JsonConvert.SerializeObject(data)) : null;
-                var response = await _httpClient.PostAsync(endpoint, content);
+                StringContent? content = data != null ? new StringContent(JsonConvert.SerializeObject(data)) : null;
+                HttpResponseMessage response = await _httpClient.PostAsync(endpoint, content);
                 return await HandleResponseAsync<T>(response);
             }
             catch (Exception ex) when (ex is not PaddleException)
@@ -64,7 +61,7 @@ namespace PaddleWrapper.Core.Services
 
         private async Task<T> HandleResponseAsync<T>(HttpResponseMessage response)
         {
-            var content = await response.Content.ReadAsStringAsync();
+            string content = await response.Content.ReadAsStringAsync();
 
             if (response.IsSuccessStatusCode)
             {
@@ -82,23 +79,16 @@ namespace PaddleWrapper.Core.Services
 
             _logger.LogWarning($"Error response received: {content}");
 
-            switch (response.StatusCode)
+            throw response.StatusCode switch
             {
-                case HttpStatusCode.Unauthorized:
-                    throw new PaddleAuthenticationException("Invalid API credentials");
-
-                case HttpStatusCode.BadRequest:
-                    throw new PaddleValidationException("The request was invalid");
-
-                case HttpStatusCode.NotFound:
-                    throw new PaddleException("The requested resource was not found");
-
-                default:
-                    throw new PaddleApiException(
-                        $"API request failed with status code {(int)response.StatusCode}",
-                        (int)response.StatusCode,
-                        response.ReasonPhrase);
-            }
+                HttpStatusCode.Unauthorized => new PaddleAuthenticationException("Invalid API credentials"),
+                HttpStatusCode.BadRequest => new PaddleValidationException("The request was invalid"),
+                HttpStatusCode.NotFound => new PaddleException("The requested resource was not found"),
+                _ => new PaddleApiException(
+                                        $"API request failed with status code {(int)response.StatusCode}",
+                                        (int)response.StatusCode,
+                                        response.ReasonPhrase),
+            };
         }
     }
-} 
+}

@@ -16,4 +16,4 @@ namespace PaddleWrapper.Core.Models.Event
         [JsonProperty("available_versions")]
         public string[] AvailableVersions { get; set; }
     }
-} 
+}

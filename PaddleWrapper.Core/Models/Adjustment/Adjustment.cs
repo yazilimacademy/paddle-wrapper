@@ -1,5 +1,3 @@
-using System;
-
 namespace PaddleWrapper.Core.Models.Adjustment
 {
     /// <summary>
@@ -98,4 +96,4 @@ namespace PaddleWrapper.Core.Models.Adjustment
         /// </summary>
         public string Notes { get; set; }
     }
-} 
+}

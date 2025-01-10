@@ -1,6 +1,3 @@
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -36,19 +33,19 @@ namespace PaddleWrapper.Tests.Services
         public async Task GetNotificationSettingsAsync_ReturnsSettings()
         {
             // Arrange
-            var expectedSettings = new NotificationSettings 
-            { 
+            NotificationSettings expectedSettings = new()
+            {
                 WebhookUrl = "https://example.com/webhook",
                 WebhookStatus = new WebhookStatus { IsActive = true }
             };
-            var expectedResponse = new PaddleResponse<NotificationSettings> { Success = true, Response = expectedSettings };
+            PaddleResponse<NotificationSettings> expectedResponse = new() { Success = true, Response = expectedSettings };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var notificationService = new NotificationService(paddleHttpClient);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            NotificationService notificationService = new(paddleHttpClient);
 
             // Act
-            var result = await notificationService.GetNotificationSettingsAsync();
+            PaddleResponse<NotificationSettings> result = await notificationService.GetNotificationSettingsAsync();
 
             // Assert
             result.Should().NotBeNull();
@@ -62,19 +59,19 @@ namespace PaddleWrapper.Tests.Services
         public async Task UpdateNotificationSettingsAsync_ValidSettings_ReturnsUpdatedSettings()
         {
             // Arrange
-            var settings = new NotificationSettings 
-            { 
+            NotificationSettings settings = new()
+            {
                 WebhookUrl = "https://example.com/webhook",
                 WebhookStatus = new WebhookStatus { IsActive = true }
             };
-            var expectedResponse = new PaddleResponse<NotificationSettings> { Success = true, Response = settings };
+            PaddleResponse<NotificationSettings> expectedResponse = new() { Success = true, Response = settings };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var notificationService = new NotificationService(paddleHttpClient);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            NotificationService notificationService = new(paddleHttpClient);
 
             // Act
-            var result = await notificationService.UpdateNotificationSettingsAsync(settings);
+            PaddleResponse<NotificationSettings> result = await notificationService.UpdateNotificationSettingsAsync(settings);
 
             // Assert
             result.Should().NotBeNull();
@@ -88,19 +85,19 @@ namespace PaddleWrapper.Tests.Services
         public async Task TestWebhookAsync_ReturnsTestResult()
         {
             // Arrange
-            var expectedResult = new WebhookTestResult 
-            { 
+            WebhookTestResult expectedResult = new()
+            {
                 IsSuccess = true,
                 ErrorMessage = "Webhook test successful"
             };
-            var expectedResponse = new PaddleResponse<WebhookTestResult> { Success = true, Response = expectedResult };
+            PaddleResponse<WebhookTestResult> expectedResponse = new() { Success = true, Response = expectedResult };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var notificationService = new NotificationService(paddleHttpClient);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            NotificationService notificationService = new(paddleHttpClient);
 
             // Act
-            var result = await notificationService.TestWebhookAsync();
+            PaddleResponse<WebhookTestResult> result = await notificationService.TestWebhookAsync();
 
             // Assert
             result.Should().NotBeNull();
@@ -114,19 +111,19 @@ namespace PaddleWrapper.Tests.Services
         public async Task GetWebhookHistoryAsync_ReturnsHistory()
         {
             // Arrange
-            var expectedHistory = new[]
+            WebhookTestResult[] expectedHistory = new[]
             {
                 new WebhookTestResult { IsSuccess = true, ErrorMessage = "First webhook" },
                 new WebhookTestResult { IsSuccess = true, ErrorMessage = "Second webhook" }
             };
-            var expectedResponse = new PaddleResponse<WebhookTestResult[]> { Success = true, Response = expectedHistory };
+            PaddleResponse<WebhookTestResult[]> expectedResponse = new() { Success = true, Response = expectedHistory };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var notificationService = new NotificationService(paddleHttpClient);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            NotificationService notificationService = new(paddleHttpClient);
 
             // Act
-            var result = await notificationService.GetWebhookHistoryAsync();
+            PaddleResponse<WebhookTestResult[]> result = await notificationService.GetWebhookHistoryAsync();
 
             // Assert
             result.Should().NotBeNull();
@@ -139,14 +136,14 @@ namespace PaddleWrapper.Tests.Services
         public async Task RotateWebhookSecretAsync_ReturnsNewSecret()
         {
             // Arrange
-            var expectedResponse = new PaddleResponse<string> { Success = true, Response = "new_webhook_secret" };
+            PaddleResponse<string> expectedResponse = new() { Success = true, Response = "new_webhook_secret" };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var notificationService = new NotificationService(paddleHttpClient);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            NotificationService notificationService = new(paddleHttpClient);
 
             // Act
-            var result = await notificationService.RotateWebhookSecretAsync();
+            PaddleResponse<string> result = await notificationService.RotateWebhookSecretAsync();
 
             // Assert
             result.Should().NotBeNull();
@@ -154,4 +151,4 @@ namespace PaddleWrapper.Tests.Services
             result.Response.Should().Be("new_webhook_secret");
         }
     }
-} 
+}

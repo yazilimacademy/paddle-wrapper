@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using PaddleWrapper.Core.Interfaces;
 using PaddleWrapper.Core.Models;
 using PaddleWrapper.Core.Models.Payment;
@@ -22,7 +21,7 @@ namespace PaddleWrapper.Core.Services
 
         public async Task<PaddleResponse<Payment[]>> ListPaymentsAsync(int? userId = null)
         {
-            var endpoint = userId.HasValue ? $"{BaseEndpoint}/user/{userId}" : BaseEndpoint;
+            string endpoint = userId.HasValue ? $"{BaseEndpoint}/user/{userId}" : BaseEndpoint;
             return await _httpClient.GetAsync<PaddleResponse<Payment[]>>(endpoint);
         }
 
@@ -42,4 +41,4 @@ namespace PaddleWrapper.Core.Services
             return await _httpClient.GetAsync<PaddleResponse<Payment[]>>($"{BaseEndpoint}/{paymentId}/refunds");
         }
     }
-} 
+}

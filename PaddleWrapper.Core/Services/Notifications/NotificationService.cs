@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using PaddleWrapper.Core.Interfaces;
 using PaddleWrapper.Core.Models;
 using PaddleWrapper.Core.Models.Notification;
@@ -50,4 +49,4 @@ namespace PaddleWrapper.Core.Services.Notifications
             return await _httpClient.PostAsync<PaddleResponse<string>>($"{BaseEndpoint}/webhook/secret/rotate", null);
         }
     }
-} 
+}

@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using PaddleWrapper.Core.Models;
 using PaddleWrapper.Core.Models.Customer;
 
@@ -59,4 +58,4 @@ namespace PaddleWrapper.Core.Interfaces
         /// </summary>
         Task<PaddleResponse<Business>> UpdateCustomerBusinessAsync(string customerId, Business business);
     }
-} 
+}

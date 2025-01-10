@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace PaddleWrapper.Core.Models.Notification
 {
     /// <summary>
@@ -110,4 +107,4 @@ namespace PaddleWrapper.Core.Models.Notification
         /// </summary>
         public string ErrorMessage { get; set; }
     }
-} 
+}

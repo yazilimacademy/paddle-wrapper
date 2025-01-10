@@ -1,4 +1,3 @@
-using System;
 using Newtonsoft.Json;
 
 namespace PaddleWrapper.Core.Models.Payment
@@ -53,4 +52,4 @@ namespace PaddleWrapper.Core.Models.Payment
         [JsonProperty("postal_code")]
         public string PostalCode { get; set; }
     }
-} 
+}

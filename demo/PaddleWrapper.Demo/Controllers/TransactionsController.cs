@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using PaddleWrapper.Core.Interfaces;
 using PaddleWrapper.Core.Models;
 using PaddleWrapper.Core.Models.Transaction;
-using System.Threading.Tasks;
 
 namespace PaddleWrapper.Demo.Controllers
 {
@@ -71,7 +69,7 @@ namespace PaddleWrapper.Demo.Controllers
         [HttpGet("{transactionId}/invoice")]
         public async Task<IActionResult> GetTransactionInvoice(string transactionId)
         {
-            var response = await _transactionService.GetTransactionInvoiceAsync(transactionId);
+            PaddleResponse<byte[]> response = await _transactionService.GetTransactionInvoiceAsync(transactionId);
             if (!response.Success)
             {
                 return BadRequest(response.Error);
@@ -97,4 +95,4 @@ namespace PaddleWrapper.Demo.Controllers
             return await _transactionService.UpdateTransactionMetadataAsync(transactionId, metadata);
         }
     }
-} 
+}

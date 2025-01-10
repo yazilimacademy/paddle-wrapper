@@ -1,5 +1,3 @@
-using System;
-
 namespace PaddleWrapper.Core.Exceptions
 {
     public class PaddleException : Exception
@@ -49,9 +47,9 @@ namespace PaddleWrapper.Core.Exceptions
 
     public class PaddleApiException : PaddleException
     {
-        public PaddleApiException(string message, int errorCode, string errorType) 
+        public PaddleApiException(string message, int errorCode, string errorType)
             : base(message, errorCode, errorType)
         {
         }
     }
-} 
+}

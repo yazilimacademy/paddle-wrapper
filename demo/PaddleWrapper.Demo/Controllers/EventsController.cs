@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using PaddleWrapper.Core.Interfaces;
 using PaddleWrapper.Core.Models;
 using PaddleWrapper.Core.Models.Event;
-using System.Threading.Tasks;
 
 namespace PaddleWrapper.Demo.Controllers
 {
@@ -47,4 +45,4 @@ namespace PaddleWrapper.Demo.Controllers
             return await _eventService.GetEventTypesAsync();
         }
     }
-} 
+}

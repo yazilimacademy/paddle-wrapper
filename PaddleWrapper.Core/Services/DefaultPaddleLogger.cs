@@ -1,4 +1,3 @@
-using System;
 using Microsoft.Extensions.Logging;
 using PaddleWrapper.Core.Interfaces;
 
@@ -31,17 +30,25 @@ namespace PaddleWrapper.Core.Services
         public void LogError(string message, Exception exception = null)
         {
             if (exception != null)
+            {
                 _logger.LogError(exception, message);
+            }
             else
+            {
                 _logger.LogError(message);
+            }
         }
 
         public void LogCritical(string message, Exception exception = null)
         {
             if (exception != null)
+            {
                 _logger.LogCritical(exception, message);
+            }
             else
+            {
                 _logger.LogCritical(message);
+            }
         }
     }
-} 
+}

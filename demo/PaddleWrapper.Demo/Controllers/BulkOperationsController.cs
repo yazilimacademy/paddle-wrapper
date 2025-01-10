@@ -1,9 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using PaddleWrapper.Core.Interfaces;
-using PaddleWrapper.Core.Models;
 using PaddleWrapper.Core.Models.Bulk;
-using System.Threading.Tasks;
 
 namespace PaddleWrapper.Demo.Controllers
 {
@@ -44,7 +40,7 @@ namespace PaddleWrapper.Demo.Controllers
         [HttpPost]
         public async Task<ActionResult<BulkOperationResult<object>>> ProcessBulkOperation([FromBody] object[] items)
         {
-            var options = new BulkOperationOptions
+            BulkOperationOptions options = new()
             {
                 MaxDegreeOfParallelism = 5,
                 BatchSize = 100,
@@ -55,4 +51,4 @@ namespace PaddleWrapper.Demo.Controllers
             return await _bulkService.ProcessAsync(items, options);
         }
     }
-} 
+}

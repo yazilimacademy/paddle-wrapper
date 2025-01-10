@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace PaddleWrapper.Core.Models
@@ -23,4 +22,4 @@ namespace PaddleWrapper.Core.Models
         [JsonProperty("message")]
         public string Message { get; set; }
     }
-} 
+}

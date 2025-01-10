@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using PaddleWrapper.Core.Interfaces;
 using PaddleWrapper.Core.Models;
 using PaddleWrapper.Core.Models.Discount;
@@ -45,4 +44,4 @@ namespace PaddleWrapper.Core.Services.Discounts
             return await _httpClient.PostAsync<PaddleResponse<bool>>($"{BaseEndpoint}/validate", new { code });
         }
     }
-} 
+}

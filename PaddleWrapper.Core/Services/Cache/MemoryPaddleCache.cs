@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using PaddleWrapper.Core.Interfaces;
 
@@ -24,7 +22,7 @@ namespace PaddleWrapper.Core.Services.Cache
         {
             try
             {
-                var value = _cache.Get<T>(key);
+                T? value = _cache.Get<T>(key);
                 if (value != null)
                 {
                     _logger.LogDebug($"Cache hit for key: {key}");
@@ -47,7 +45,7 @@ namespace PaddleWrapper.Core.Services.Cache
         {
             try
             {
-                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
                     .SetSlidingExpiration(expirationTime)
                     .SetAbsoluteExpiration(DateTimeOffset.Now.Add(expirationTime.Add(TimeSpan.FromMinutes(5))))
                     .SetSize(1); // Her cache girişi 1 birim olarak sayılır
@@ -79,4 +77,4 @@ namespace PaddleWrapper.Core.Services.Cache
             }
         }
     }
-} 
+}

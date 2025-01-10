@@ -1,6 +1,4 @@
 using PaddleWrapper.Core.Models.Customer;
-using System;
-using System.Collections.Generic;
 
 namespace PaddleWrapper.Core.Models.Transaction
 {
@@ -130,4 +128,4 @@ namespace PaddleWrapper.Core.Models.Transaction
         /// </summary>
         public decimal TaxAmount { get; set; }
     }
-} 
+}

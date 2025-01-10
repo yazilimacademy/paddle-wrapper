@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
 namespace PaddleWrapper.Core.Models.Bulk
 {
     /// <summary>
@@ -124,4 +120,4 @@ namespace PaddleWrapper.Core.Models.Bulk
         /// </summary>
         double GetProgress();
     }
-} 
+}

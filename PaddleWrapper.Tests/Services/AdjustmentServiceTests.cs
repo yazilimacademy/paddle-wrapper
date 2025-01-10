@@ -1,6 +1,3 @@
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -36,15 +33,15 @@ namespace PaddleWrapper.Tests.Services
         public async Task GetAdjustmentAsync_ValidId_ReturnsAdjustment()
         {
             // Arrange
-            var expectedAdjustment = new Adjustment { Id = "adj_123", Amount = 100.00m };
-            var expectedResponse = new PaddleResponse<Adjustment> { Success = true, Response = expectedAdjustment };
+            Adjustment expectedAdjustment = new() { Id = "adj_123", Amount = 100.00m };
+            PaddleResponse<Adjustment> expectedResponse = new() { Success = true, Response = expectedAdjustment };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var adjustmentService = new AdjustmentService(paddleHttpClient);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            AdjustmentService adjustmentService = new(paddleHttpClient);
 
             // Act
-            var result = await adjustmentService.GetAdjustmentAsync("adj_123");
+            PaddleResponse<Adjustment> result = await adjustmentService.GetAdjustmentAsync("adj_123");
 
             // Assert
             result.Should().NotBeNull();
@@ -58,19 +55,19 @@ namespace PaddleWrapper.Tests.Services
         public async Task CreateAdjustmentAsync_ValidAdjustment_ReturnsCreatedAdjustment()
         {
             // Arrange
-            var newAdjustment = new Adjustment { Amount = 50.00m };
-            var expectedResponse = new PaddleResponse<Adjustment>
+            Adjustment newAdjustment = new() { Amount = 50.00m };
+            PaddleResponse<Adjustment> expectedResponse = new()
             {
                 Success = true,
                 Response = new Adjustment { Id = "adj_123", Amount = 50.00m }
             };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var adjustmentService = new AdjustmentService(paddleHttpClient);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            AdjustmentService adjustmentService = new(paddleHttpClient);
 
             // Act
-            var result = await adjustmentService.CreateAdjustmentAsync(newAdjustment);
+            PaddleResponse<Adjustment> result = await adjustmentService.CreateAdjustmentAsync(newAdjustment);
 
             // Assert
             result.Should().NotBeNull();
@@ -84,19 +81,19 @@ namespace PaddleWrapper.Tests.Services
         public async Task ListAdjustmentsAsync_ReturnsAdjustments()
         {
             // Arrange
-            var expectedAdjustments = new[]
+            Adjustment[] expectedAdjustments = new[]
             {
                 new Adjustment { Id = "adj_123", Amount = 100.00m },
                 new Adjustment { Id = "adj_124", Amount = 200.00m }
             };
-            var expectedResponse = new PaddleResponse<Adjustment[]> { Success = true, Response = expectedAdjustments };
+            PaddleResponse<Adjustment[]> expectedResponse = new() { Success = true, Response = expectedAdjustments };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var adjustmentService = new AdjustmentService(paddleHttpClient);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            AdjustmentService adjustmentService = new(paddleHttpClient);
 
             // Act
-            var result = await adjustmentService.ListAdjustmentsAsync();
+            PaddleResponse<Adjustment[]> result = await adjustmentService.ListAdjustmentsAsync();
 
             // Assert
             result.Should().NotBeNull();
@@ -111,14 +108,14 @@ namespace PaddleWrapper.Tests.Services
         public async Task CancelAdjustmentAsync_ValidId_ReturnsCancelledAdjustment()
         {
             // Arrange
-            var expectedResponse = new PaddleResponse<bool> { Success = true, Response = true };
+            PaddleResponse<bool> expectedResponse = new() { Success = true, Response = true };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var adjustmentService = new AdjustmentService(paddleHttpClient);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            AdjustmentService adjustmentService = new(paddleHttpClient);
 
             // Act
-            var result = await adjustmentService.CancelAdjustmentAsync("adj_123");
+            PaddleResponse<bool> result = await adjustmentService.CancelAdjustmentAsync("adj_123");
 
             // Assert
             result.Should().NotBeNull();
@@ -126,4 +123,4 @@ namespace PaddleWrapper.Tests.Services
             result.Response.Should().BeTrue();
         }
     }
-} 
+}

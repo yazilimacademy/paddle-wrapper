@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using PaddleWrapper.Core.Interfaces;
 using PaddleWrapper.Core.Models;
 using PaddleWrapper.Core.Models.Discount;
-using System.Threading.Tasks;
 
 namespace PaddleWrapper.Demo.Controllers
 {
@@ -62,7 +60,7 @@ namespace PaddleWrapper.Demo.Controllers
         [HttpDelete("{discountId}")]
         public async Task<IActionResult> DeleteDiscount(string discountId)
         {
-            var response = await _discountService.DeleteDiscountAsync(discountId);
+            PaddleResponse<bool> response = await _discountService.DeleteDiscountAsync(discountId);
             if (!response.Success)
             {
                 return BadRequest(response.Error);
@@ -70,4 +68,4 @@ namespace PaddleWrapper.Demo.Controllers
             return NoContent();
         }
     }
-} 
+}

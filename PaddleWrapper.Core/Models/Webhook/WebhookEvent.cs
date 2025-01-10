@@ -1,4 +1,3 @@
-using System;
 using Newtonsoft.Json;
 
 namespace PaddleWrapper.Core.Models.Webhook
@@ -36,4 +35,4 @@ namespace PaddleWrapper.Core.Models.Webhook
         public const string PaymentRefunded = "payment_refunded";
         public const string PaymentFailed = "payment_failed";
     }
-} 
+}

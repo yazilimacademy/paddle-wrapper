@@ -1,6 +1,3 @@
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -36,27 +33,27 @@ namespace PaddleWrapper.Tests.Services
         public async Task CreateReportAsync_ValidParameters_ReturnsReport()
         {
             // Arrange
-            var parameters = new ReportParameters
+            ReportParameters parameters = new()
             {
                 StartDate = DateTime.UtcNow.AddDays(-30),
                 EndDate = DateTime.UtcNow,
                 GroupBy = "day"
             };
-            var expectedReport = new Report 
-            { 
+            Report expectedReport = new()
+            {
                 Id = "rep_123",
                 Type = "revenue",
                 Status = "completed",
                 CreatedAt = DateTime.UtcNow
             };
-            var expectedResponse = new PaddleResponse<Report> { Success = true, Response = expectedReport };
+            PaddleResponse<Report> expectedResponse = new() { Success = true, Response = expectedReport };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var reportService = new ReportService(paddleHttpClient);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            ReportService reportService = new(paddleHttpClient);
 
             // Act
-            var result = await reportService.CreateReportAsync("revenue", parameters);
+            PaddleResponse<Report> result = await reportService.CreateReportAsync("revenue", parameters);
 
             // Assert
             result.Should().NotBeNull();
@@ -71,21 +68,21 @@ namespace PaddleWrapper.Tests.Services
         public async Task GetReportAsync_ValidId_ReturnsReport()
         {
             // Arrange
-            var expectedReport = new Report 
-            { 
+            Report expectedReport = new()
+            {
                 Id = "rep_123",
                 Type = "revenue",
                 Status = "completed",
                 CreatedAt = DateTime.UtcNow
             };
-            var expectedResponse = new PaddleResponse<Report> { Success = true, Response = expectedReport };
+            PaddleResponse<Report> expectedResponse = new() { Success = true, Response = expectedReport };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var reportService = new ReportService(paddleHttpClient);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            ReportService reportService = new(paddleHttpClient);
 
             // Act
-            var result = await reportService.GetReportAsync("rep_123");
+            PaddleResponse<Report> result = await reportService.GetReportAsync("rep_123");
 
             // Assert
             result.Should().NotBeNull();
@@ -100,19 +97,19 @@ namespace PaddleWrapper.Tests.Services
         public async Task ListReportsAsync_ReturnsReports()
         {
             // Arrange
-            var expectedReports = new[]
+            Report[] expectedReports = new[]
             {
                 new Report { Id = "rep_123", Type = "revenue", Status = "completed" },
                 new Report { Id = "rep_124", Type = "subscription", Status = "completed" }
             };
-            var expectedResponse = new PaddleResponse<Report[]> { Success = true, Response = expectedReports };
+            PaddleResponse<Report[]> expectedResponse = new() { Success = true, Response = expectedReports };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var reportService = new ReportService(paddleHttpClient);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            ReportService reportService = new(paddleHttpClient);
 
             // Act
-            var result = await reportService.ListReportsAsync();
+            PaddleResponse<Report[]> result = await reportService.ListReportsAsync();
 
             // Assert
             result.Should().NotBeNull();
@@ -127,15 +124,15 @@ namespace PaddleWrapper.Tests.Services
         public async Task DownloadReportAsync_ValidId_ReturnsReportData()
         {
             // Arrange
-            var expectedData = new byte[] { 1, 2, 3, 4, 5 };
-            var expectedResponse = new PaddleResponse<byte[]> { Success = true, Response = expectedData };
+            byte[] expectedData = new byte[] { 1, 2, 3, 4, 5 };
+            PaddleResponse<byte[]> expectedResponse = new() { Success = true, Response = expectedData };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var reportService = new ReportService(paddleHttpClient);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            ReportService reportService = new(paddleHttpClient);
 
             // Act
-            var result = await reportService.DownloadReportAsync("rep_123");
+            PaddleResponse<byte[]> result = await reportService.DownloadReportAsync("rep_123");
 
             // Assert
             result.Should().NotBeNull();
@@ -148,22 +145,22 @@ namespace PaddleWrapper.Tests.Services
         public async Task CreateRevenueReportAsync_ValidParameters_ReturnsReport()
         {
             // Arrange
-            var startDate = DateTime.UtcNow.AddDays(-30);
-            var endDate = DateTime.UtcNow;
-            var expectedReport = new Report 
-            { 
+            DateTime startDate = DateTime.UtcNow.AddDays(-30);
+            DateTime endDate = DateTime.UtcNow;
+            Report expectedReport = new()
+            {
                 Id = "rep_123",
                 Type = "revenue",
                 Status = "completed"
             };
-            var expectedResponse = new PaddleResponse<Report> { Success = true, Response = expectedReport };
+            PaddleResponse<Report> expectedResponse = new() { Success = true, Response = expectedReport };
 
-            var httpClient = new HttpClient(new MockHttpMessageHandler(expectedResponse));
-            var paddleHttpClient = new PaddleHttpClient(httpClient, _optionsMock.Object, _loggerMock.Object);
-            var reportService = new ReportService(paddleHttpClient);
+            HttpClient httpClient = new(new MockHttpMessageHandler(expectedResponse));
+            PaddleHttpClient paddleHttpClient = new(httpClient, _optionsMock.Object, _loggerMock.Object);
+            ReportService reportService = new(paddleHttpClient);
 
             // Act
-            var result = await reportService.CreateRevenueReportAsync(startDate, endDate);
+            PaddleResponse<Report> result = await reportService.CreateRevenueReportAsync(startDate, endDate);
 
             // Assert
             result.Should().NotBeNull();
@@ -173,4 +170,4 @@ namespace PaddleWrapper.Tests.Services
             result.Response.Status.Should().Be("completed");
         }
     }
-} 
+}

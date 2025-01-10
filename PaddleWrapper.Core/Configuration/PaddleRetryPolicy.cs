@@ -1,10 +1,8 @@
-using System;
-using System.Net;
-using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
+using PaddleWrapper.Core.Interfaces;
 using Polly;
 using Polly.Extensions.Http;
-using PaddleWrapper.Core.Interfaces;
+using System.Net;
 
 namespace PaddleWrapper.Core.Configuration
 {
@@ -58,4 +56,4 @@ namespace PaddleWrapper.Core.Configuration
                 .AddPolicyHandler(GetCircuitBreakerPolicy(logger));
         }
     }
-} 
+}
