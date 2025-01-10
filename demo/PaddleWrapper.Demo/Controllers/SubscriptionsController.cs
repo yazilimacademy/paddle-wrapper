@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PaddleWrapper.Interfaces;
-using PaddleWrapper.Services;
-using System.Threading.Tasks;
 
-namespace PaddleDemo.Api.Controllers
+namespace PaddleWrapperDemo.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -19,14 +17,14 @@ namespace PaddleDemo.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetSubscriptions()
         {
-            var result = await _subscriptionService.ListSubscriptionsAsync();
+            PaddleWrapper.Models.Common.PaddleResponse<List<PaddleWrapper.Models.Subscriptions.Subscription>> result = await _subscriptionService.ListSubscriptionsAsync();
             return Ok(result);
         }
 
         [HttpGet("{subscriptionId}")]
         public async Task<IActionResult> GetSubscription(string subscriptionId)
         {
-            var result = await _subscriptionService.GetSubscriptionAsync(subscriptionId);
+            PaddleWrapper.Models.Common.PaddleResponse<PaddleWrapper.Models.Subscriptions.Subscription> result = await _subscriptionService.GetSubscriptionAsync(subscriptionId);
             return Ok(result);
         }
     }

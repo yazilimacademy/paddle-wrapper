@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PaddleWrapper.Interfaces;
-using System.Threading.Tasks;
 
-namespace PaddleDemo.Api.Controllers
+namespace PaddleWrapperDemo.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -18,14 +17,14 @@ namespace PaddleDemo.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetPrices()
         {
-            var result = await _priceService.ListPricesAsync();
+            PaddleWrapper.Models.Common.PaddleResponse<List<PaddleWrapper.Models.Prices.Price>> result = await _priceService.ListPricesAsync();
             return Ok(result);
         }
 
         [HttpGet("products/{productId}")]
         public async Task<IActionResult> GetProductPrices(string productId)
         {
-            var result = await _priceService.ListProductPricesAsync(productId);
+            PaddleWrapper.Models.Common.PaddleResponse<List<PaddleWrapper.Models.Prices.Price>> result = await _priceService.ListProductPricesAsync(productId);
             return Ok(result);
         }
     }

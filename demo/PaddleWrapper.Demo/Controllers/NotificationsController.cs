@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PaddleWrapper.Interfaces;
-using System.Threading.Tasks;
 
-namespace PaddleDemo.Api.Controllers
+namespace PaddleWrapperDemo.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -18,42 +17,42 @@ namespace PaddleDemo.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetNotifications()
         {
-            var result = await _notificationService.ListNotificationsAsync();
+            PaddleWrapper.Models.Common.PaddleResponse<List<PaddleWrapper.Models.Notifications.Notification>> result = await _notificationService.ListNotificationsAsync();
             return Ok(result);
         }
 
         [HttpGet("{notificationId}")]
         public async Task<IActionResult> GetNotification(string notificationId)
         {
-            var result = await _notificationService.GetNotificationAsync(notificationId);
+            PaddleWrapper.Models.Common.PaddleResponse<PaddleWrapper.Models.Notifications.Notification> result = await _notificationService.GetNotificationAsync(notificationId);
             return Ok(result);
         }
 
         [HttpGet("entities/{entityType}")]
         public async Task<IActionResult> GetEntityNotifications(string entityType)
         {
-            var result = await _notificationService.ListEntityNotificationsAsync(entityType);
+            PaddleWrapper.Models.Common.PaddleResponse<List<PaddleWrapper.Models.Notifications.Notification>> result = await _notificationService.ListEntityNotificationsAsync(entityType);
             return Ok(result);
         }
 
         [HttpGet("unread")]
         public async Task<IActionResult> GetUnreadNotifications()
         {
-            var result = await _notificationService.ListUnreadNotificationsAsync();
+            PaddleWrapper.Models.Common.PaddleResponse<List<PaddleWrapper.Models.Notifications.Notification>> result = await _notificationService.ListUnreadNotificationsAsync();
             return Ok(result);
         }
 
         [HttpPost("{notificationId}/mark-as-read")]
         public async Task<IActionResult> MarkAsRead(string notificationId)
         {
-            var result = await _notificationService.MarkAsReadAsync(notificationId);
+            PaddleWrapper.Models.Common.PaddleResponse<PaddleWrapper.Models.Notifications.Notification> result = await _notificationService.MarkAsReadAsync(notificationId);
             return Ok(result);
         }
 
         [HttpPost("mark-all-as-read")]
         public async Task<IActionResult> MarkAllAsRead()
         {
-            var result = await _notificationService.MarkAllAsReadAsync();
+            PaddleWrapper.Models.Common.PaddleResponse<List<PaddleWrapper.Models.Notifications.Notification>> result = await _notificationService.MarkAllAsReadAsync();
             return Ok(result);
         }
     }
