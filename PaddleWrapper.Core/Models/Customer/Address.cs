@@ -16,7 +16,7 @@ namespace PaddleWrapper.Core.Models.Customer
         public string Line1 { get; set; }
 
         /// <summary>
-        /// Adres satırı 2
+        /// Adres satırı 2 (isteğe bağlı)
         /// </summary>
         public string Line2 { get; set; }
 
@@ -26,7 +26,7 @@ namespace PaddleWrapper.Core.Models.Customer
         public string City { get; set; }
 
         /// <summary>
-        /// Eyalet/Bölge
+        /// Eyalet/Bölge/İlçe
         /// </summary>
         public string State { get; set; }
 
@@ -41,7 +41,7 @@ namespace PaddleWrapper.Core.Models.Customer
         public string CountryCode { get; set; }
 
         /// <summary>
-        /// Adres tipi (fatura, teslimat vb.)
+        /// Adres tipi (billing, shipping)
         /// </summary>
         public string Type { get; set; }
 
@@ -49,6 +49,16 @@ namespace PaddleWrapper.Core.Models.Customer
         /// Adresin varsayılan olup olmadığı
         /// </summary>
         public bool IsDefault { get; set; }
+
+        /// <summary>
+        /// Adres doğrulama durumu (verified, unverified)
+        /// </summary>
+        public string Status { get; set; }
+
+        /// <summary>
+        /// Adres için özel alanlar
+        /// </summary>
+        public Dictionary<string, string> CustomData { get; set; } = new Dictionary<string, string>();
 
         /// <summary>
         /// Adresin oluşturulma tarihi

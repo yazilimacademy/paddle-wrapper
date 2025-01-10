@@ -21,12 +21,17 @@ namespace PaddleWrapper.Core.Models.Customer
         public string Name { get; set; }
 
         /// <summary>
-        /// Müşterinin telefon numarası
+        /// Müşterinin telefon numarası (isteğe bağlı)
         /// </summary>
         public string PhoneNumber { get; set; }
 
         /// <summary>
-        /// Müşterinin adresleri
+        /// Müşterinin varsayılan adresi
+        /// </summary>
+        public Address DefaultAddress { get; set; }
+
+        /// <summary>
+        /// Müşterinin tüm adresleri
         /// </summary>
         public List<Address> Addresses { get; set; } = new List<Address>();
 
@@ -39,6 +44,11 @@ namespace PaddleWrapper.Core.Models.Customer
         /// Müşterinin özel alanları
         /// </summary>
         public Dictionary<string, string> CustomData { get; set; } = new Dictionary<string, string>();
+
+        /// <summary>
+        /// Müşterinin durumu (active, archived)
+        /// </summary>
+        public string Status { get; set; }
 
         /// <summary>
         /// Müşterinin oluşturulma tarihi
@@ -54,6 +64,11 @@ namespace PaddleWrapper.Core.Models.Customer
         /// Müşterinin lokalizasyon ayarları
         /// </summary>
         public CustomerLocale Locale { get; set; }
+
+        /// <summary>
+        /// Müşterinin vergi kimlik numarası
+        /// </summary>
+        public string TaxIdentifier { get; set; }
     }
 
     /// <summary>
@@ -62,17 +77,17 @@ namespace PaddleWrapper.Core.Models.Customer
     public class CustomerLocale
     {
         /// <summary>
-        /// Dil kodu
+        /// Dil kodu (ISO 639-1)
         /// </summary>
         public string Language { get; set; }
 
         /// <summary>
-        /// Ülke kodu
+        /// Ülke kodu (ISO 3166-1 alpha-2)
         /// </summary>
         public string Country { get; set; }
 
         /// <summary>
-        /// Para birimi
+        /// Para birimi (ISO 4217)
         /// </summary>
         public string Currency { get; set; }
     }
