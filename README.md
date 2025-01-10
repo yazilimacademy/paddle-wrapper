@@ -13,6 +13,24 @@ PaddleWrapper, Paddle ödeme sistemi için .NET tabanlı bir istemci kütüphane
 - 🛡️ Circuit breaker pattern
 - 📡 Webhook desteği
 - 🧪 Kapsamlı unit testler
+- 🗜️ HTTP sıkıştırma desteği
+- 💾 Cache mekanizması
+- 🔍 Detaylı loglama
+- 🌐 Çoklu para birimi desteği
+
+## Desteklenen Servisler
+
+- 📦 Ürün Yönetimi
+- 💰 Fiyatlandırma
+- 👥 Müşteri Yönetimi
+- 📅 Abonelik Yönetimi
+- 💳 Ödeme İşlemleri
+- 🎫 İndirim Kodları
+- 📊 Raporlama
+- 📢 Bildirimler
+- 📝 Ayarlamalar
+- 🔔 Olay Takibi
+- 📨 Webhook Yönetimi
 
 ## Kurulum
 
@@ -33,7 +51,12 @@ services.AddPaddleServices(options =>
     options.VendorId = "YOUR_VENDOR_ID";
     options.WebhookSecret = "YOUR_WEBHOOK_SECRET";
     
-    // Retry ayarları (opsiyonel)
+    // HTTP sıkıştırma ayarları
+    options.CompressionOptions.EnableRequestCompression = true;
+    options.CompressionOptions.EnableResponseCompression = true;
+    options.CompressionOptions.MinimumSizeToCompress = 1024;
+    
+    // Retry ayarları
     options.RetryOptions.MaxRetries = 3;
     options.RetryOptions.CircuitBreakerThreshold = 5;
     options.RetryOptions.CircuitBreakerDurationSeconds = 30;
@@ -66,7 +89,33 @@ public class ProductManager
 }
 ```
 
-### 3. Webhook İşlemleri
+### 3. Müşteri İşlemleri
+
+```csharp
+public class CustomerManager
+{
+    private readonly ICustomerService _customerService;
+
+    public CustomerManager(ICustomerService customerService)
+    {
+        _customerService = customerService;
+    }
+
+    public async Task<Customer> CreateCustomerAsync(Customer customer)
+    {
+        var response = await _customerService.CreateCustomerAsync(customer);
+        return response.Response;
+    }
+
+    public async Task<Customer> UpdateCustomerAsync(string customerId, Customer customer)
+    {
+        var response = await _customerService.UpdateCustomerAsync(customerId, customer);
+        return response.Response;
+    }
+}
+```
+
+### 4. Webhook İşlemleri
 
 ```csharp
 public class CustomWebhookHandler : WebhookHandler
@@ -92,7 +141,33 @@ public class CustomWebhookHandler : WebhookHandler
 }
 ```
 
-### 4. Hata Yönetimi
+### 5. Raporlama İşlemleri
+
+```csharp
+public class ReportManager
+{
+    private readonly IReportService _reportService;
+
+    public ReportManager(IReportService reportService)
+    {
+        _reportService = reportService;
+    }
+
+    public async Task<Report> CreateRevenueReportAsync(DateTime startDate, DateTime endDate)
+    {
+        var response = await _reportService.CreateRevenueReportAsync(startDate, endDate, "day");
+        return response.Response;
+    }
+
+    public async Task<byte[]> DownloadReportAsync(string reportId)
+    {
+        var response = await _reportService.DownloadReportAsync(reportId);
+        return response.Response;
+    }
+}
+```
+
+### 6. Hata Yönetimi
 
 ```csharp
 try
@@ -117,9 +192,12 @@ catch (PaddleApiException ex)
 
 ## Özellikler ve Limitler
 
+- **HTTP Sıkıştırma**: GZIP ve Deflate desteği
+- **Cache Mekanizması**: In-memory cache desteği
 - **Retry Mekanizması**: Geçici hatalar için otomatik yeniden deneme
 - **Circuit Breaker**: Ardışık hataları izleme ve sistemi koruma
 - **Webhook Doğrulama**: HMAC-SHA256 ile webhook güvenliği
+- **Bulk İşlemler**: Toplu işlem desteği
 - **Loglama**: Detaylı hata ve işlem logları
 - **Thread Safety**: Thread-safe implementasyon
 
