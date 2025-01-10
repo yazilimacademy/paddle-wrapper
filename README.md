@@ -1,8 +1,6 @@
 <div align="center">
   <img src=".images/PaddleWrapper.png" alt="PaddleWrapper Logo" width="128"/>
-  <br/>
   <h2>PaddleWrapper</h2>
-  <br/>
   
   🚀 A modern, powerful, and developer-friendly .NET SDK for Paddle API. Accelerate your development process with type-safe API design, comprehensive documentation, and rich feature set.
 
