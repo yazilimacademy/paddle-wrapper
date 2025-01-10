@@ -1,11 +1,13 @@
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PaddleWrapper.Core.Configuration;
 using PaddleWrapper.Core.Exceptions;
 using PaddleWrapper.Core.Interfaces;
 using System.Net;
 using System.IO;
 using System.IO.Compression;
+using PaddleWrapper.Core.Models;
 
 namespace PaddleWrapper.Core.Services
 {
@@ -67,25 +69,73 @@ namespace PaddleWrapper.Core.Services
 
         private async Task<T> HandleResponseAsync<T>(HttpResponseMessage response)
         {
-            var content = await DecompressResponseAsync(response);
-            _logger.LogDebug($"Raw API Response: {content}");
+            var contentEncoding = response.Content.Headers.ContentEncoding;
+            _logger.LogInformation($"Response Content-Encoding: {string.Join(", ", contentEncoding)}");
+
+            var content = await DecompressResponse(response);
+            _logger.LogInformation($"Decompressed API Response: {content}");
 
             if (response.IsSuccessStatusCode)
             {
                 try
                 {
-                    var settings = new JsonSerializerSettings 
-                    { 
-                        NullValueHandling = NullValueHandling.Ignore,
-                        MissingMemberHandling = MissingMemberHandling.Ignore
-                    };
-                    
-                    _logger.LogDebug($"Successful response received: {content}");
-                    return JsonConvert.DeserializeObject<T>(content, settings);
+                    // Paddle API yanıt formatını kontrol et
+                    if (content.Contains("\"data\":"))
+                    {
+                        var paddleResponse = JsonConvert.DeserializeObject<PaddleApiResponse>(content);
+                        var responseType = typeof(T).GetGenericArguments().FirstOrDefault();
+                        
+                        if (responseType != null)
+                        {
+                            if (typeof(T).GetGenericTypeDefinition() == typeof(PaddleResponse<>))
+                            {
+                                // Tek nesne mi dizi mi kontrol et
+                                var isArray = responseType.IsArray;
+                                var elementType = isArray ? responseType.GetElementType() : responseType;
+
+                                object convertedData;
+                                if (paddleResponse.Data is JArray dataArray)
+                                {
+                                    if (isArray)
+                                    {
+                                        // Diziyi dönüştür
+                                        var list = dataArray.Select(item => 
+                                            JsonConvert.DeserializeObject(item.ToString(), elementType)).ToList();
+                                        var array = Array.CreateInstance(elementType, list.Count);
+                                        list.CopyTo((object[])array);
+                                        convertedData = array;
+                                    }
+                                    else
+                                    {
+                                        // Tek nesneyi dönüştür (ilk eleman)
+                                        convertedData = JsonConvert.DeserializeObject(
+                                            dataArray.First().ToString(), elementType);
+                                    }
+                                }
+                                else
+                                {
+                                    // Tek nesne
+                                    convertedData = JsonConvert.DeserializeObject(
+                                        paddleResponse.Data.ToString(), elementType);
+                                }
+
+                                // Generic PaddleResponse oluştur
+                                var paddleResponseType = typeof(PaddleResponse<>).MakeGenericType(responseType);
+                                var result = Activator.CreateInstance(paddleResponseType);
+                                paddleResponseType.GetProperty("Success").SetValue(result, true);
+                                paddleResponseType.GetProperty("Response").SetValue(result, convertedData);
+                                paddleResponseType.GetProperty("Error").SetValue(result, null);
+
+                                return (T)result;
+                            }
+                        }
+                    }
+
+                    return JsonConvert.DeserializeObject<T>(content);
                 }
                 catch (JsonException ex)
                 {
-                    _logger.LogError($"Error deserializing response. Content: {content}", ex);
+                    _logger.LogError("Error deserializing response", ex);
                     throw new PaddleException("Failed to deserialize the response", ex);
                 }
             }
@@ -104,30 +154,25 @@ namespace PaddleWrapper.Core.Services
             };
         }
 
-        private async Task<string> DecompressResponseAsync(HttpResponseMessage response)
+        private async Task<string> DecompressResponse(HttpResponseMessage response)
         {
-            var contentEncoding = response.Content.Headers.ContentEncoding;
             var contentStream = await response.Content.ReadAsStreamAsync();
-
-            if (contentEncoding.Contains("gzip"))
+            
+            if (response.Content.Headers.ContentEncoding.Contains("gzip"))
             {
-                _logger.LogDebug("Decompressing gzip response");
                 using var gzipStream = new GZipStream(contentStream, CompressionMode.Decompress);
                 using var reader = new StreamReader(gzipStream);
                 return await reader.ReadToEndAsync();
             }
-            else if (contentEncoding.Contains("deflate"))
+            else if (response.Content.Headers.ContentEncoding.Contains("deflate"))
             {
-                _logger.LogDebug("Decompressing deflate response");
                 using var deflateStream = new DeflateStream(contentStream, CompressionMode.Decompress);
                 using var reader = new StreamReader(deflateStream);
                 return await reader.ReadToEndAsync();
             }
-            else
-            {
-                using var reader = new StreamReader(contentStream);
-                return await reader.ReadToEndAsync();
-            }
+
+            using var normalReader = new StreamReader(contentStream);
+            return await normalReader.ReadToEndAsync();
         }
     }
 }

@@ -1,7 +1,17 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace PaddleWrapper.Core.Models
 {
+    public class PaddleApiResponse
+    {
+        [JsonProperty("data")]
+        public JArray Data { get; set; }
+
+        [JsonProperty("meta")]
+        public JObject Meta { get; set; }
+    }
+
     public class PaddleResponse<T>
     {
         [JsonProperty("success")]
