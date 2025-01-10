@@ -79,4 +79,16 @@ namespace PaddleWrapper.Core.Models.Customer
         /// <summary>
         /// Dil kodu (ISO 639-1)
         /// </summary>
+        public string Language { get; set; }
+
+        /// <summary>
+        /// Ülke kodu (ISO 3166-1 alpha-2)
+        /// </summary>
+        public string Country { get; set; }
+
+        /// <summary>
+        /// Para birimi (ISO 4217)
+        /// </summary>
+        public string Currency { get; set; }
+    }
 }
