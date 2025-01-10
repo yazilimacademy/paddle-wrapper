@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PaddleWrapper.Core.Interfaces;
+using PaddleWrapper.Core.Models;
 using PaddleWrapper.Core.Models.Adjustment;
 using System.Threading.Tasks;
 
@@ -23,7 +24,7 @@ namespace PaddleWrapper.Demo.Controllers
         /// Lists all adjustments
         /// </summary>
         [HttpGet]
-        public async Task<ActionResult<AdjustmentResponse>> ListAdjustments()
+        public async Task<ActionResult<PaddleResponse<Adjustment[]>>> ListAdjustments()
         {
             return await _adjustmentService.ListAdjustmentsAsync();
         }
@@ -32,7 +33,7 @@ namespace PaddleWrapper.Demo.Controllers
         /// Gets a specific adjustment by ID
         /// </summary>
         [HttpGet("{adjustmentId}")]
-        public async Task<ActionResult<Adjustment>> GetAdjustment(string adjustmentId)
+        public async Task<ActionResult<PaddleResponse<Adjustment>>> GetAdjustment(string adjustmentId)
         {
             return await _adjustmentService.GetAdjustmentAsync(adjustmentId);
         }
@@ -41,18 +42,9 @@ namespace PaddleWrapper.Demo.Controllers
         /// Creates a new adjustment
         /// </summary>
         [HttpPost]
-        public async Task<ActionResult<Adjustment>> CreateAdjustment([FromBody] CreateAdjustmentRequest request)
+        public async Task<ActionResult<PaddleResponse<Adjustment>>> CreateAdjustment([FromBody] Adjustment adjustment)
         {
-            return await _adjustmentService.CreateAdjustmentAsync(request);
-        }
-
-        /// <summary>
-        /// Previews an adjustment
-        /// </summary>
-        [HttpPost("preview")]
-        public async Task<ActionResult<AdjustmentPreview>> PreviewAdjustment([FromBody] PreviewAdjustmentRequest request)
-        {
-            return await _adjustmentService.PreviewAdjustmentAsync(request);
+            return await _adjustmentService.CreateAdjustmentAsync(adjustment);
         }
     }
 } 
