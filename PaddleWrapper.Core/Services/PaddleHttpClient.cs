@@ -4,6 +4,8 @@ using PaddleWrapper.Core.Configuration;
 using PaddleWrapper.Core.Exceptions;
 using PaddleWrapper.Core.Interfaces;
 using System.Net;
+using System.IO;
+using System.IO.Compression;
 
 namespace PaddleWrapper.Core.Services
 {
@@ -50,7 +52,9 @@ namespace PaddleWrapper.Core.Services
             try
             {
                 _logger.LogDebug($"Making POST request to {endpoint}");
-                StringContent? content = data != null ? new StringContent(JsonConvert.SerializeObject(data)) : null;
+                StringContent? content = data != null 
+                    ? new StringContent(JsonConvert.SerializeObject(data), System.Text.Encoding.UTF8, "application/json") 
+                    : null;
                 HttpResponseMessage response = await _httpClient.PostAsync(endpoint, content);
                 return await HandleResponseAsync<T>(response);
             }
@@ -63,18 +67,25 @@ namespace PaddleWrapper.Core.Services
 
         private async Task<T> HandleResponseAsync<T>(HttpResponseMessage response)
         {
-            string content = await response.Content.ReadAsStringAsync();
+            var content = await DecompressResponseAsync(response);
+            _logger.LogDebug($"Raw API Response: {content}");
 
             if (response.IsSuccessStatusCode)
             {
                 try
                 {
+                    var settings = new JsonSerializerSettings 
+                    { 
+                        NullValueHandling = NullValueHandling.Ignore,
+                        MissingMemberHandling = MissingMemberHandling.Ignore
+                    };
+                    
                     _logger.LogDebug($"Successful response received: {content}");
-                    return JsonConvert.DeserializeObject<T>(content);
+                    return JsonConvert.DeserializeObject<T>(content, settings);
                 }
                 catch (JsonException ex)
                 {
-                    _logger.LogError("Error deserializing response", ex);
+                    _logger.LogError($"Error deserializing response. Content: {content}", ex);
                     throw new PaddleException("Failed to deserialize the response", ex);
                 }
             }
@@ -91,6 +102,32 @@ namespace PaddleWrapper.Core.Services
                                         (int)response.StatusCode,
                                         response.ReasonPhrase),
             };
+        }
+
+        private async Task<string> DecompressResponseAsync(HttpResponseMessage response)
+        {
+            var contentEncoding = response.Content.Headers.ContentEncoding;
+            var contentStream = await response.Content.ReadAsStreamAsync();
+
+            if (contentEncoding.Contains("gzip"))
+            {
+                _logger.LogDebug("Decompressing gzip response");
+                using var gzipStream = new GZipStream(contentStream, CompressionMode.Decompress);
+                using var reader = new StreamReader(gzipStream);
+                return await reader.ReadToEndAsync();
+            }
+            else if (contentEncoding.Contains("deflate"))
+            {
+                _logger.LogDebug("Decompressing deflate response");
+                using var deflateStream = new DeflateStream(contentStream, CompressionMode.Decompress);
+                using var reader = new StreamReader(deflateStream);
+                return await reader.ReadToEndAsync();
+            }
+            else
+            {
+                using var reader = new StreamReader(contentStream);
+                return await reader.ReadToEndAsync();
+            }
         }
     }
 }
