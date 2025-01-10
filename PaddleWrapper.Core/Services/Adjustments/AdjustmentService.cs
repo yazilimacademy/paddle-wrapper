@@ -7,7 +7,7 @@ namespace PaddleWrapper.Core.Services.Adjustments
     public class AdjustmentService : IAdjustmentService
     {
         private readonly PaddleHttpClient _httpClient;
-        private const string BaseEndpoint = "adjustment";
+        private const string BaseEndpoint = "adjustments";
 
         public AdjustmentService(PaddleHttpClient httpClient)
         {

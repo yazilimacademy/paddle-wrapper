@@ -53,12 +53,12 @@ namespace PaddleWrapper.Core.Models.Customer
         /// <summary>
         /// Müşterinin oluşturulma tarihi
         /// </summary>
-        public DateTime CreatedAt { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
 
         /// <summary>
         /// Müşterinin son güncelleme tarihi
         /// </summary>
-        public DateTime UpdatedAt { get; set; }
+        public DateTimeOffset UpdatedAt { get; set; }
 
         /// <summary>
         /// Müşterinin lokalizasyon ayarları
@@ -79,16 +79,4 @@ namespace PaddleWrapper.Core.Models.Customer
         /// <summary>
         /// Dil kodu (ISO 639-1)
         /// </summary>
-        public string Language { get; set; }
-
-        /// <summary>
-        /// Ülke kodu (ISO 3166-1 alpha-2)
-        /// </summary>
-        public string Country { get; set; }
-
-        /// <summary>
-        /// Para birimi (ISO 4217)
-        /// </summary>
-        public string Currency { get; set; }
-    }
 }

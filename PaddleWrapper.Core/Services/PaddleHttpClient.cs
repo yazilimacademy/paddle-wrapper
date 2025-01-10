@@ -79,64 +79,48 @@ namespace PaddleWrapper.Core.Services
             {
                 try
                 {
-                    // Paddle API yanıt formatını kontrol et
                     if (content.Contains("\"data\":"))
                     {
-                        var paddleResponse = JsonConvert.DeserializeObject<PaddleApiResponse>(content);
-                        var responseType = typeof(T).GetGenericArguments().FirstOrDefault();
-                        
-                        if (responseType != null)
+                        var tType = typeof(T);
+                        if (tType.IsGenericType && tType.GetGenericTypeDefinition() == typeof(PaddleResponse<>))
                         {
-                            if (typeof(T).GetGenericTypeDefinition() == typeof(PaddleResponse<>))
-                            {
-                                // Tek nesne mi dizi mi kontrol et
-                                var isArray = responseType.IsArray;
-                                var elementType = isArray ? responseType.GetElementType() : responseType;
+                            var innerType = tType.GetGenericArguments()[0];
+                            var paddleApiResponseType = typeof(PaddleApiResponse<>).MakeGenericType(innerType);
+                            var apiResponse = JsonConvert.DeserializeObject(content, paddleApiResponseType);
 
-                                object convertedData;
-                                if (paddleResponse.Data is JArray dataArray)
-                                {
-                                    if (isArray)
-                                    {
-                                        // Diziyi dönüştür
-                                        var list = dataArray.Select(item => 
-                                            JsonConvert.DeserializeObject(item.ToString(), elementType)).ToList();
-                                        var array = Array.CreateInstance(elementType, list.Count);
-                                        list.CopyTo((object[])array);
-                                        convertedData = array;
-                                    }
-                                    else
-                                    {
-                                        // Tek nesneyi dönüştür (ilk eleman)
-                                        convertedData = JsonConvert.DeserializeObject(
-                                            dataArray.First().ToString(), elementType);
-                                    }
-                                }
-                                else
-                                {
-                                    // Tek nesne
-                                    convertedData = JsonConvert.DeserializeObject(
-                                        paddleResponse.Data.ToString(), elementType);
-                                }
+                            var result = (T)Activator.CreateInstance(typeof(T));
+                            typeof(T).GetProperty("Success").SetValue(result, true);
+                            typeof(T).GetProperty("Response").SetValue(result, paddleApiResponseType.GetProperty("Data").GetValue(apiResponse));
+                            typeof(T).GetProperty("Error").SetValue(result, null);
 
-                                // Generic PaddleResponse oluştur
-                                var paddleResponseType = typeof(PaddleResponse<>).MakeGenericType(responseType);
-                                var result = Activator.CreateInstance(paddleResponseType);
-                                paddleResponseType.GetProperty("Success").SetValue(result, true);
-                                paddleResponseType.GetProperty("Response").SetValue(result, convertedData);
-                                paddleResponseType.GetProperty("Error").SetValue(result, null);
-
-                                return (T)result;
-                            }
+                            return result;
                         }
+                        
+                        var jObject = JObject.Parse(content);
+                        var dataToken = jObject["data"];
+
+                        if (typeof(T).IsArray)
+                        {
+                            var elementType = typeof(T).GetElementType();
+                            var array = Array.CreateInstance(elementType, dataToken.Count());
+                            
+                            for (int i = 0; i < dataToken.Count(); i++)
+                            {
+                                array.SetValue(dataToken[i].ToObject(elementType), i);
+                            }
+                            
+                            return (T)(object)array;
+                        }
+                        
+                        return dataToken.ToObject<T>();
                     }
 
                     return JsonConvert.DeserializeObject<T>(content);
                 }
-                catch (JsonException ex)
+                catch (Exception ex)
                 {
-                    _logger.LogError("Error deserializing response", ex);
-                    throw new PaddleException("Failed to deserialize the response", ex);
+                    _logger.LogError($"Error processing response: {ex.Message}", ex);
+                    throw new PaddleException("An error occurred while processing the response", ex);
                 }
             }
 

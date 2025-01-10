@@ -16,6 +16,11 @@ namespace PaddleWrapper.Core.Models.Adjustment
         public string Type { get; set; }
 
         /// <summary>
+        /// Ayarlama işlemi (ekleme, çıkarma vb.)
+        /// </summary>
+        public string Action { get; set; }
+
+        /// <summary>
         /// Ayarlama miktarı
         /// </summary>
         public decimal Amount { get; set; }
@@ -48,17 +53,17 @@ namespace PaddleWrapper.Core.Models.Adjustment
         /// <summary>
         /// Ayarlamanın oluşturulma tarihi
         /// </summary>
-        public DateTime CreatedAt { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
 
         /// <summary>
         /// Ayarlamanın son güncelleme tarihi
         /// </summary>
-        public DateTime UpdatedAt { get; set; }
+        public DateTimeOffset UpdatedAt { get; set; }
 
         /// <summary>
         /// Ayarlamanın uygulanma tarihi
         /// </summary>
-        public DateTime? AppliedAt { get; set; }
+        public DateTimeOffset? AppliedAt { get; set; }
 
         /// <summary>
         /// Ayarlamayı yapan kullanıcı ID'si
