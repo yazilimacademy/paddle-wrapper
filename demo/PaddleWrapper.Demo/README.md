@@ -4,16 +4,69 @@ This is a demonstration project showcasing the usage of the Paddle API Wrapper l
 
 ## Features
 
-- Subscription Management
-  - List all subscriptions
-  - Create new subscriptions
-  - Update existing subscriptions
-  - Cancel subscriptions
+### Product Management
+- List all products
+- Get product details
+- Create new products
+- Update existing products
+- Delete products
 
-- Notification Management (Webhooks)
-  - Configure notification endpoints
-  - Handle webhook events
-  - Process subscription-related notifications
+### Price Management
+- List all prices
+- Get price details
+- Create new prices
+- Update existing prices
+- Delete prices
+
+### Customer Management
+- List all customers
+- Get customer details
+- Create new customers
+- Update existing customers
+- Manage credit balances
+
+### Discount Management
+- List all discounts
+- Get discount details
+- Create new discounts
+- Update existing discounts
+- Delete discounts
+
+### Transaction Management
+- List all transactions
+- Get transaction details
+- Create new transactions
+- Update existing transactions
+- Preview transactions
+- Get transaction invoices
+
+### Report Management
+- List all reports
+- Get report details
+- Create new reports
+- Download reports
+
+### Event Management
+- List all events
+- Get event details
+- List event types
+
+### Adjustment Management
+- List all adjustments
+- Get adjustment details
+- Create new adjustments
+- Preview adjustments
+
+### Bulk Operations
+- Create bulk operations
+- Get bulk operation details
+- List bulk operations
+- Update bulk operations
+
+### Notification Management (Webhooks)
+- Configure notification endpoints
+- Handle webhook events
+- Process subscription-related notifications
 
 ## Getting Started
 
@@ -30,9 +83,22 @@ This is a demonstration project showcasing the usage of the Paddle API Wrapper l
 {
   "Paddle": {
     "ApiKey": "YOUR_API_KEY_HERE",
-    "Environment": "sandbox",
+    "VendorId": "YOUR_VENDOR_ID",
+    "WebhookSecret": "YOUR_WEBHOOK_SECRET",
     "TimeoutSeconds": 30,
-    "MaxRetryAttempts": 3
+    "BaseUrl": "https://vendors.paddle.com/api/2.0",
+    "RetryOptions": {
+      "MaxRetries": 3,
+      "CircuitBreakerThreshold": 5,
+      "EnableCircuitBreaker": true,
+      "CircuitBreakerDurationSeconds": 30
+    },
+    "CompressionOptions": {
+      "EnableRequestCompression": true,
+      "EnableResponseCompression": true,
+      "MinimumSizeToCompress": 1024,
+      "SupportedEncodings": ["gzip", "deflate"]
+    }
   }
 }
 ```
@@ -51,46 +117,56 @@ dotnet run
 
 3. Open your browser and navigate to `https://localhost:7240` to access the Swagger UI.
 
-## API Endpoints
-
-### Subscriptions
-
-- `GET /api/subscriptions` - List all subscriptions
-- `POST /api/subscriptions` - Create a new subscription
-- `PATCH /api/subscriptions/{id}` - Update a subscription
-- `DELETE /api/subscriptions/{id}` - Cancel a subscription
-
-### Webhooks
-
-- `GET /api/webhooks` - List notification settings
-- `POST /api/webhooks` - Create a notification endpoint
-- `PATCH /api/webhooks/{id}` - Update notification settings
-- `DELETE /api/webhooks/{id}` - Delete a notification endpoint
-- `POST /api/webhooks/receive` - Webhook receiver endpoint
-
 ## Example Requests
 
-### Create a Notification Endpoint
-
+### Create a Product
 ```json
 {
   "data": {
-    "type": "webhook",
-    "description": "My webhook endpoint for subscription events",
-    "destination": "https://your-domain.com/api/webhooks/receive",
-    "active": true,
-    "api_version": "1.0",
-    "subscribed_events": [
-      "subscription.created",
-      "subscription.updated",
-      "subscription.canceled"
-    ]
+    "name": "Premium Plan",
+    "description": "Premium subscription plan with advanced features",
+    "type": "subscription",
+    "tax_category": "digital-goods",
+    "custom_data": {
+      "features": ["feature1", "feature2"]
+    }
   }
 }
 ```
 
-### Create a Subscription
+### Create a Price
+```json
+{
+  "data": {
+    "description": "Monthly subscription",
+    "product_id": "pro_123",
+    "billing_cycle": {
+      "interval": "month",
+      "frequency": 1
+    },
+    "unit_price": {
+      "amount": "29.99",
+      "currency_code": "USD"
+    }
+  }
+}
+```
 
+### Create a Customer
+```json
+{
+  "data": {
+    "email": "customer@example.com",
+    "name": "John Doe",
+    "locale": "en",
+    "custom_data": {
+      "company": "Example Corp"
+    }
+  }
+}
+```
+
+### Create a Transaction
 ```json
 {
   "data": {
@@ -103,6 +179,45 @@ dotnet run
       {
         "price_id": "pri_123",
         "quantity": 1
+      }
+    ]
+  }
+}
+```
+
+### Create a Report
+```json
+{
+  "data": {
+    "type": "subscriptions",
+    "filters": {
+      "status": ["active", "past_due"],
+      "date_from": "2024-01-01",
+      "date_to": "2024-12-31"
+    }
+  }
+}
+```
+
+### Create a Bulk Operation
+```json
+{
+  "data": {
+    "type": "price_update",
+    "items": [
+      {
+        "price_id": "pri_123",
+        "unit_price": {
+          "amount": "39.99",
+          "currency_code": "USD"
+        }
+      },
+      {
+        "price_id": "pri_456",
+        "unit_price": {
+          "amount": "49.99",
+          "currency_code": "USD"
+        }
       }
     ]
   }
@@ -140,7 +255,9 @@ The application uses structured logging:
 
 - HTTPS enforcement
 - API key authentication
-- Webhook signature verification (recommended for production)
+- Webhook signature verification
+- Circuit breaker pattern
+- Request/Response compression
 
 ## Additional Resources
 

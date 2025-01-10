@@ -49,5 +49,10 @@ namespace PaddleWrapper.Core.Services.Events
         {
             return await _httpClient.PostAsync<PaddleResponse<bool>>($"{BaseEndpoint}/{eventId}/mark", new { status });
         }
+
+        public async Task<PaddleResponse<EventType[]>> GetEventTypesAsync()
+        {
+            return await _httpClient.GetAsync<PaddleResponse<EventType[]>>($"{BaseEndpoint}/types");
+        }
     }
 } 

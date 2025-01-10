@@ -43,5 +43,10 @@ namespace PaddleWrapper.Core.Interfaces
         /// Olayı işaretler.
         /// </summary>
         Task<PaddleResponse<bool>> MarkEventAsync(string eventId, string status);
+
+        /// <summary>
+        /// Olay türlerini getirir.
+        /// </summary>
+        Task<PaddleResponse<EventType[]>> GetEventTypesAsync();
     }
 } 
