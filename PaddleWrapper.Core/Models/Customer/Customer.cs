@@ -63,7 +63,7 @@ namespace PaddleWrapper.Core.Models.Customer
         /// <summary>
         /// Müşterinin lokalizasyon ayarları
         /// </summary>
-        public CustomerLocale Locale { get; set; }
+        public string Locale { get; set; }
 
         /// <summary>
         /// Müşterinin vergi kimlik numarası
