@@ -42,6 +42,7 @@ namespace PaddleWrapper.Extensions
 
             services.AddHttpClient();
             services.AddScoped<IPaddleClient, PaddleClient>();
+            services.AddScoped<IWebhookService, WebhookService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IPriceService, PriceService>();
             services.AddScoped<ICustomerService, CustomerService>();
