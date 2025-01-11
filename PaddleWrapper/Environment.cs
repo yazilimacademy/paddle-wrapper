@@ -12,8 +12,8 @@ public static class EnvironmentExtensions
     {
         return environment switch
         {
-            Environment.Sandbox => "https://sandbox-api.paddle.com",
             Environment.Production => "https://api.paddle.com",
+            Environment.Sandbox => "https://sandbox-api.paddle.com",
             _ => throw new ArgumentOutOfRangeException(nameof(environment))
         };
     }
