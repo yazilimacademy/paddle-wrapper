@@ -24,4 +24,4 @@ namespace PaddleWrapper.Entities.Shared
         [EnumMember(Value = "web")]
         Web
     }
-} 
+}

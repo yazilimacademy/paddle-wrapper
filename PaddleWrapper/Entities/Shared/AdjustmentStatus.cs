@@ -18,4 +18,4 @@ namespace PaddleWrapper.Entities.Shared
         [EnumMember(Value = "reversed")]
         Reversed
     }
-} 
+}

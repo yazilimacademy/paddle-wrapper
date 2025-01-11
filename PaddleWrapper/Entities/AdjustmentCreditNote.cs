@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Entities.Shared;
 
 namespace PaddleWrapper.Entities
 {
@@ -21,4 +19,4 @@ namespace PaddleWrapper.Entities
             );
         }
     }
-} 
+}

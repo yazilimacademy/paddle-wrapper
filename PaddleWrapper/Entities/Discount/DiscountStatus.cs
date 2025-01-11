@@ -18,4 +18,4 @@ namespace PaddleWrapper.Entities.Discount
         [EnumMember(Value = "used")]
         Used
     }
-} 
+}

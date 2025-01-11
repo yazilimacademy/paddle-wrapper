@@ -28,4 +28,4 @@ namespace PaddleWrapper.Entities.Shared
             return new CustomData(data);
         }
     }
-} 
+}

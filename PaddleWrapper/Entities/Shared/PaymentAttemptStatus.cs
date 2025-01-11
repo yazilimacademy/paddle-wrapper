@@ -36,4 +36,4 @@ namespace PaddleWrapper.Entities.Shared
         [EnumMember(Value = "dropped")]
         Dropped
     }
-} 
+}

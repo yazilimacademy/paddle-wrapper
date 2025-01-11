@@ -1,5 +1,3 @@
-using System.Net.Http;
-
 namespace PaddleWrapper.Logger
 {
     public interface IFormatter
@@ -8,4 +6,4 @@ namespace PaddleWrapper.Logger
         string FormatResponse(HttpResponseMessage response);
         string FormatResponseForRequest(HttpResponseMessage response, HttpRequestMessage request);
     }
-} 
+}

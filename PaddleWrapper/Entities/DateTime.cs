@@ -1,6 +1,3 @@
-using System;
-using System.Text.Json.Serialization;
-
 namespace PaddleWrapper.Entities
 {
     public class PaddleDateTime
@@ -55,4 +52,4 @@ namespace PaddleWrapper.Entities
             return Format();
         }
     }
-} 
+}

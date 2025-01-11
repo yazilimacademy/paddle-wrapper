@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Entities.Event;
 
 namespace PaddleWrapper.Entities
 {
@@ -32,7 +30,7 @@ namespace PaddleWrapper.Entities
 
         public static EventType From(Dictionary<string, object> data)
         {
-            var availableVersions = ((object[])data["available_versions"])
+            List<string> availableVersions = ((object[])data["available_versions"])
                 .Select(v => (string)v)
                 .ToList();
 
@@ -44,4 +42,4 @@ namespace PaddleWrapper.Entities
             );
         }
     }
-} 
+}

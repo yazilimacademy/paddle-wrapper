@@ -15,4 +15,4 @@ namespace PaddleWrapper.Entities.Subscription
         [EnumMember(Value = "resume")]
         Resume
     }
-} 
+}

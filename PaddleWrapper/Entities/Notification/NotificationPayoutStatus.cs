@@ -12,4 +12,4 @@ namespace PaddleWrapper.Entities.Notification
         [EnumMember(Value = "paid")]
         Paid
     }
-} 
+}

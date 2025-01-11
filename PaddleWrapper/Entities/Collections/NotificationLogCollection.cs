@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using PaddleWrapper.Entities.Notification;
-
 namespace PaddleWrapper.Entities.Collections
 {
     public class NotificationLogCollection : Collection<NotificationLog>
@@ -12,10 +9,10 @@ namespace PaddleWrapper.Entities.Collections
 
         public static new NotificationLogCollection From(Dictionary<string, object> data, Paginator? paginator)
         {
-            var items = new List<NotificationLog>();
-            var dataArray = (object[])data["data"];
+            List<NotificationLog> items = new();
+            object[] dataArray = (object[])data["data"];
 
-            foreach (var item in dataArray)
+            foreach (object item in dataArray)
             {
                 items.Add(NotificationLog.From((Dictionary<string, object>)item));
             }
@@ -23,4 +20,4 @@ namespace PaddleWrapper.Entities.Collections
             return new NotificationLogCollection(items, paginator);
         }
     }
-} 
+}

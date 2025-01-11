@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Entities.Event;
-using PaddleWrapper.Entities.SimulationRunEvent;
-using PaddleWrapper.Notifications.Entities;
 
 namespace PaddleWrapper.Entities
 {
@@ -55,21 +50,21 @@ namespace PaddleWrapper.Entities
 
         public static SimulationRunEvent From(Dictionary<string, object> data)
         {
-            var eventType = (string)data["event_type"];
-            
+            string eventType = (string)data["event_type"];
+
             return new SimulationRunEvent(
                 id: (string)data["id"],
                 status: System.Enum.Parse<SimulationRunEventStatus>((string)data["status"], true),
                 type: System.Enum.Parse<EventTypeName>(eventType, true),
-                payload: data.ContainsKey("payload") && data["payload"] != null ? 
+                payload: data.ContainsKey("payload") && data["payload"] != null ?
                     EntityFactory.Create(eventType, (Dictionary<string, object>)data["payload"]) : null,
-                request: data.ContainsKey("request") ? 
+                request: data.ContainsKey("request") ?
                     SimulationRunEventRequest.From((Dictionary<string, object>)data["request"]) : null,
-                response: data.ContainsKey("response") ? 
+                response: data.ContainsKey("response") ?
                     SimulationRunEventResponse.From((Dictionary<string, object>)data["response"]) : null,
                 createdAt: DateTime.Parse((string)data["created_at"]),
                 updatedAt: DateTime.Parse((string)data["updated_at"])
             );
         }
     }
-} 
+}

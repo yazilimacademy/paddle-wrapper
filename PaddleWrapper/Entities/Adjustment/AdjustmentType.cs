@@ -12,4 +12,4 @@ namespace PaddleWrapper.Entities.Adjustment
         [EnumMember(Value = "partial")]
         Partial
     }
-} 
+}

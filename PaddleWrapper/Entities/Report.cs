@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Entities.Report;
 
 namespace PaddleWrapper.Entities
 {
@@ -53,11 +50,11 @@ namespace PaddleWrapper.Entities
 
         public static Report From(Dictionary<string, object> data)
         {
-            var filters = new List<ReportFilter>();
+            List<ReportFilter> filters = new();
             if (data.ContainsKey("filters"))
             {
-                var filtersData = (object[])data["filters"];
-                foreach (var filter in filtersData)
+                object[] filtersData = (object[])data["filters"];
+                foreach (object filter in filtersData)
                 {
                     filters.Add(ReportFilter.From((Dictionary<string, object>)filter));
                 }
@@ -69,11 +66,11 @@ namespace PaddleWrapper.Entities
                 rows: data.ContainsKey("rows") ? (int?)data["rows"] : null,
                 type: System.Enum.Parse<ReportType>((string)data["type"], true),
                 filters: filters,
-                expiresAt: data.ContainsKey("expires_at") ? 
+                expiresAt: data.ContainsKey("expires_at") ?
                     DateTime.Parse((string)data["expires_at"]) : null,
                 createdAt: DateTime.Parse((string)data["created_at"]),
                 updatedAt: DateTime.Parse((string)data["updated_at"])
             );
         }
     }
-} 
+}

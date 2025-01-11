@@ -1,4 +1,3 @@
-using System;
 using System.Text.Json;
 
 namespace PaddleWrapper.Exceptions.SdkExceptions
@@ -13,4 +12,4 @@ namespace PaddleWrapper.Exceptions.SdkExceptions
             JsonException = exception;
         }
     }
-} 
+}

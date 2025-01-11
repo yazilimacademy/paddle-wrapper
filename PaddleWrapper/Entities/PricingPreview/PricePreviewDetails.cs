@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Entities.Shared;
 
 namespace PaddleWrapper.Entities.PricingPreview
 {
@@ -16,10 +14,10 @@ namespace PaddleWrapper.Entities.PricingPreview
 
         public static PricePreviewDetails From(Dictionary<string, object> data)
         {
-            var lineItems = new List<PricePreviewLineItem>();
-            var lineItemsData = (object[])data["line_items"];
+            List<PricePreviewLineItem> lineItems = new();
+            object[] lineItemsData = (object[])data["line_items"];
 
-            foreach (var item in lineItemsData)
+            foreach (object item in lineItemsData)
             {
                 lineItems.Add(PricePreviewLineItem.From((Dictionary<string, object>)item));
             }
@@ -27,4 +25,4 @@ namespace PaddleWrapper.Entities.PricingPreview
             return new PricePreviewDetails(lineItems);
         }
     }
-} 
+}

@@ -1,7 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using PaddleWrapper.Entities.Shared;
+using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities.Transaction
 {
@@ -93,11 +91,11 @@ namespace PaddleWrapper.Entities.Transaction
 
         public static TransactionPreviewPrice From(Dictionary<string, object> data)
         {
-            var unitPriceOverrides = new List<UnitPriceOverride>();
+            List<UnitPriceOverride> unitPriceOverrides = new();
             if (data.ContainsKey("unit_price_overrides"))
             {
-                var overridesData = (object[])data["unit_price_overrides"];
-                foreach (var item in overridesData)
+                object[] overridesData = (object[])data["unit_price_overrides"];
+                foreach (object item in overridesData)
                 {
                     unitPriceOverrides.Add(UnitPriceOverride.From((Dictionary<string, object>)item));
                 }
@@ -123,4 +121,4 @@ namespace PaddleWrapper.Entities.Transaction
             );
         }
     }
-} 
+}

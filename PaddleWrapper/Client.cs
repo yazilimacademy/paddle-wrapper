@@ -1,7 +1,3 @@
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-
 namespace PaddleWrapper
 {
     public class Client
@@ -19,4 +15,4 @@ namespace PaddleWrapper
 
         // API metodları buraya eklenecek
     }
-} 
+}

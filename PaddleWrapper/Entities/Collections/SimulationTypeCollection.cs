@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using PaddleWrapper.Entities.Simulation;
-
 namespace PaddleWrapper.Entities.Collections
 {
     public class SimulationTypeCollection : Collection<SimulationType>
@@ -12,10 +9,10 @@ namespace PaddleWrapper.Entities.Collections
 
         public static new SimulationTypeCollection From(Dictionary<string, object> data, Paginator? paginator)
         {
-            var items = new List<SimulationType>();
-            var dataArray = (object[])data["data"];
+            List<SimulationType> items = new();
+            object[] dataArray = (object[])data["data"];
 
-            foreach (var item in dataArray)
+            foreach (object item in dataArray)
             {
                 items.Add(SimulationType.From((Dictionary<string, object>)item));
             }
@@ -23,4 +20,4 @@ namespace PaddleWrapper.Entities.Collections
             return new SimulationTypeCollection(items, paginator);
         }
     }
-} 
+}

@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
-using PaddleWrapper.Entities.Discount;
 using PaddleWrapper.Entities.Shared;
+using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
 {
@@ -112,22 +109,22 @@ namespace PaddleWrapper.Entities
                 code: data.ContainsKey("code") ? (string?)data["code"] : null,
                 type: System.Enum.Parse<DiscountType>((string)data["type"], true),
                 amount: (string)data["amount"],
-                currencyCode: data.ContainsKey("currency_code") && data["currency_code"] != null ? 
+                currencyCode: data.ContainsKey("currency_code") && data["currency_code"] != null ?
                     System.Enum.Parse<CurrencyCode>((string)data["currency_code"], true) : null,
                 recur: (bool)data["recur"],
                 maximumRecurringIntervals: (int?)data["maximum_recurring_intervals"],
                 usageLimit: data.ContainsKey("usage_limit") ? (int?)data["usage_limit"] : null,
                 restrictTo: data.ContainsKey("restrict_to") ? (object[]?)data["restrict_to"] : null,
-                expiresAt: data.ContainsKey("expires_at") ? 
+                expiresAt: data.ContainsKey("expires_at") ?
                     DateTime.Parse((string)data["expires_at"]) : null,
                 timesUsed: (int)data["times_used"],
                 createdAt: DateTime.Parse((string)data["created_at"]),
                 updatedAt: DateTime.Parse((string)data["updated_at"]),
-                customData: data.ContainsKey("custom_data") ? 
+                customData: data.ContainsKey("custom_data") ?
                     CustomData.From((Dictionary<string, object>)data["custom_data"]) : null,
-                importMeta: data.ContainsKey("import_meta") ? 
+                importMeta: data.ContainsKey("import_meta") ?
                     ImportMeta.From((Dictionary<string, object>)data["import_meta"]) : null
             );
         }
     }
-} 
+}

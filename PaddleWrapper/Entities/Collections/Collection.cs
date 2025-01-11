@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using PaddleWrapper.Entities.Shared;
 
 namespace PaddleWrapper.Entities.Collections
 {
@@ -24,7 +22,7 @@ namespace PaddleWrapper.Entities.Collections
             {
                 if (_pointer >= Items.Count)
                 {
-                    var nextPage = Paginator!.NextPage();
+                    Task<object> nextPage = Paginator!.NextPage();
                     Items.Clear();
                     Items.AddRange(((Collection<T>)nextPage).Items);
                     _pointer = 0;
@@ -41,4 +39,4 @@ namespace PaddleWrapper.Entities.Collections
             return GetEnumerator();
         }
     }
-} 
+}

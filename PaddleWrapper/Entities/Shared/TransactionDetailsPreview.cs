@@ -26,8 +26,8 @@ namespace PaddleWrapper.Entities.Shared
 
         public static TransactionDetailsPreview From(Dictionary<string, object> data)
         {
-            var taxRatesUsedArray = (object[])data["tax_rates_used"];
-            var lineItemsArray = (object[])data["line_items"];
+            object[] taxRatesUsedArray = (object[])data["tax_rates_used"];
+            object[] lineItemsArray = (object[])data["line_items"];
 
             return new TransactionDetailsPreview(
                 taxRatesUsed: taxRatesUsedArray.Select(item => TaxRatesUsed.From((Dictionary<string, object>)item)).ToList(),
@@ -36,4 +36,4 @@ namespace PaddleWrapper.Entities.Shared
             );
         }
     }
-} 
+}

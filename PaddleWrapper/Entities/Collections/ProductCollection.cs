@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using PaddleWrapper.Entities.Product;
-
 namespace PaddleWrapper.Entities.Collections
 {
     public class ProductCollection : Collection<Product.Product>
@@ -12,10 +9,10 @@ namespace PaddleWrapper.Entities.Collections
 
         public static new ProductCollection From(Dictionary<string, object> data, Paginator? paginator)
         {
-            var items = new List<Product.Product>();
-            var dataArray = (object[])data["data"];
+            List<Product.Product> items = new();
+            object[] dataArray = (object[])data["data"];
 
-            foreach (var item in dataArray)
+            foreach (object item in dataArray)
             {
                 items.Add(Product.Product.From((Dictionary<string, object>)item));
             }
@@ -23,4 +20,4 @@ namespace PaddleWrapper.Entities.Collections
             return new ProductCollection(items, paginator);
         }
     }
-} 
+}

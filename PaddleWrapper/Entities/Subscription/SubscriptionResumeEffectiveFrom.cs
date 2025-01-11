@@ -9,4 +9,4 @@ namespace PaddleWrapper.Entities.Subscription
         [EnumMember(Value = "immediately")]
         Immediately
     }
-} 
+}

@@ -1,7 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using PaddleWrapper.Entities.Shared;
+using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
 {
@@ -68,11 +66,11 @@ namespace PaddleWrapper.Entities
 
         public static Business From(Dictionary<string, object> data)
         {
-            var contacts = new List<Contacts>();
+            List<Contacts> contacts = new();
             if (data.ContainsKey("contacts"))
             {
-                var contactsData = (object[])data["contacts"];
-                foreach (var contact in contactsData)
+                object[] contactsData = (object[])data["contacts"];
+                foreach (object contact in contactsData)
                 {
                     contacts.Add(Contacts.From((Dictionary<string, object>)contact));
                 }
@@ -88,11 +86,11 @@ namespace PaddleWrapper.Entities
                 contacts: contacts,
                 createdAt: DateTime.Parse((string)data["created_at"]),
                 updatedAt: DateTime.Parse((string)data["updated_at"]),
-                customData: data.ContainsKey("custom_data") ? 
+                customData: data.ContainsKey("custom_data") ?
                     CustomData.From((Dictionary<string, object>)data["custom_data"]) : null,
-                importMeta: data.ContainsKey("import_meta") ? 
+                importMeta: data.ContainsKey("import_meta") ?
                     ImportMeta.From((Dictionary<string, object>)data["import_meta"]) : null
             );
         }
     }
-} 
+}

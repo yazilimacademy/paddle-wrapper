@@ -1,6 +1,5 @@
-using System;
-using System.Text.Json.Serialization;
 using PaddleWrapper.Entities.Shared;
+using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities.Transaction
 {
@@ -82,4 +81,4 @@ namespace PaddleWrapper.Entities.Transaction
             );
         }
     }
-} 
+}

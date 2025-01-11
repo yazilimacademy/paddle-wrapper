@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using PaddleWrapper.Entities.Event;
-
 namespace PaddleWrapper.Entities.Collections
 {
     public class EventTypeCollection : Collection<EventType>
@@ -12,10 +9,10 @@ namespace PaddleWrapper.Entities.Collections
 
         public static new EventTypeCollection From(Dictionary<string, object> data, Paginator? paginator)
         {
-            var items = new List<EventType>();
-            var dataArray = (object[])data["data"];
+            List<EventType> items = new();
+            object[] dataArray = (object[])data["data"];
 
-            foreach (var item in dataArray)
+            foreach (object item in dataArray)
             {
                 items.Add(EventType.From((Dictionary<string, object>)item));
             }
@@ -23,4 +20,4 @@ namespace PaddleWrapper.Entities.Collections
             return new EventTypeCollection(items, paginator);
         }
     }
-} 
+}

@@ -1,6 +1,5 @@
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using PaddleWrapper.Entities.Shared;
+using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities.Subscription
 {
@@ -42,21 +41,21 @@ namespace PaddleWrapper.Entities.Subscription
 
         public static SubscriptionDetails From(Dictionary<string, object> data)
         {
-            var taxRatesUsed = new List<TaxRatesUsed>();
+            List<TaxRatesUsed> taxRatesUsed = new();
             if (data.ContainsKey("tax_rate_used"))
             {
-                var taxRatesData = (object[])data["tax_rate_used"];
-                foreach (var item in taxRatesData)
+                object[] taxRatesData = (object[])data["tax_rate_used"];
+                foreach (object item in taxRatesData)
                 {
                     taxRatesUsed.Add(TaxRatesUsed.From((Dictionary<string, object>)item));
                 }
             }
 
-            var lineItems = new List<SubscriptionTransactionLineItem>();
+            List<Subscription.SubscriptionTransactionLineItem> lineItems = new List<SubscriptionTransactionLineItem>();
             if (data.ContainsKey("line_items"))
             {
-                var lineItemsData = (object[])data["line_items"];
-                foreach (var item in lineItemsData)
+                object[] lineItemsData = (object[])data["line_items"];
+                foreach (object item in lineItemsData)
                 {
                     lineItems.Add(SubscriptionTransactionLineItem.From((Dictionary<string, object>)item));
                 }
@@ -72,4 +71,4 @@ namespace PaddleWrapper.Entities.Subscription
             );
         }
     }
-} 
+}

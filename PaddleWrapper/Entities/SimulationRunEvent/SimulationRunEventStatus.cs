@@ -18,4 +18,4 @@ namespace PaddleWrapper.Entities.SimulationRunEvent
         [EnumMember(Value = "pending")]
         Pending
     }
-} 
+}

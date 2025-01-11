@@ -1,9 +1,6 @@
-using System;
-using System.Net.Http;
-using System.Text.Json;
-using System.Threading.Tasks;
 using PaddleWrapper.Entities.Shared;
 using PaddleWrapper.Exceptions;
+using System.Text.Json;
 
 namespace PaddleWrapper.Entities.Collections
 {
@@ -27,19 +24,19 @@ namespace PaddleWrapper.Entities.Collections
 
         public async Task<object> NextPage()
         {
-            var response = await _client.GetAsync(_pagination.Next);
-            var content = await response.Content.ReadAsStringAsync();
+            HttpResponseMessage response = await _client.GetAsync(_pagination.Next);
+            string content = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
             {
-                var error = JsonSerializer.Deserialize<Dictionary<string, object>>(content);
+                Dictionary<string, object>? error = JsonSerializer.Deserialize<Dictionary<string, object>>(content);
                 throw ApiError.FromErrorData(error!);
             }
 
-            var data = JsonSerializer.Deserialize<Dictionary<string, object>>(content);
-            var method = _collectionType.GetMethod("From");
-            
-            var pagination = new Paginator(
+            Dictionary<string, object>? data = JsonSerializer.Deserialize<Dictionary<string, object>>(content);
+            System.Reflection.MethodInfo? method = _collectionType.GetMethod("From");
+
+            Paginator pagination = new(
                 _client,
                 Pagination.From((Dictionary<string, object>)data["meta"]),
                 _collectionType
@@ -48,4 +45,4 @@ namespace PaddleWrapper.Entities.Collections
             return method!.Invoke(null, new object[] { data, pagination })!;
         }
     }
-} 
+}

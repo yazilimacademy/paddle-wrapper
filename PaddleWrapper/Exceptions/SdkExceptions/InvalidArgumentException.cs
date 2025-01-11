@@ -1,5 +1,3 @@
-using System;
-
 namespace PaddleWrapper.Exceptions.SdkExceptions
 {
     public class InvalidArgumentException : SdkException
@@ -18,4 +16,4 @@ namespace PaddleWrapper.Exceptions.SdkExceptions
         public InvalidArgumentException(string message) : base(message) { }
         public InvalidArgumentException(string message, Exception inner) : base(message, inner) { }
     }
-} 
+}

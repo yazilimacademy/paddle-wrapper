@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using PaddleWrapper.Entities.Shared;
 
 namespace PaddleWrapper.Entities.Subscription
 {
@@ -39,4 +38,4 @@ namespace PaddleWrapper.Entities.Subscription
             );
         }
     }
-} 
+}

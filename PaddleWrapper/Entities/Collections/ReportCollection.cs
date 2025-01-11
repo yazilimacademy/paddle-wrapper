@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using PaddleWrapper.Entities.Report;
-
 namespace PaddleWrapper.Entities.Collections
 {
     public class ReportCollection : Collection<Report>
@@ -12,10 +9,10 @@ namespace PaddleWrapper.Entities.Collections
 
         public static new ReportCollection From(Dictionary<string, object> data, Paginator? paginator)
         {
-            var items = new List<Report>();
-            var dataArray = (object[])data["data"];
+            List<Report> items = new();
+            object[] dataArray = (object[])data["data"];
 
-            foreach (var item in dataArray)
+            foreach (object item in dataArray)
             {
                 items.Add(Report.From((Dictionary<string, object>)item));
             }
@@ -23,4 +20,4 @@ namespace PaddleWrapper.Entities.Collections
             return new ReportCollection(items, paginator);
         }
     }
-} 
+}

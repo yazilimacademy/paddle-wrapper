@@ -12,4 +12,4 @@ namespace PaddleWrapper.Entities.NotificationSetting
         [EnumMember(Value = "url")]
         Url
     }
-} 
+}

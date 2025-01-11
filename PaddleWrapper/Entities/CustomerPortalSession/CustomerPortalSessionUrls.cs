@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Entities.Shared;
 
 namespace PaddleWrapper.Entities.CustomerPortalSession
 {
@@ -22,13 +20,13 @@ namespace PaddleWrapper.Entities.CustomerPortalSession
 
         public static CustomerPortalSessionUrls From(Dictionary<string, object> data)
         {
-            var general = CustomerPortalSessionGeneralUrl.From((Dictionary<string, object>)data["general"]);
-            var subscriptions = new List<CustomerPortalSessionSubscriptionUrl>();
+            CustomerPortalSessionGeneralUrl general = CustomerPortalSessionGeneralUrl.From((Dictionary<string, object>)data["general"]);
+            List<CustomerPortalSession.CustomerPortalSessionSubscriptionUrl> subscriptions = new List<CustomerPortalSessionSubscriptionUrl>();
 
             if (data.ContainsKey("subscriptions"))
             {
-                var subscriptionsData = (object[])data["subscriptions"];
-                foreach (var item in subscriptionsData)
+                object[] subscriptionsData = (object[])data["subscriptions"];
+                foreach (object item in subscriptionsData)
                 {
                     subscriptions.Add(CustomerPortalSessionSubscriptionUrl.From((Dictionary<string, object>)item));
                 }
@@ -37,4 +35,4 @@ namespace PaddleWrapper.Entities.CustomerPortalSession
             return new CustomerPortalSessionUrls(general, subscriptions);
         }
     }
-} 
+}

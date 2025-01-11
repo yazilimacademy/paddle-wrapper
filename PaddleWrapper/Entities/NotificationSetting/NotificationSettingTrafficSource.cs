@@ -15,4 +15,4 @@ namespace PaddleWrapper.Entities.NotificationSetting
         [EnumMember(Value = "simulation")]
         Simulation
     }
-} 
+}

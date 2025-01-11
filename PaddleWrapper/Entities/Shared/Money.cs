@@ -27,4 +27,4 @@ namespace PaddleWrapper.Entities.Shared
             );
         }
     }
-} 
+}

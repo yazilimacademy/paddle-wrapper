@@ -1,5 +1,5 @@
-using System.Text.Json.Serialization;
 using PaddleWrapper.Entities.Shared;
+using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities.Adjustment
 {
@@ -47,11 +47,11 @@ namespace PaddleWrapper.Entities.Adjustment
                 itemId: data["item_id"].ToString(),
                 type: Enum.Parse<AdjustmentType>(data["type"].ToString(), true),
                 amount: data.ContainsKey("amount") ? data["amount"]?.ToString() : null,
-                proration: data.ContainsKey("proration") && data["proration"] != null 
-                    ? AdjustmentProration.From((Dictionary<string, object>)data["proration"]) 
+                proration: data.ContainsKey("proration") && data["proration"] != null
+                    ? AdjustmentProration.From((Dictionary<string, object>)data["proration"])
                     : null,
                 totals: AdjustmentItemTotals.From((Dictionary<string, object>)data["totals"])
             );
         }
     }
-} 
+}

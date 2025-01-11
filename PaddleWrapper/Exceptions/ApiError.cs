@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace PaddleWrapper.Exceptions
 {
     public class ApiError : SdkException
@@ -28,7 +24,7 @@ namespace PaddleWrapper.Exceptions
 
         public static ApiError FromErrorData(IDictionary<string, object> error)
         {
-            var fieldErrors = error.ContainsKey("errors")
+            IEnumerable<FieldError> fieldErrors = error.ContainsKey("errors")
                 ? ((IEnumerable<IDictionary<string, object>>)error["errors"])
                     .Select(fe => new FieldError(
                         fe["field"].ToString(),
@@ -43,4 +39,4 @@ namespace PaddleWrapper.Exceptions
                 fieldErrors);
         }
     }
-} 
+}

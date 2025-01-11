@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using PaddleWrapper.Entities.Transaction;
-
 namespace PaddleWrapper.Entities.Collections
 {
     public class TransactionCollection : Collection<Transaction.Transaction>
@@ -12,10 +9,10 @@ namespace PaddleWrapper.Entities.Collections
 
         public static new TransactionCollection From(Dictionary<string, object> data, Paginator? paginator)
         {
-            var items = new List<Transaction.Transaction>();
-            var dataArray = (object[])data["data"];
+            List<Transaction.Transaction> items = new();
+            object[] dataArray = (object[])data["data"];
 
-            foreach (var item in dataArray)
+            foreach (object item in dataArray)
             {
                 items.Add(Transaction.Transaction.From((Dictionary<string, object>)item));
             }
@@ -23,4 +20,4 @@ namespace PaddleWrapper.Entities.Collections
             return new TransactionCollection(items, paginator);
         }
     }
-} 
+}

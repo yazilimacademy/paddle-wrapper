@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using PaddleWrapper.Entities.Shared;
 
 namespace PaddleWrapper.Entities.PricingPreview
 {
@@ -39,4 +38,4 @@ namespace PaddleWrapper.Entities.PricingPreview
             );
         }
     }
-} 
+}

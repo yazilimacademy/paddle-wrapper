@@ -18,4 +18,4 @@ namespace PaddleWrapper.Entities.Notification
         [EnumMember(Value = "failed")]
         Failed
     }
-} 
+}

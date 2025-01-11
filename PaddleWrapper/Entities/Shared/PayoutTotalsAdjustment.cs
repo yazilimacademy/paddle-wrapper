@@ -59,4 +59,4 @@ namespace PaddleWrapper.Entities.Shared
             );
         }
     }
-} 
+}

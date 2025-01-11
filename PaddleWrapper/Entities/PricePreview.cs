@@ -1,8 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using PaddleWrapper.Entities.PricingPreview;
 using PaddleWrapper.Entities.Shared;
+using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
 {
@@ -59,11 +57,11 @@ namespace PaddleWrapper.Entities
 
         public static PricePreview From(Dictionary<string, object> data)
         {
-            var availablePaymentMethods = new List<AvailablePaymentMethods>();
+            List<AvailablePaymentMethods> availablePaymentMethods = new();
             if (data.ContainsKey("available_payment_methods"))
             {
-                var methodsData = (object[])data["available_payment_methods"];
-                foreach (var method in methodsData)
+                object[] methodsData = (object[])data["available_payment_methods"];
+                foreach (object method in methodsData)
                 {
                     availablePaymentMethods.Add(System.Enum.Parse<AvailablePaymentMethods>((string)method, true));
                 }
@@ -75,13 +73,13 @@ namespace PaddleWrapper.Entities
                 businessId: data.ContainsKey("business_id") ? (string?)data["business_id"] : null,
                 currencyCode: System.Enum.Parse<CurrencyCode>((string)data["currency_code"], true),
                 discountId: data.ContainsKey("discount_id") ? (string?)data["discount_id"] : null,
-                address: data.ContainsKey("address") ? 
+                address: data.ContainsKey("address") ?
                     AddressPreview.From((Dictionary<string, object>)data["address"]) : null,
-                customerIpAddress: data.ContainsKey("customer_ip_address") ? 
+                customerIpAddress: data.ContainsKey("customer_ip_address") ?
                     (string?)data["customer_ip_address"] : null,
                 details: PricePreviewDetails.From((Dictionary<string, object>)data["details"]),
                 availablePaymentMethods: availablePaymentMethods
             );
         }
     }
-} 
+}

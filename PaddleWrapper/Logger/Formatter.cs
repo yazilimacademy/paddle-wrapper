@@ -1,13 +1,11 @@
-using System.Net.Http;
-
 namespace PaddleWrapper.Logger
 {
     public sealed class Formatter : IFormatter
     {
         public string FormatRequest(HttpRequestMessage request)
         {
-            string transactionId = request.Headers.Contains("X-Transaction-ID") 
-                ? request.Headers.GetValues("X-Transaction-ID").FirstOrDefault() 
+            string transactionId = request.Headers.Contains("X-Transaction-ID")
+                ? request.Headers.GetValues("X-Transaction-ID").FirstOrDefault()
                 : "-";
 
             return string.Format("{0} {1} HTTP/{2} {3}",
@@ -38,4 +36,4 @@ namespace PaddleWrapper.Logger
                 transactionId);
         }
     }
-} 
+}

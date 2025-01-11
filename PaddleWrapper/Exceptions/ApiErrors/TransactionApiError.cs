@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace PaddleWrapper.Exceptions.ApiErrors
 {
     public class TransactionApiError : ApiError
@@ -14,4 +12,4 @@ namespace PaddleWrapper.Exceptions.ApiErrors
         {
         }
     }
-} 
+}

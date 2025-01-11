@@ -18,4 +18,4 @@ namespace PaddleWrapper.Entities.Report
         [EnumMember(Value = "expired")]
         Expired
     }
-} 
+}

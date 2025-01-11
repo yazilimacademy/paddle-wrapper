@@ -1,5 +1,6 @@
-using System.Text.Json.Serialization;
 using PaddleWrapper.Entities.Shared;
+using System.Text.Json.Serialization;
+using Action = PaddleWrapper.Entities.Shared.Action;
 
 namespace PaddleWrapper.Entities
 {
@@ -91,21 +92,21 @@ namespace PaddleWrapper.Entities
 
         public static Adjustment From(Dictionary<string, object> data)
         {
-            var items = new List<AdjustmentItem>();
+            List<AdjustmentItem> items = new();
             if (data.ContainsKey("items"))
             {
-                var itemsData = (object[])data["items"];
-                foreach (var item in itemsData)
+                object[] itemsData = (object[])data["items"];
+                foreach (object item in itemsData)
                 {
                     items.Add(AdjustmentItem.From((Dictionary<string, object>)item));
                 }
             }
 
-            var taxRatesUsed = new List<AdjustmentTaxRatesUsed>();
+            List<AdjustmentTaxRatesUsed> taxRatesUsed = new();
             if (data.ContainsKey("tax_rates_used"))
             {
-                var taxRatesData = (object[])data["tax_rates_used"];
-                foreach (var taxRate in taxRatesData)
+                object[] taxRatesData = (object[])data["tax_rates_used"];
+                foreach (object taxRate in taxRatesData)
                 {
                     taxRatesUsed.Add(AdjustmentTaxRatesUsed.From((Dictionary<string, object>)taxRate));
                 }
@@ -118,13 +119,13 @@ namespace PaddleWrapper.Entities
                 subscriptionId: data.ContainsKey("subscription_id") ? (string?)data["subscription_id"] : null,
                 customerId: (string)data["customer_id"],
                 reason: (string)data["reason"],
-                creditAppliedToBalance: data.ContainsKey("credit_applied_to_balance") ? 
+                creditAppliedToBalance: data.ContainsKey("credit_applied_to_balance") ?
                     (bool?)data["credit_applied_to_balance"] : null,
                 currencyCode: System.Enum.Parse<CurrencyCode>((string)data["currency_code"], true),
                 status: System.Enum.Parse<AdjustmentStatus>((string)data["status"], true),
                 items: items,
                 totals: AdjustmentTotals.From((Dictionary<string, object>)data["totals"]),
-                payoutTotals: data.ContainsKey("payout_totals") ? 
+                payoutTotals: data.ContainsKey("payout_totals") ?
                     PayoutTotalsAdjustment.From((Dictionary<string, object>)data["payout_totals"]) : null,
                 taxRatesUsed: taxRatesUsed,
                 createdAt: DateTime.Parse((string)data["created_at"]),
@@ -133,4 +134,4 @@ namespace PaddleWrapper.Entities
             );
         }
     }
-} 
+}

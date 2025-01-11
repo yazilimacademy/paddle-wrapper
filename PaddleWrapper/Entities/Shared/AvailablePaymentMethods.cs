@@ -36,4 +36,4 @@ namespace PaddleWrapper.Entities.Shared
         [EnumMember(Value = "wire_transfer")]
         WireTransfer
     }
-} 
+}

@@ -36,4 +36,4 @@ namespace PaddleWrapper.Entities.Transaction
         [EnumMember(Value = "visa")]
         Visa
     }
-} 
+}

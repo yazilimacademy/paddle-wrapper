@@ -1,4 +1,3 @@
-using System;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities.Shared
@@ -26,4 +25,4 @@ namespace PaddleWrapper.Entities.Shared
             );
         }
     }
-} 
+}

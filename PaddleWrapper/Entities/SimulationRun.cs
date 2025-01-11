@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Entities.Event;
-using PaddleWrapper.Entities.Simulation;
-using PaddleWrapper.Entities.SimulationRun;
 
 namespace PaddleWrapper.Entities
 {
@@ -45,9 +40,9 @@ namespace PaddleWrapper.Entities
 
         public static SimulationRun From(Dictionary<string, object> data)
         {
-            var typeStr = (string)data["type"];
+            string typeStr = (string)data["type"];
             object type;
-            
+
             try
             {
                 var eventType = System.Enum.Parse<EventTypeName>(typeStr, true);
@@ -58,11 +53,11 @@ namespace PaddleWrapper.Entities
                 type = System.Enum.Parse<SimulationScenarioType>(typeStr, true);
             }
 
-            var events = new List<SimulationRunEvent>();
+            List<SimulationRunEvent> events = new();
             if (data.ContainsKey("events"))
             {
-                var eventsData = (object[])data["events"];
-                foreach (var eventData in eventsData)
+                object[] eventsData = (object[])data["events"];
+                foreach (object eventData in eventsData)
                 {
                     events.Add(SimulationRunEvent.From((Dictionary<string, object>)eventData));
                 }
@@ -78,4 +73,4 @@ namespace PaddleWrapper.Entities
             );
         }
     }
-} 
+}

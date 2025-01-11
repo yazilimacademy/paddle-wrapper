@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Entities.Event;
-using PaddleWrapper.Entities.Simulation;
-using PaddleWrapper.Notifications.Entities;
 
 namespace PaddleWrapper.Entities
 {
@@ -60,9 +55,9 @@ namespace PaddleWrapper.Entities
 
         public static Simulation From(Dictionary<string, object> data)
         {
-            var typeStr = (string)data["type"];
+            string typeStr = (string)data["type"];
             object type;
-            
+
             try
             {
                 var eventType = System.Enum.Parse<EventTypeName>(typeStr, true);
@@ -79,13 +74,13 @@ namespace PaddleWrapper.Entities
                 notificationSettingId: (string)data["notification_setting_id"],
                 name: (string)data["name"],
                 type: type,
-                payload: data.ContainsKey("payload") && data["payload"] != null ? 
+                payload: data.ContainsKey("payload") && data["payload"] != null ?
                     EntityFactory.Create(typeStr, (Dictionary<string, object>)data["payload"]) : null,
-                lastRunAt: data.ContainsKey("last_run_at") ? 
+                lastRunAt: data.ContainsKey("last_run_at") ?
                     DateTime.Parse((string)data["last_run_at"]) : null,
                 createdAt: DateTime.Parse((string)data["created_at"]),
                 updatedAt: DateTime.Parse((string)data["updated_at"])
             );
         }
     }
-} 
+}

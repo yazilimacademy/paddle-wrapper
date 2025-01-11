@@ -12,4 +12,4 @@ namespace PaddleWrapper.Entities.Shared
         [EnumMember(Value = "inline")]
         Inline
     }
-} 
+}

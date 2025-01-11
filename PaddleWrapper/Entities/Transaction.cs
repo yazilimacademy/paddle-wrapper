@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using PaddleWrapper.Entities.Shared;
-using PaddleWrapper.Entities.Transaction;
+using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
 {
@@ -159,41 +156,41 @@ namespace PaddleWrapper.Entities
 
         public static Transaction From(Dictionary<string, object> data)
         {
-            var items = new List<TransactionItem>();
+            List<TransactionItem> items = new();
             if (data.ContainsKey("items"))
             {
-                var itemsData = (object[])data["items"];
-                foreach (var item in itemsData)
+                object[] itemsData = (object[])data["items"];
+                foreach (object item in itemsData)
                 {
                     items.Add(TransactionItem.From((Dictionary<string, object>)item));
                 }
             }
 
-            var payments = new List<TransactionPaymentAttempt>();
+            List<TransactionPaymentAttempt> payments = new();
             if (data.ContainsKey("payments"))
             {
-                var paymentsData = (object[])data["payments"];
-                foreach (var payment in paymentsData)
+                object[] paymentsData = (object[])data["payments"];
+                foreach (object payment in paymentsData)
                 {
                     payments.Add(TransactionPaymentAttempt.From((Dictionary<string, object>)payment));
                 }
             }
 
-            var adjustments = new List<Adjustment>();
+            List<Adjustment> adjustments = new();
             if (data.ContainsKey("adjustments"))
             {
-                var adjustmentsData = (object[])data["adjustments"];
-                foreach (var adjustment in adjustmentsData)
+                object[] adjustmentsData = (object[])data["adjustments"];
+                foreach (object adjustment in adjustmentsData)
                 {
                     adjustments.Add(Adjustment.From((Dictionary<string, object>)adjustment));
                 }
             }
 
-            var availablePaymentMethods = new List<AvailablePaymentMethods>();
+            List<AvailablePaymentMethods> availablePaymentMethods = new();
             if (data.ContainsKey("available_payment_methods"))
             {
-                var methodsData = (object[])data["available_payment_methods"];
-                foreach (var method in methodsData)
+                object[] methodsData = (object[])data["available_payment_methods"];
+                foreach (object method in methodsData)
                 {
                     availablePaymentMethods.Add(System.Enum.Parse<AvailablePaymentMethods>((string)method, true));
                 }
@@ -205,7 +202,7 @@ namespace PaddleWrapper.Entities
                 customerId: data.ContainsKey("customer_id") ? (string?)data["customer_id"] : null,
                 addressId: data.ContainsKey("address_id") ? (string?)data["address_id"] : null,
                 businessId: data.ContainsKey("business_id") ? (string?)data["business_id"] : null,
-                customData: data.ContainsKey("custom_data") ? 
+                customData: data.ContainsKey("custom_data") ?
                     CustomData.From((Dictionary<string, object>)data["custom_data"]) : null,
                 currencyCode: System.Enum.Parse<CurrencyCode>((string)data["currency_code"], true),
                 origin: System.Enum.Parse<TransactionOrigin>((string)data["origin"], true),
@@ -214,31 +211,31 @@ namespace PaddleWrapper.Entities
                 invoiceNumber: data.ContainsKey("invoice_number") ? (string?)data["invoice_number"] : null,
                 collectionMode: System.Enum.Parse<CollectionMode>((string)data["collection_mode"], true),
                 discountId: data.ContainsKey("discount_id") ? (string?)data["discount_id"] : null,
-                billingDetails: data.ContainsKey("billing_details") ? 
+                billingDetails: data.ContainsKey("billing_details") ?
                     BillingDetails.From((Dictionary<string, object>)data["billing_details"]) : null,
-                billingPeriod: data.ContainsKey("billing_period") ? 
+                billingPeriod: data.ContainsKey("billing_period") ?
                     TransactionTimePeriod.From((Dictionary<string, object>)data["billing_period"]) : null,
                 items: items,
                 details: TransactionDetails.From((Dictionary<string, object>)data["details"]),
                 payments: payments,
-                checkout: data.ContainsKey("checkout") ? 
+                checkout: data.ContainsKey("checkout") ?
                     Checkout.From((Dictionary<string, object>)data["checkout"]) : null,
                 createdAt: DateTime.Parse((string)data["created_at"]),
                 updatedAt: DateTime.Parse((string)data["updated_at"]),
                 billedAt: data.ContainsKey("billed_at") ? DateTime.Parse((string)data["billed_at"]) : null,
-                address: data.ContainsKey("address") ? 
+                address: data.ContainsKey("address") ?
                     Address.From((Dictionary<string, object>)data["address"]) : null,
                 adjustments: adjustments,
-                adjustmentsTotals: data.ContainsKey("adjustments_totals") ? 
+                adjustmentsTotals: data.ContainsKey("adjustments_totals") ?
                     TransactionAdjustmentsTotals.From((Dictionary<string, object>)data["adjustments_totals"]) : null,
-                business: data.ContainsKey("business") ? 
+                business: data.ContainsKey("business") ?
                     Business.From((Dictionary<string, object>)data["business"]) : null,
-                customer: data.ContainsKey("customer") ? 
+                customer: data.ContainsKey("customer") ?
                     Customer.From((Dictionary<string, object>)data["customer"]) : null,
-                discount: data.ContainsKey("discount") ? 
+                discount: data.ContainsKey("discount") ?
                     Discount.From((Dictionary<string, object>)data["discount"]) : null,
                 availablePaymentMethods: availablePaymentMethods
             );
         }
     }
-} 
+}

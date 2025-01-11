@@ -17,4 +17,4 @@ namespace PaddleWrapper.Entities.Shared
             return new Data(data);
         }
     }
-} 
+}

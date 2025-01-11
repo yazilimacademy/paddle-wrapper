@@ -24,4 +24,4 @@ namespace PaddleWrapper.Entities.Report
         [EnumMember(Value = "transaction_line_items")]
         TransactionLineItems
     }
-} 
+}

@@ -21,4 +21,4 @@ namespace PaddleWrapper.Entities.Subscription
         [EnumMember(Value = "do_not_bill")]
         DoNotBill
     }
-} 
+}

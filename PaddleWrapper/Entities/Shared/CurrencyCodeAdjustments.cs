@@ -15,4 +15,4 @@ namespace PaddleWrapper.Entities.Shared
         [EnumMember(Value = "USD")]
         USD
     }
-} 
+}

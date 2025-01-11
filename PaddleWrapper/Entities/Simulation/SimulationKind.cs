@@ -12,4 +12,4 @@ namespace PaddleWrapper.Entities.Simulation
         [EnumMember(Value = "single_event")]
         SingleEvent
     }
-} 
+}

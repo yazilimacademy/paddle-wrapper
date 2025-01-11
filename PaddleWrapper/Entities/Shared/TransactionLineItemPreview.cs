@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using PaddleWrapper.Entities.Transaction;
 
 namespace PaddleWrapper.Entities.Shared
 {
@@ -60,4 +59,4 @@ namespace PaddleWrapper.Entities.Shared
             );
         }
     }
-} 
+}

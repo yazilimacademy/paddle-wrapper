@@ -45,4 +45,4 @@ namespace PaddleWrapper.Entities.Report
         [EnumMember(Value = "updated_at")]
         UpdatedAt
     }
-} 
+}

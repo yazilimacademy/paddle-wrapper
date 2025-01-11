@@ -15,4 +15,4 @@ namespace PaddleWrapper.Entities.Discount
         [EnumMember(Value = "percentage")]
         Percentage
     }
-} 
+}

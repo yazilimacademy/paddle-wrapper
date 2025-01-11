@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using PaddleWrapper.Entities.Shared;
-using PaddleWrapper.Entities.Subscription;
+using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
 {
@@ -139,11 +136,11 @@ namespace PaddleWrapper.Entities
 
         public static Subscription From(Dictionary<string, object> data)
         {
-            var items = new List<SubscriptionItem>();
+            List<SubscriptionItem> items = new();
             if (data.ContainsKey("items"))
             {
-                var itemsData = (object[])data["items"];
-                foreach (var item in itemsData)
+                object[] itemsData = (object[])data["items"];
+                foreach (object item in itemsData)
                 {
                     items.Add(SubscriptionItem.From((Dictionary<string, object>)item));
                 }
@@ -163,28 +160,28 @@ namespace PaddleWrapper.Entities
                 nextBilledAt: data.ContainsKey("next_billed_at") ? DateTime.Parse((string)data["next_billed_at"]) : null,
                 pausedAt: data.ContainsKey("paused_at") ? DateTime.Parse((string)data["paused_at"]) : null,
                 canceledAt: data.ContainsKey("canceled_at") ? DateTime.Parse((string)data["canceled_at"]) : null,
-                discount: data.ContainsKey("discount") ? 
+                discount: data.ContainsKey("discount") ?
                     SubscriptionDiscount.From((Dictionary<string, object>)data["discount"]) : null,
                 collectionMode: System.Enum.Parse<CollectionMode>((string)data["collection_mode"], true),
-                billingDetails: data.ContainsKey("billing_details") ? 
+                billingDetails: data.ContainsKey("billing_details") ?
                     BillingDetails.From((Dictionary<string, object>)data["billing_details"]) : null,
-                currentBillingPeriod: data.ContainsKey("current_billing_period") ? 
+                currentBillingPeriod: data.ContainsKey("current_billing_period") ?
                     SubscriptionTimePeriod.From((Dictionary<string, object>)data["current_billing_period"]) : null,
                 billingCycle: TimePeriod.From((Dictionary<string, object>)data["billing_cycle"]),
-                scheduledChange: data.ContainsKey("scheduled_change") ? 
+                scheduledChange: data.ContainsKey("scheduled_change") ?
                     SubscriptionScheduledChange.From((Dictionary<string, object>)data["scheduled_change"]) : null,
-                managementUrls: data.ContainsKey("management_urls") ? 
+                managementUrls: data.ContainsKey("management_urls") ?
                     SubscriptionManagementUrls.From((Dictionary<string, object>)data["management_urls"]) : null,
                 items: items,
-                customData: data.ContainsKey("custom_data") ? 
+                customData: data.ContainsKey("custom_data") ?
                     CustomData.From((Dictionary<string, object>)data["custom_data"]) : null,
-                importMeta: data.ContainsKey("import_meta") ? 
+                importMeta: data.ContainsKey("import_meta") ?
                     ImportMeta.From((Dictionary<string, object>)data["import_meta"]) : null,
-                nextTransaction: data.ContainsKey("next_transaction") ? 
+                nextTransaction: data.ContainsKey("next_transaction") ?
                     SubscriptionNextTransaction.From((Dictionary<string, object>)data["next_transaction"]) : null,
-                recurringTransactionDetails: data.ContainsKey("recurring_transaction_details") ? 
+                recurringTransactionDetails: data.ContainsKey("recurring_transaction_details") ?
                     TransactionDetailsPreview.From((Dictionary<string, object>)data["recurring_transaction_details"]) : null
             );
         }
     }
-} 
+}

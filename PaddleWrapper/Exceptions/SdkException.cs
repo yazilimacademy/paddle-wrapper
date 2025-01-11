@@ -1,5 +1,3 @@
-using System;
-
 namespace PaddleWrapper.Exceptions
 {
     public class SdkException : Exception
@@ -8,4 +6,4 @@ namespace PaddleWrapper.Exceptions
         public SdkException(string message) : base(message) { }
         public SdkException(string message, Exception inner) : base(message, inner) { }
     }
-} 
+}

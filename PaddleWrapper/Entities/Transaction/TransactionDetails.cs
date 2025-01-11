@@ -1,6 +1,5 @@
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using PaddleWrapper.Entities.Shared;
+using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities.Transaction
 {
@@ -42,16 +41,16 @@ namespace PaddleWrapper.Entities.Transaction
 
         public static TransactionDetails From(Dictionary<string, object> data)
         {
-            var taxRatesUsed = new List<TaxRatesUsed>();
-            var taxRatesUsedData = (object[])data["tax_rates_used"];
-            foreach (var item in taxRatesUsedData)
+            List<TaxRatesUsed> taxRatesUsed = new();
+            object[] taxRatesUsedData = (object[])data["tax_rates_used"];
+            foreach (object item in taxRatesUsedData)
             {
                 taxRatesUsed.Add(TaxRatesUsed.From((Dictionary<string, object>)item));
             }
 
-            var lineItems = new List<TransactionLineItem>();
-            var lineItemsData = (object[])data["line_items"];
-            foreach (var item in lineItemsData)
+            List<Transaction.TransactionLineItem> lineItems = new List<TransactionLineItem>();
+            object[] lineItemsData = (object[])data["line_items"];
+            foreach (object item in lineItemsData)
             {
                 lineItems.Add(TransactionLineItem.From((Dictionary<string, object>)item));
             }
@@ -66,4 +65,4 @@ namespace PaddleWrapper.Entities.Transaction
             );
         }
     }
-} 
+}

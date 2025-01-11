@@ -29,4 +29,4 @@ namespace PaddleWrapper.Entities.Shared
             PaymentTerms = paymentTerms;
         }
     }
-} 
+}

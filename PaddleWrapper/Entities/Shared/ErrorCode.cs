@@ -60,4 +60,4 @@ namespace PaddleWrapper.Entities.Shared
         [EnumMember(Value = "unknown")]
         Unknown
     }
-} 
+}

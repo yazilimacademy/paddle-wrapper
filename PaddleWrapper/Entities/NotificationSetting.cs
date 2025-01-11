@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Entities.NotificationSetting;
 
 namespace PaddleWrapper.Entities
 {
@@ -62,11 +60,11 @@ namespace PaddleWrapper.Entities
 
         public static NotificationSetting From(Dictionary<string, object> data)
         {
-            var subscribedEvents = new List<EventType>();
+            List<EventType> subscribedEvents = new();
             if (data.ContainsKey("subscribed_events"))
             {
-                var eventsData = (object[])data["subscribed_events"];
-                foreach (var eventData in eventsData)
+                object[] eventsData = (object[])data["subscribed_events"];
+                foreach (object eventData in eventsData)
                 {
                     subscribedEvents.Add(EventType.From((Dictionary<string, object>)eventData));
                 }
@@ -86,4 +84,4 @@ namespace PaddleWrapper.Entities
             );
         }
     }
-} 
+}

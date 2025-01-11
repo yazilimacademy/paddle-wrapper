@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using PaddleWrapper.Entities.Credit;
-
 namespace PaddleWrapper.Entities.Collections
 {
     public class CreditBalanceCollection : Collection<CreditBalance>
@@ -12,10 +9,10 @@ namespace PaddleWrapper.Entities.Collections
 
         public static new CreditBalanceCollection From(Dictionary<string, object> data, Paginator? paginator)
         {
-            var items = new List<CreditBalance>();
-            var dataArray = (object[])data["data"];
+            List<CreditBalance> items = new();
+            object[] dataArray = (object[])data["data"];
 
-            foreach (var item in dataArray)
+            foreach (object item in dataArray)
             {
                 items.Add(CreditBalance.From((Dictionary<string, object>)item));
             }
@@ -23,4 +20,4 @@ namespace PaddleWrapper.Entities.Collections
             return new CreditBalanceCollection(items, paginator);
         }
     }
-} 
+}

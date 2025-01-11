@@ -45,4 +45,4 @@ namespace PaddleWrapper.Entities.Shared
         [EnumMember(Value = "ZAR")]
         ZAR
     }
-} 
+}

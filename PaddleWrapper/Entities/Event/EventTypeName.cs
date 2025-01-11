@@ -150,4 +150,4 @@ namespace PaddleWrapper.Entities.Event
         [EnumMember(Value = "report.updated")]
         ReportUpdated
     }
-} 
+}

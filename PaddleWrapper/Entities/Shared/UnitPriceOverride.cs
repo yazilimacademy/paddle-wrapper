@@ -19,11 +19,11 @@ namespace PaddleWrapper.Entities.Shared
 
         public static UnitPriceOverride From(Dictionary<string, object> data)
         {
-            var countryCodesArray = (object[])data["country_codes"];
+            object[] countryCodesArray = (object[])data["country_codes"];
             return new UnitPriceOverride(
                 countryCodes: countryCodesArray.Select(code => Enum.Parse<CountryCode>(code.ToString(), true)).ToList(),
                 unitPrice: Money.From((Dictionary<string, object>)data["unit_price"])
             );
         }
     }
-} 
+}

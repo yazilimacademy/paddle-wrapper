@@ -12,4 +12,4 @@ namespace PaddleWrapper.Entities.Report
         [EnumMember(Value = "gte")]
         Gte
     }
-} 
+}

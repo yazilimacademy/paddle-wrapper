@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using PaddleWrapper.Entities.Shared;
 
 namespace PaddleWrapper.Entities.CustomerPortalSession
 {
@@ -33,4 +32,4 @@ namespace PaddleWrapper.Entities.CustomerPortalSession
             );
         }
     }
-} 
+}

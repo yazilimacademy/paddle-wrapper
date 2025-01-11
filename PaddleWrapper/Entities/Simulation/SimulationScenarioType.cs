@@ -21,4 +21,4 @@ namespace PaddleWrapper.Entities.Simulation
         [EnumMember(Value = "subscription_cancellation")]
         SubscriptionCancellation
     }
-} 
+}

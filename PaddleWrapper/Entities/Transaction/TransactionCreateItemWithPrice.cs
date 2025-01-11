@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using PaddleWrapper.Entities.Shared;
 
 namespace PaddleWrapper.Entities.Transaction
 {
@@ -19,7 +18,7 @@ namespace PaddleWrapper.Entities.Transaction
 
         public static TransactionCreateItemWithPrice From(Dictionary<string, object> data)
         {
-            var priceData = (Dictionary<string, object>)data["price"];
+            Dictionary<string, object> priceData = (Dictionary<string, object>)data["price"];
             object price;
 
             // Determine which type of price object to create based on the data
@@ -38,4 +37,4 @@ namespace PaddleWrapper.Entities.Transaction
             );
         }
     }
-} 
+}

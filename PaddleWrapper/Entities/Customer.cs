@@ -1,7 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using PaddleWrapper.Entities.Shared;
+using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
 {
@@ -69,14 +67,14 @@ namespace PaddleWrapper.Entities
                 email: (string)data["email"],
                 marketingConsent: (bool)data["marketing_consent"],
                 status: System.Enum.Parse<Status>((string)data["status"], true),
-                customData: data.ContainsKey("custom_data") ? 
+                customData: data.ContainsKey("custom_data") ?
                     CustomData.From((Dictionary<string, object>)data["custom_data"]) : null,
                 locale: (string)data["locale"],
                 createdAt: DateTime.Parse((string)data["created_at"]),
                 updatedAt: DateTime.Parse((string)data["updated_at"]),
-                importMeta: data.ContainsKey("import_meta") ? 
+                importMeta: data.ContainsKey("import_meta") ?
                     ImportMeta.From((Dictionary<string, object>)data["import_meta"]) : null
             );
         }
     }
-} 
+}

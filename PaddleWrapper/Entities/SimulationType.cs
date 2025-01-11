@@ -1,7 +1,4 @@
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Entities.Event;
-using PaddleWrapper.Entities.Simulation;
 
 namespace PaddleWrapper.Entities
 {
@@ -43,11 +40,11 @@ namespace PaddleWrapper.Entities
 
         public static SimulationType From(Dictionary<string, object> data)
         {
-            var events = new List<EventTypeName>();
+            List<EventTypeName> events = new();
             if (data.ContainsKey("events"))
             {
-                var eventsData = (object[])data["events"];
-                foreach (var eventData in eventsData)
+                object[] eventsData = (object[])data["events"];
+                foreach (object eventData in eventsData)
                 {
                     events.Add(System.Enum.Parse<EventTypeName>((string)eventData, true));
                 }
@@ -63,4 +60,4 @@ namespace PaddleWrapper.Entities
             );
         }
     }
-} 
+}

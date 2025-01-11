@@ -24,4 +24,4 @@ namespace PaddleWrapper.Entities.Subscription
         [EnumMember(Value = "inactive")]
         Inactive
     }
-} 
+}

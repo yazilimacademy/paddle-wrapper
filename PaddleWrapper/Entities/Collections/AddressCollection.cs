@@ -9,10 +9,10 @@ namespace PaddleWrapper.Entities.Collections
 
         public static new AddressCollection From(Dictionary<string, object> data, Paginator? paginator)
         {
-            var items = new List<Address>();
-            var dataArray = (object[])data["data"];
+            List<Address> items = new();
+            object[] dataArray = (object[])data["data"];
 
-            foreach (var item in dataArray)
+            foreach (object item in dataArray)
             {
                 items.Add(Address.From((Dictionary<string, object>)item));
             }
@@ -20,4 +20,4 @@ namespace PaddleWrapper.Entities.Collections
             return new AddressCollection(items, paginator);
         }
     }
-} 
+}

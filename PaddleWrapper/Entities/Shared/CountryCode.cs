@@ -236,4 +236,4 @@ namespace PaddleWrapper.Entities.Shared
         [EnumMember(Value = "ZA")] ZA,
         [EnumMember(Value = "ZM")] ZM
     }
-} 
+}

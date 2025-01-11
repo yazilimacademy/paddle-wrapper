@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using PaddleWrapper.Entities.Shared;
 
 namespace PaddleWrapper.Entities.Transaction
 {
@@ -27,4 +26,4 @@ namespace PaddleWrapper.Entities.Transaction
             );
         }
     }
-} 
+}

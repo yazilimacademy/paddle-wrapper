@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using PaddleWrapper.Entities.Notification;
-
 namespace PaddleWrapper.Entities.Collections
 {
     public class NotificationSettingCollection : Collection<NotificationSetting>
@@ -12,10 +9,10 @@ namespace PaddleWrapper.Entities.Collections
 
         public static new NotificationSettingCollection From(Dictionary<string, object> data, Paginator? paginator)
         {
-            var items = new List<NotificationSetting>();
-            var dataArray = (object[])data["data"];
+            List<NotificationSetting> items = new();
+            object[] dataArray = (object[])data["data"];
 
-            foreach (var item in dataArray)
+            foreach (object item in dataArray)
             {
                 items.Add(NotificationSetting.From((Dictionary<string, object>)item));
             }
@@ -23,4 +20,4 @@ namespace PaddleWrapper.Entities.Collections
             return new NotificationSettingCollection(items, paginator);
         }
     }
-} 
+}

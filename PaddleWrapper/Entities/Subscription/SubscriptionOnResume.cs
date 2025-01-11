@@ -12,4 +12,4 @@ namespace PaddleWrapper.Entities.Subscription
         [EnumMember(Value = "start_new_billing_period")]
         StartNewBillingPeriod
     }
-} 
+}

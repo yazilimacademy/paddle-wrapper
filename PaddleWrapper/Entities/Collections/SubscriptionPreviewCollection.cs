@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using PaddleWrapper.Entities.Subscription;
-
 namespace PaddleWrapper.Entities.Collections
 {
     public class SubscriptionPreviewCollection : Collection<SubscriptionPreview>
@@ -12,10 +9,10 @@ namespace PaddleWrapper.Entities.Collections
 
         public static new SubscriptionPreviewCollection From(Dictionary<string, object> data, Paginator? paginator)
         {
-            var items = new List<SubscriptionPreview>();
-            var dataArray = (object[])data["data"];
+            List<SubscriptionPreview> items = new();
+            object[] dataArray = (object[])data["data"];
 
-            foreach (var item in dataArray)
+            foreach (object item in dataArray)
             {
                 items.Add(SubscriptionPreview.From((Dictionary<string, object>)item));
             }
@@ -23,4 +20,4 @@ namespace PaddleWrapper.Entities.Collections
             return new SubscriptionPreviewCollection(items, paginator);
         }
     }
-} 
+}

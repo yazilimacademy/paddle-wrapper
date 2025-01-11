@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using PaddleWrapper.Entities.Adjustment;
-
 namespace PaddleWrapper.Entities.Collections
 {
     public class AdjustmentCollection : Collection<Adjustment.Adjustment>
@@ -12,10 +9,10 @@ namespace PaddleWrapper.Entities.Collections
 
         public static new AdjustmentCollection From(Dictionary<string, object> data, Paginator? paginator)
         {
-            var items = new List<Adjustment.Adjustment>();
-            var dataArray = (object[])data["data"];
+            List<Adjustment.Adjustment> items = new();
+            object[] dataArray = (object[])data["data"];
 
-            foreach (var item in dataArray)
+            foreach (object item in dataArray)
             {
                 items.Add(Adjustment.Adjustment.From((Dictionary<string, object>)item));
             }
@@ -23,4 +20,4 @@ namespace PaddleWrapper.Entities.Collections
             return new AdjustmentCollection(items, paginator);
         }
     }
-} 
+}

@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Entities.Event;
-using PaddleWrapper.Notifications.Entities;
 
 namespace PaddleWrapper.Entities
 {
@@ -39,17 +35,17 @@ namespace PaddleWrapper.Entities
 
         public static Event From(Dictionary<string, object> data)
         {
-            var eventTypeStr = (string)data["event_type"];
-            var type = eventTypeStr.Split('.');
-            var identifier = string.Join("", type.Select(t => char.ToUpperInvariant(t[0]) + t.Substring(1)));
+            string eventTypeStr = (string)data["event_type"];
+            string[] type = eventTypeStr.Split('.');
+            string identifier = string.Join("", type.Select(t => char.ToUpperInvariant(t[0]) + t[1..]));
 
-            var eventType = Type.GetType($"PaddleWrapper.Notifications.Events.{identifier}");
+            Type? eventType = Type.GetType($"PaddleWrapper.Notifications.Events.{identifier}");
             if (eventType == null || !typeof(Event).IsAssignableFrom(eventType))
             {
                 eventType = typeof(UndefinedEvent);
             }
 
-            var fromEventMethod = eventType.GetMethod("FromEvent");
+            System.Reflection.MethodInfo? fromEventMethod = eventType.GetMethod("FromEvent");
             if (fromEventMethod == null)
             {
                 throw new InvalidOperationException($"Event type {eventType.Name} does not implement FromEvent method");
@@ -72,4 +68,4 @@ namespace PaddleWrapper.Entities
             NotificationEntity data,
             string? notificationId = null);
     }
-} 
+}

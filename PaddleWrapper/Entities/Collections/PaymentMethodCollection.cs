@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using PaddleWrapper.Entities.PaymentMethod;
-
 namespace PaddleWrapper.Entities.Collections
 {
     public class PaymentMethodCollection : Collection<PaymentMethod>
@@ -12,10 +9,10 @@ namespace PaddleWrapper.Entities.Collections
 
         public static new PaymentMethodCollection From(Dictionary<string, object> data, Paginator? paginator)
         {
-            var items = new List<PaymentMethod>();
-            var dataArray = (object[])data["data"];
+            List<PaymentMethod> items = new();
+            object[] dataArray = (object[])data["data"];
 
-            foreach (var item in dataArray)
+            foreach (object item in dataArray)
             {
                 items.Add(PaymentMethod.From((Dictionary<string, object>)item));
             }
@@ -23,4 +20,4 @@ namespace PaddleWrapper.Entities.Collections
             return new PaymentMethodCollection(items, paginator);
         }
     }
-} 
+}

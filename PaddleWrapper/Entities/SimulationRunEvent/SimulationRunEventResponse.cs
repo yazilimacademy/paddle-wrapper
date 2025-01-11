@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using PaddleWrapper.Entities.Shared;
 
 namespace PaddleWrapper.Entities.SimulationRunEvent
 {
@@ -25,4 +24,4 @@ namespace PaddleWrapper.Entities.SimulationRunEvent
             );
         }
     }
-} 
+}

@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Entities.Event;
-using PaddleWrapper.Entities.Notification;
 
 namespace PaddleWrapper.Entities
 {
@@ -90,4 +86,4 @@ namespace PaddleWrapper.Entities
             );
         }
     }
-} 
+}

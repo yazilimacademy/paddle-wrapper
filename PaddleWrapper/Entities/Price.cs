@@ -1,7 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using PaddleWrapper.Entities.Shared;
+using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
 {
@@ -98,11 +96,11 @@ namespace PaddleWrapper.Entities
 
         public static Price From(Dictionary<string, object> data)
         {
-            var unitPriceOverrides = new List<UnitPriceOverride>();
+            List<UnitPriceOverride> unitPriceOverrides = new();
             if (data.ContainsKey("unit_price_overrides"))
             {
-                var overridesData = (object[])data["unit_price_overrides"];
-                foreach (var override_ in overridesData)
+                object[] overridesData = (object[])data["unit_price_overrides"];
+                foreach (object override_ in overridesData)
                 {
                     unitPriceOverrides.Add(UnitPriceOverride.From((Dictionary<string, object>)override_));
                 }
@@ -113,26 +111,26 @@ namespace PaddleWrapper.Entities
                 productId: (string)data["product_id"],
                 name: data.ContainsKey("name") ? (string?)data["name"] : null,
                 description: (string)data["description"],
-                type: data.ContainsKey("type") && data["type"] != null ? 
+                type: data.ContainsKey("type") && data["type"] != null ?
                     System.Enum.Parse<CatalogType>((string)data["type"], true) : null,
-                billingCycle: data.ContainsKey("billing_cycle") ? 
+                billingCycle: data.ContainsKey("billing_cycle") ?
                     TimePeriod.From((Dictionary<string, object>)data["billing_cycle"]) : null,
-                trialPeriod: data.ContainsKey("trial_period") ? 
+                trialPeriod: data.ContainsKey("trial_period") ?
                     TimePeriod.From((Dictionary<string, object>)data["trial_period"]) : null,
                 taxMode: System.Enum.Parse<TaxMode>((string)data["tax_mode"], true),
                 unitPrice: Money.From((Dictionary<string, object>)data["unit_price"]),
                 unitPriceOverrides: unitPriceOverrides,
                 quantity: PriceQuantity.From((Dictionary<string, object>)data["quantity"]),
                 status: System.Enum.Parse<Status>((string)data["status"], true),
-                customData: data.ContainsKey("custom_data") ? 
+                customData: data.ContainsKey("custom_data") ?
                     CustomData.From((Dictionary<string, object>)data["custom_data"]) : null,
-                importMeta: data.ContainsKey("import_meta") ? 
+                importMeta: data.ContainsKey("import_meta") ?
                     ImportMeta.From((Dictionary<string, object>)data["import_meta"]) : null,
-                product: data.ContainsKey("product") ? 
+                product: data.ContainsKey("product") ?
                     Product.From((Dictionary<string, object>)data["product"]) : null,
                 createdAt: DateTime.Parse((string)data["created_at"]),
                 updatedAt: DateTime.Parse((string)data["updated_at"])
             );
         }
     }
-} 
+}

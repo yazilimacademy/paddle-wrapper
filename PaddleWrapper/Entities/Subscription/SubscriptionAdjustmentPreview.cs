@@ -1,6 +1,5 @@
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using PaddleWrapper.Entities.Shared;
+using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities.Subscription
 {
@@ -27,9 +26,9 @@ namespace PaddleWrapper.Entities.Subscription
 
         public static SubscriptionAdjustmentPreview From(Dictionary<string, object> data)
         {
-            var items = new List<SubscriptionAdjustmentItem>();
-            var itemsData = (object[])data["items"];
-            foreach (var item in itemsData)
+            List<Subscription.SubscriptionAdjustmentItem> items = new List<SubscriptionAdjustmentItem>();
+            object[] itemsData = (object[])data["items"];
+            foreach (object item in itemsData)
             {
                 items.Add(SubscriptionAdjustmentItem.From((Dictionary<string, object>)item));
             }
@@ -41,4 +40,4 @@ namespace PaddleWrapper.Entities.Subscription
             );
         }
     }
-} 
+}

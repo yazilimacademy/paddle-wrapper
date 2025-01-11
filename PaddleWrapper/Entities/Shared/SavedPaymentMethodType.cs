@@ -21,4 +21,4 @@ namespace PaddleWrapper.Entities.Shared
         [EnumMember(Value = "paypal")]
         Paypal
     }
-} 
+}

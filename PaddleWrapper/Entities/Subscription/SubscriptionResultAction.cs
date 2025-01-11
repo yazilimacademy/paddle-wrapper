@@ -12,4 +12,4 @@ namespace PaddleWrapper.Entities.Subscription
         [EnumMember(Value = "charge")]
         Charge
     }
-} 
+}
