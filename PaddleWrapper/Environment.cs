@@ -1,8 +1,20 @@
-namespace PaddleWrapper
+namespace PaddleWrapper;
+
+public enum Environment
 {
-    public enum Environment
+    Sandbox,
+    Production
+}
+
+public static class EnvironmentExtensions
+{
+    public static string GetBaseUrl(this Environment environment)
     {
-        Sandbox,
-        Production
+        return environment switch
+        {
+            Environment.Sandbox => "https://sandbox-api.paddle.com",
+            Environment.Production => "https://api.paddle.com",
+            _ => throw new ArgumentOutOfRangeException(nameof(environment))
+        };
     }
 }
