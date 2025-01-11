@@ -1,0 +1,70 @@
+using System.Text.Json.Serialization;
+
+namespace PaddleWrapper.Notifications.Entities.Shared;
+
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum CurrencyCode
+{
+    [JsonPropertyName("USD")]
+    USD,
+    [JsonPropertyName("EUR")]
+    EUR,
+    [JsonPropertyName("GBP")]
+    GBP,
+    [JsonPropertyName("JPY")]
+    JPY,
+    [JsonPropertyName("AUD")]
+    AUD,
+    [JsonPropertyName("CAD")]
+    CAD,
+    [JsonPropertyName("CHF")]
+    CHF,
+    [JsonPropertyName("HKD")]
+    HKD,
+    [JsonPropertyName("SGD")]
+    SGD,
+    [JsonPropertyName("SEK")]
+    SEK,
+    [JsonPropertyName("ARS")]
+    ARS,
+    [JsonPropertyName("BRL")]
+    BRL,
+    [JsonPropertyName("CNY")]
+    CNY,
+    [JsonPropertyName("COP")]
+    COP,
+    [JsonPropertyName("CZK")]
+    CZK,
+    [JsonPropertyName("DKK")]
+    DKK,
+    [JsonPropertyName("HUF")]
+    HUF,
+    [JsonPropertyName("ILS")]
+    ILS,
+    [JsonPropertyName("INR")]
+    INR,
+    [JsonPropertyName("KRW")]
+    KRW,
+    [JsonPropertyName("MXN")]
+    MXN,
+    [JsonPropertyName("NOK")]
+    NOK,
+    [JsonPropertyName("NZD")]
+    NZD,
+    [JsonPropertyName("PLN")]
+    PLN,
+    [JsonPropertyName("RUB")]
+    RUB,
+    [JsonPropertyName("THB")]
+    THB,
+    [JsonPropertyName("TRY")]
+    TRY,
+    [JsonPropertyName("TWD")]
+    TWD,
+    [JsonPropertyName("UAH")]
+    UAH,
+    [JsonPropertyName("VND")]
+    VND,
+    [JsonPropertyName("ZAR")]
+    ZAR
+} 
