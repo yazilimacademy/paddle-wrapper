@@ -5,17 +5,17 @@ namespace PaddleWrapper.Notifications;
 
 public sealed class PaddleSignature
 {
-    public const string HEADER = "Paddle-Signature";
-    public const string HASH_ALGORITHM_1 = "h1";
     public const string TIMESTAMP = "ts";
+    public const string HASH_ALGORITHM_1 = "h1";
+    public const string HEADER = "Paddle-Signature";
 
     private readonly Dictionary<string, List<string>> _hashes;
     public int Timestamp { get; }
 
     private PaddleSignature(int timestamp, Dictionary<string, List<string>> hashes)
     {
-        Timestamp = timestamp;
         _hashes = hashes;
+        Timestamp = timestamp;
     }
 
     /// <summary>
