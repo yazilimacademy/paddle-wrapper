@@ -112,16 +112,16 @@ namespace PaddleWrapper.Entities
                 name: data.ContainsKey("name") ? (string?)data["name"] : null,
                 description: (string)data["description"],
                 type: data.ContainsKey("type") && data["type"] != null ?
-                    System.Enum.Parse<CatalogType>((string)data["type"], true) : null,
+                    Enum.Parse<CatalogType>((string)data["type"], true) : null,
                 billingCycle: data.ContainsKey("billing_cycle") ?
                     TimePeriod.From((Dictionary<string, object>)data["billing_cycle"]) : null,
                 trialPeriod: data.ContainsKey("trial_period") ?
                     TimePeriod.From((Dictionary<string, object>)data["trial_period"]) : null,
-                taxMode: System.Enum.Parse<TaxMode>((string)data["tax_mode"], true),
+                taxMode: Enum.Parse<TaxMode>((string)data["tax_mode"], true),
                 unitPrice: Money.From((Dictionary<string, object>)data["unit_price"]),
                 unitPriceOverrides: unitPriceOverrides,
                 quantity: PriceQuantity.From((Dictionary<string, object>)data["quantity"]),
-                status: System.Enum.Parse<Status>((string)data["status"], true),
+                status: Enum.Parse<Status>((string)data["status"], true),
                 customData: data.ContainsKey("custom_data") ?
                     CustomData.From((Dictionary<string, object>)data["custom_data"]) : null,
                 importMeta: data.ContainsKey("import_meta") ?

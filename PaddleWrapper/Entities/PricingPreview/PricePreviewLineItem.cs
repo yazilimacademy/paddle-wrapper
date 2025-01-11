@@ -27,20 +27,20 @@ namespace PaddleWrapper.Entities.PricingPreview
         public PricePreviewTotalsFormatted FormattedTotals { get; }
 
         [JsonPropertyName("product")]
-        public Product.Product Product { get; }
+        public Product Product { get; }
 
         [JsonPropertyName("discounts")]
         public IReadOnlyList<PricePreviewDiscounts> Discounts { get; }
 
         private PricePreviewLineItem(
-            Price.Price price,
+            Price price,
             int quantity,
             string taxRate,
             UnitTotals unitTotals,
             PricePreviewUnitTotalsFormatted formattedUnitTotals,
             Totals totals,
             PricePreviewTotalsFormatted formattedTotals,
-            Product.Product product,
+            Product product,
             IReadOnlyList<PricePreviewDiscounts> discounts)
         {
             Price = price;
@@ -64,14 +64,14 @@ namespace PaddleWrapper.Entities.PricingPreview
             }
 
             return new PricePreviewLineItem(
-                price: Price.Price.From((Dictionary<string, object>)data["price"]),
+                price: Price.From((Dictionary<string, object>)data["price"]),
                 quantity: (int)data["quantity"],
                 taxRate: (string)data["tax_rate"],
                 unitTotals: UnitTotals.From((Dictionary<string, object>)data["unit_totals"]),
                 formattedUnitTotals: PricePreviewUnitTotalsFormatted.From((Dictionary<string, object>)data["formatted_unit_totals"]),
                 totals: Totals.From((Dictionary<string, object>)data["totals"]),
                 formattedTotals: PricePreviewTotalsFormatted.From((Dictionary<string, object>)data["formatted_totals"]),
-                product: Product.Product.From((Dictionary<string, object>)data["product"]),
+                product: Product.From((Dictionary<string, object>)data["product"]),
                 discounts: discounts
             );
         }

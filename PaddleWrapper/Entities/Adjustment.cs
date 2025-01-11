@@ -1,6 +1,8 @@
+using PaddleWrapper.Entities.Adjustments;
 using PaddleWrapper.Entities.Shared;
 using System.Text.Json.Serialization;
 using Action = PaddleWrapper.Entities.Shared.Action;
+using AdjustmentType = PaddleWrapper.Entities.Adjustments.AdjustmentType;
 
 namespace PaddleWrapper.Entities
 {
@@ -114,15 +116,15 @@ namespace PaddleWrapper.Entities
 
             return new Adjustment(
                 id: (string)data["id"],
-                action: System.Enum.Parse<Action>((string)data["action"], true),
+                action: Enum.Parse<Action>((string)data["action"], true),
                 transactionId: (string)data["transaction_id"],
                 subscriptionId: data.ContainsKey("subscription_id") ? (string?)data["subscription_id"] : null,
                 customerId: (string)data["customer_id"],
                 reason: (string)data["reason"],
                 creditAppliedToBalance: data.ContainsKey("credit_applied_to_balance") ?
                     (bool?)data["credit_applied_to_balance"] : null,
-                currencyCode: System.Enum.Parse<CurrencyCode>((string)data["currency_code"], true),
-                status: System.Enum.Parse<AdjustmentStatus>((string)data["status"], true),
+                currencyCode: Enum.Parse<CurrencyCode>((string)data["currency_code"], true),
+                status: Enum.Parse<AdjustmentStatus>((string)data["status"], true),
                 items: items,
                 totals: AdjustmentTotals.From((Dictionary<string, object>)data["totals"]),
                 payoutTotals: data.ContainsKey("payout_totals") ?
@@ -130,7 +132,7 @@ namespace PaddleWrapper.Entities
                 taxRatesUsed: taxRatesUsed,
                 createdAt: DateTime.Parse((string)data["created_at"]),
                 updatedAt: data.ContainsKey("updated_at") ? DateTime.Parse((string)data["updated_at"]) : null,
-                type: System.Enum.Parse<AdjustmentType>((string)data["type"], true)
+                type: Enum.Parse<AdjustmentType>((string)data["type"], true)
             );
         }
     }

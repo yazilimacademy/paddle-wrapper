@@ -82,7 +82,7 @@ namespace PaddleWrapper.Entities
                 customerId: (string)data["customer_id"],
                 companyNumber: data.ContainsKey("company_number") ? (string?)data["company_number"] : null,
                 taxIdentifier: data.ContainsKey("tax_identifier") ? (string?)data["tax_identifier"] : null,
-                status: System.Enum.Parse<Status>((string)data["status"], true),
+                status: Enum.Parse<Status>((string)data["status"], true),
                 contacts: contacts,
                 createdAt: DateTime.Parse((string)data["created_at"]),
                 updatedAt: DateTime.Parse((string)data["updated_at"]),

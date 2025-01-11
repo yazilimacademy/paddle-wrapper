@@ -1,3 +1,4 @@
+using PaddleWrapper.Entities.Events;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
@@ -35,7 +36,7 @@ namespace PaddleWrapper.Entities
                 .ToList();
 
             return new EventType(
-                name: System.Enum.Parse<EventTypeName>((string)data["name"], true),
+                name: Enum.Parse<EventTypeName>((string)data["name"], true),
                 description: (string)data["description"],
                 group: (string)data["group"],
                 availableVersions: availableVersions

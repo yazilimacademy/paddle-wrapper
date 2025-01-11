@@ -1,3 +1,4 @@
+using PaddleWrapper.Entities.NotificationSettings;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
@@ -73,14 +74,14 @@ namespace PaddleWrapper.Entities
             return new NotificationSetting(
                 id: (string)data["id"],
                 description: (string)data["description"],
-                type: System.Enum.Parse<NotificationSettingType>((string)data["type"], true),
+                type: Enum.Parse<NotificationSettingType>((string)data["type"], true),
                 destination: (string)data["destination"],
                 active: (bool)data["active"],
                 apiVersion: (int)data["api_version"],
                 includeSensitiveFields: (bool)data["include_sensitive_fields"],
                 subscribedEvents: subscribedEvents,
                 endpointSecretKey: (string)data["endpoint_secret_key"],
-                trafficSource: System.Enum.Parse<NotificationSettingTrafficSource>((string)data["traffic_source"], true)
+                trafficSource: Enum.Parse<NotificationSettingTrafficSource>((string)data["traffic_source"], true)
             );
         }
     }

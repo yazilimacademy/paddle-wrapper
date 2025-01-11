@@ -1,3 +1,5 @@
+using PaddleWrapper.Entities.Events;
+using PaddleWrapper.Entities.Simulations;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
@@ -60,17 +62,17 @@ namespace PaddleWrapper.Entities
 
             try
             {
-                var eventType = System.Enum.Parse<EventTypeName>(typeStr, true);
+                var eventType = Enum.Parse<EventTypeName>(typeStr, true);
                 type = eventType;
             }
             catch
             {
-                type = System.Enum.Parse<SimulationScenarioType>(typeStr, true);
+                type = Enum.Parse<SimulationScenarioType>(typeStr, true);
             }
 
             return new Simulation(
                 id: (string)data["id"],
-                status: System.Enum.Parse<SimulationStatus>((string)data["status"], true),
+                status: Enum.Parse<SimulationStatus>((string)data["status"], true),
                 notificationSettingId: (string)data["notification_setting_id"],
                 name: (string)data["name"],
                 type: type,

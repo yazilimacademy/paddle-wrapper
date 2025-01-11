@@ -5,7 +5,7 @@ namespace PaddleWrapper.Entities.PricingPreview
     public class PricePreviewDiscounts
     {
         [JsonPropertyName("discount")]
-        public Discount.Discount Discount { get; }
+        public Discount Discount { get; }
 
         [JsonPropertyName("total")]
         public string Total { get; }
@@ -14,7 +14,7 @@ namespace PaddleWrapper.Entities.PricingPreview
         public string FormattedTotal { get; }
 
         private PricePreviewDiscounts(
-            Discount.Discount discount,
+            Discount discount,
             string total,
             string formattedTotal)
         {
@@ -26,7 +26,7 @@ namespace PaddleWrapper.Entities.PricingPreview
         public static PricePreviewDiscounts From(Dictionary<string, object> data)
         {
             return new PricePreviewDiscounts(
-                discount: Discount.Discount.From((Dictionary<string, object>)data["discount"]),
+                discount: Discount.From((Dictionary<string, object>)data["discount"]),
                 total: (string)data["total"],
                 formattedTotal: (string)data["formatted_total"]
             );

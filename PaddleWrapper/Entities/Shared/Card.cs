@@ -1,3 +1,4 @@
+using PaddleWrapper.Entities.Transactions;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities.Shared

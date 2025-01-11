@@ -1,3 +1,5 @@
+using PaddleWrapper.Entities.Events;
+using PaddleWrapper.Entities.Notifications;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
@@ -72,13 +74,13 @@ namespace PaddleWrapper.Entities
         {
             return new Notification(
                 id: (string)data["id"],
-                type: System.Enum.Parse<EventTypeName>((string)data["type"], true),
-                status: System.Enum.Parse<NotificationStatus>((string)data["status"], true),
+                type: Enum.Parse<EventTypeName>((string)data["type"], true),
+                status: Enum.Parse<NotificationStatus>((string)data["status"], true),
                 payload: Event.From((Dictionary<string, object>)data["payload"]),
                 occurredAt: DateTime.Parse((string)data["occurred_at"]),
                 deliveredAt: data.ContainsKey("delivered_at") ? DateTime.Parse((string)data["delivered_at"]) : null,
                 replayedAt: data.ContainsKey("replayed_at") ? DateTime.Parse((string)data["replayed_at"]) : null,
-                origin: System.Enum.Parse<NotificationOrigin>((string)data["origin"], true),
+                origin: Enum.Parse<NotificationOrigin>((string)data["origin"], true),
                 lastAttemptAt: data.ContainsKey("last_attempt_at") ? DateTime.Parse((string)data["last_attempt_at"]) : null,
                 retryAt: data.ContainsKey("retry_at") ? DateTime.Parse((string)data["retry_at"]) : null,
                 timesAttempted: (int)data["times_attempted"],

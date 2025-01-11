@@ -90,10 +90,10 @@ namespace PaddleWrapper.Entities
                 city: data.ContainsKey("city") ? (string?)data["city"] : null,
                 postalCode: data.ContainsKey("postal_code") ? (string?)data["postal_code"] : null,
                 region: data.ContainsKey("region") ? (string?)data["region"] : null,
-                countryCode: System.Enum.Parse<CountryCode>((string)data["country_code"], true),
+                countryCode: Enum.Parse<CountryCode>((string)data["country_code"], true),
                 customData: data.ContainsKey("custom_data") ?
                     CustomData.From((Dictionary<string, object>)data["custom_data"]) : null,
-                status: System.Enum.Parse<Status>((string)data["status"], true),
+                status: Enum.Parse<Status>((string)data["status"], true),
                 createdAt: DateTime.Parse((string)data["created_at"]),
                 updatedAt: DateTime.Parse((string)data["updated_at"]),
                 importMeta: data.ContainsKey("import_meta") ?

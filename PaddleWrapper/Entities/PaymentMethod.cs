@@ -60,10 +60,10 @@ namespace PaddleWrapper.Entities
                 id: (string)data["id"],
                 customerId: (string)data["customer_id"],
                 addressId: (string)data["address_id"],
-                type: System.Enum.Parse<SavedPaymentMethodType>((string)data["type"], true),
+                type: Enum.Parse<SavedPaymentMethodType>((string)data["type"], true),
                 card: data.ContainsKey("card") ? Card.From((Dictionary<string, object>)data["card"]) : null,
                 paypal: data.ContainsKey("paypal") ? Paypal.From((Dictionary<string, object>)data["paypal"]) : null,
-                origin: System.Enum.Parse<SavedPaymentMethodOrigin>((string)data["origin"], true),
+                origin: Enum.Parse<SavedPaymentMethodOrigin>((string)data["origin"], true),
                 savedAt: DateTime.Parse((string)data["saved_at"]),
                 updatedAt: DateTime.Parse((string)data["updated_at"])
             );

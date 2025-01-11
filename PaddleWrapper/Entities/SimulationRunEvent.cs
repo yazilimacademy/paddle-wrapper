@@ -1,3 +1,5 @@
+using PaddleWrapper.Entities.Events;
+using PaddleWrapper.Entities.SimulationRunEvents;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
@@ -54,8 +56,8 @@ namespace PaddleWrapper.Entities
 
             return new SimulationRunEvent(
                 id: (string)data["id"],
-                status: System.Enum.Parse<SimulationRunEventStatus>((string)data["status"], true),
-                type: System.Enum.Parse<EventTypeName>(eventType, true),
+                status: Enum.Parse<SimulationRunEventStatus>((string)data["status"], true),
+                type: Enum.Parse<EventTypeName>(eventType, true),
                 payload: data.ContainsKey("payload") && data["payload"] != null ?
                     EntityFactory.Create(eventType, (Dictionary<string, object>)data["payload"]) : null,
                 request: data.ContainsKey("request") ?

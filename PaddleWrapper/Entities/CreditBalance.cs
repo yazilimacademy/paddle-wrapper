@@ -1,3 +1,4 @@
+using PaddleWrapper.Entities.Adjustments;
 using PaddleWrapper.Entities.Shared;
 using System.Text.Json.Serialization;
 
@@ -28,7 +29,7 @@ namespace PaddleWrapper.Entities
         {
             return new CreditBalance(
                 customerId: (string)data["customer_id"],
-                currencyCode: System.Enum.Parse<CurrencyCode>((string)data["currency_code"], true),
+                currencyCode: Enum.Parse<CurrencyCode>((string)data["currency_code"], true),
                 balance: AdjustmentCustomerBalance.From((Dictionary<string, object>)data["balance"])
             );
         }

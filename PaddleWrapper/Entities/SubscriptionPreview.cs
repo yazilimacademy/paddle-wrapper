@@ -1,4 +1,5 @@
 using PaddleWrapper.Entities.Shared;
+using PaddleWrapper.Entities.Subscriptions;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
@@ -147,11 +148,11 @@ namespace PaddleWrapper.Entities
             }
 
             return new SubscriptionPreview(
-                status: System.Enum.Parse<SubscriptionStatus>((string)data["status"], true),
+                status: Enum.Parse<SubscriptionStatus>((string)data["status"], true),
                 customerId: (string)data["customer_id"],
                 addressId: (string)data["address_id"],
                 businessId: data.ContainsKey("business_id") ? (string?)data["business_id"] : null,
-                currencyCode: System.Enum.Parse<CurrencyCode>((string)data["currency_code"], true),
+                currencyCode: Enum.Parse<CurrencyCode>((string)data["currency_code"], true),
                 createdAt: DateTime.Parse((string)data["created_at"]),
                 updatedAt: DateTime.Parse((string)data["updated_at"]),
                 startedAt: data.ContainsKey("started_at") ? DateTime.Parse((string)data["started_at"]) : null,
@@ -161,7 +162,7 @@ namespace PaddleWrapper.Entities
                 canceledAt: data.ContainsKey("canceled_at") ? DateTime.Parse((string)data["canceled_at"]) : null,
                 discount: data.ContainsKey("discount") ?
                     SubscriptionDiscount.From((Dictionary<string, object>)data["discount"]) : null,
-                collectionMode: System.Enum.Parse<CollectionMode>((string)data["collection_mode"], true),
+                collectionMode: Enum.Parse<CollectionMode>((string)data["collection_mode"], true),
                 billingDetails: data.ContainsKey("billing_details") ?
                     BillingDetails.From((Dictionary<string, object>)data["billing_details"]) : null,
                 currentBillingPeriod: data.ContainsKey("current_billing_period") ?

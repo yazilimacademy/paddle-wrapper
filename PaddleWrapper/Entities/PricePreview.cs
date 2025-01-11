@@ -63,7 +63,7 @@ namespace PaddleWrapper.Entities
                 object[] methodsData = (object[])data["available_payment_methods"];
                 foreach (object method in methodsData)
                 {
-                    availablePaymentMethods.Add(System.Enum.Parse<AvailablePaymentMethods>((string)method, true));
+                    availablePaymentMethods.Add(Enum.Parse<AvailablePaymentMethods>((string)method, true));
                 }
             }
 
@@ -71,7 +71,7 @@ namespace PaddleWrapper.Entities
                 customerId: data.ContainsKey("customer_id") ? (string?)data["customer_id"] : null,
                 addressId: data.ContainsKey("address_id") ? (string?)data["address_id"] : null,
                 businessId: data.ContainsKey("business_id") ? (string?)data["business_id"] : null,
-                currencyCode: System.Enum.Parse<CurrencyCode>((string)data["currency_code"], true),
+                currencyCode: Enum.Parse<CurrencyCode>((string)data["currency_code"], true),
                 discountId: data.ContainsKey("discount_id") ? (string?)data["discount_id"] : null,
                 address: data.ContainsKey("address") ?
                     AddressPreview.From((Dictionary<string, object>)data["address"]) : null,

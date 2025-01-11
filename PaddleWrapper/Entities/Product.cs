@@ -86,12 +86,12 @@ namespace PaddleWrapper.Entities
                 name: (string)data["name"],
                 description: data.ContainsKey("description") ? (string?)data["description"] : null,
                 type: data.ContainsKey("type") && data["type"] != null ?
-                    System.Enum.Parse<CatalogType>((string)data["type"], true) : null,
-                taxCategory: System.Enum.Parse<TaxCategory>((string)data["tax_category"], true),
+                    Enum.Parse<CatalogType>((string)data["type"], true) : null,
+                taxCategory: Enum.Parse<TaxCategory>((string)data["tax_category"], true),
                 imageUrl: data.ContainsKey("image_url") ? (string?)data["image_url"] : null,
                 customData: data.ContainsKey("custom_data") ?
                     CustomData.From((Dictionary<string, object>)data["custom_data"]) : null,
-                status: System.Enum.Parse<Status>((string)data["status"], true),
+                status: Enum.Parse<Status>((string)data["status"], true),
                 importMeta: data.ContainsKey("import_meta") ?
                     ImportMeta.From((Dictionary<string, object>)data["import_meta"]) : null,
                 prices: prices,

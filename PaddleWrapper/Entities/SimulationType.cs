@@ -1,3 +1,5 @@
+using PaddleWrapper.Entities.Events;
+using PaddleWrapper.Entities.Simulations;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
@@ -46,7 +48,7 @@ namespace PaddleWrapper.Entities
                 object[] eventsData = (object[])data["events"];
                 foreach (object eventData in eventsData)
                 {
-                    events.Add(System.Enum.Parse<EventTypeName>((string)eventData, true));
+                    events.Add(Enum.Parse<EventTypeName>((string)eventData, true));
                 }
             }
 
@@ -55,7 +57,7 @@ namespace PaddleWrapper.Entities
                 label: (string)data["label"],
                 description: (string)data["description"],
                 group: (string)data["group"],
-                type: System.Enum.Parse<SimulationKind>((string)data["type"], true),
+                type: Enum.Parse<SimulationKind>((string)data["type"], true),
                 events: events
             );
         }

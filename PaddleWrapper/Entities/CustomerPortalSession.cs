@@ -1,3 +1,4 @@
+using PaddleWrapper.Entities.CustomerPortalSessions;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities

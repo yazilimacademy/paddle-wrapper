@@ -1,3 +1,4 @@
+using PaddleWrapper.Entities.Discounts;
 using PaddleWrapper.Entities.Shared;
 using System.Text.Json.Serialization;
 
@@ -103,14 +104,14 @@ namespace PaddleWrapper.Entities
         {
             return new Discount(
                 id: (string)data["id"],
-                status: System.Enum.Parse<DiscountStatus>((string)data["status"], true),
+                status: Enum.Parse<DiscountStatus>((string)data["status"], true),
                 description: (string)data["description"],
                 enabledForCheckout: (bool)data["enabled_for_checkout"],
                 code: data.ContainsKey("code") ? (string?)data["code"] : null,
-                type: System.Enum.Parse<DiscountType>((string)data["type"], true),
+                type: Enum.Parse<DiscountType>((string)data["type"], true),
                 amount: (string)data["amount"],
                 currencyCode: data.ContainsKey("currency_code") && data["currency_code"] != null ?
-                    System.Enum.Parse<CurrencyCode>((string)data["currency_code"], true) : null,
+                    Enum.Parse<CurrencyCode>((string)data["currency_code"], true) : null,
                 recur: (bool)data["recur"],
                 maximumRecurringIntervals: (int?)data["maximum_recurring_intervals"],
                 usageLimit: data.ContainsKey("usage_limit") ? (int?)data["usage_limit"] : null,

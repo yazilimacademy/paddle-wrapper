@@ -1,3 +1,4 @@
+using PaddleWrapper.Entities.Reports;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
@@ -62,9 +63,9 @@ namespace PaddleWrapper.Entities
 
             return new Report(
                 id: (string)data["id"],
-                status: System.Enum.Parse<ReportStatus>((string)data["status"], true),
+                status: Enum.Parse<ReportStatus>((string)data["status"], true),
                 rows: data.ContainsKey("rows") ? (int?)data["rows"] : null,
-                type: System.Enum.Parse<ReportType>((string)data["type"], true),
+                type: Enum.Parse<ReportType>((string)data["type"], true),
                 filters: filters,
                 expiresAt: data.ContainsKey("expires_at") ?
                     DateTime.Parse((string)data["expires_at"]) : null,

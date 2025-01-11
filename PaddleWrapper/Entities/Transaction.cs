@@ -1,4 +1,5 @@
 using PaddleWrapper.Entities.Shared;
+using PaddleWrapper.Entities.Transactions;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
@@ -192,24 +193,24 @@ namespace PaddleWrapper.Entities
                 object[] methodsData = (object[])data["available_payment_methods"];
                 foreach (object method in methodsData)
                 {
-                    availablePaymentMethods.Add(System.Enum.Parse<AvailablePaymentMethods>((string)method, true));
+                    availablePaymentMethods.Add(Enum.Parse<AvailablePaymentMethods>((string)method, true));
                 }
             }
 
             return new Transaction(
                 id: (string)data["id"],
-                status: System.Enum.Parse<TransactionStatus>((string)data["status"], true),
+                status: Enum.Parse<TransactionStatus>((string)data["status"], true),
                 customerId: data.ContainsKey("customer_id") ? (string?)data["customer_id"] : null,
                 addressId: data.ContainsKey("address_id") ? (string?)data["address_id"] : null,
                 businessId: data.ContainsKey("business_id") ? (string?)data["business_id"] : null,
                 customData: data.ContainsKey("custom_data") ?
                     CustomData.From((Dictionary<string, object>)data["custom_data"]) : null,
-                currencyCode: System.Enum.Parse<CurrencyCode>((string)data["currency_code"], true),
-                origin: System.Enum.Parse<TransactionOrigin>((string)data["origin"], true),
+                currencyCode: Enum.Parse<CurrencyCode>((string)data["currency_code"], true),
+                origin: Enum.Parse<TransactionOrigin>((string)data["origin"], true),
                 subscriptionId: data.ContainsKey("subscription_id") ? (string?)data["subscription_id"] : null,
                 invoiceId: data.ContainsKey("invoice_id") ? (string?)data["invoice_id"] : null,
                 invoiceNumber: data.ContainsKey("invoice_number") ? (string?)data["invoice_number"] : null,
-                collectionMode: System.Enum.Parse<CollectionMode>((string)data["collection_mode"], true),
+                collectionMode: Enum.Parse<CollectionMode>((string)data["collection_mode"], true),
                 discountId: data.ContainsKey("discount_id") ? (string?)data["discount_id"] : null,
                 billingDetails: data.ContainsKey("billing_details") ?
                     BillingDetails.From((Dictionary<string, object>)data["billing_details"]) : null,

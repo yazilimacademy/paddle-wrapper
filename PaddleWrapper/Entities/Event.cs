@@ -1,3 +1,5 @@
+using PaddleWrapper.Entities.Events;
+using System.Reflection;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
@@ -45,7 +47,7 @@ namespace PaddleWrapper.Entities
                 eventType = typeof(UndefinedEvent);
             }
 
-            System.Reflection.MethodInfo? fromEventMethod = eventType.GetMethod("FromEvent");
+            MethodInfo? fromEventMethod = eventType.GetMethod("FromEvent");
             if (fromEventMethod == null)
             {
                 throw new InvalidOperationException($"Event type {eventType.Name} does not implement FromEvent method");
@@ -54,7 +56,7 @@ namespace PaddleWrapper.Entities
             return (Event)fromEventMethod.Invoke(null, new object[]
             {
                 (string)data["event_id"],
-                System.Enum.Parse<EventTypeName>(eventTypeStr, true),
+                Enum.Parse<EventTypeName>(eventTypeStr, true),
                 DateTime.Parse((string)data["occurred_at"]),
                 EntityFactory.Create(eventTypeStr, (Dictionary<string, object>)data["data"]),
                 data.ContainsKey("notification_id") ? (string?)data["notification_id"] : null

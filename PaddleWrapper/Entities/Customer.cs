@@ -66,7 +66,7 @@ namespace PaddleWrapper.Entities
                 name: data.ContainsKey("name") ? (string?)data["name"] : null,
                 email: (string)data["email"],
                 marketingConsent: (bool)data["marketing_consent"],
-                status: System.Enum.Parse<Status>((string)data["status"], true),
+                status: Enum.Parse<Status>((string)data["status"], true),
                 customData: data.ContainsKey("custom_data") ?
                     CustomData.From((Dictionary<string, object>)data["custom_data"]) : null,
                 locale: (string)data["locale"],

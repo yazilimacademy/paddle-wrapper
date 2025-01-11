@@ -1,3 +1,6 @@
+using PaddleWrapper.Entities.Events;
+using PaddleWrapper.Entities.SimulationRuns;
+using PaddleWrapper.Entities.Simulations;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
@@ -45,12 +48,12 @@ namespace PaddleWrapper.Entities
 
             try
             {
-                var eventType = System.Enum.Parse<EventTypeName>(typeStr, true);
+                var eventType = Enum.Parse<EventTypeName>(typeStr, true);
                 type = eventType;
             }
             catch
             {
-                type = System.Enum.Parse<SimulationScenarioType>(typeStr, true);
+                type = Enum.Parse<SimulationScenarioType>(typeStr, true);
             }
 
             List<SimulationRunEvent> events = new();
@@ -65,7 +68,7 @@ namespace PaddleWrapper.Entities
 
             return new SimulationRun(
                 id: (string)data["id"],
-                status: System.Enum.Parse<SimulationRunStatus>((string)data["status"], true),
+                status: Enum.Parse<SimulationRunStatus>((string)data["status"], true),
                 type: type,
                 createdAt: DateTime.Parse((string)data["created_at"]),
                 updatedAt: DateTime.Parse((string)data["updated_at"]),

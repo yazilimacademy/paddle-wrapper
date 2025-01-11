@@ -1,4 +1,5 @@
 using PaddleWrapper.Entities.Shared;
+using PaddleWrapper.Entities.Transactions;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
@@ -82,7 +83,7 @@ namespace PaddleWrapper.Entities
                 object[] methodsData = (object[])data["available_payment_methods"];
                 foreach (object method in methodsData)
                 {
-                    availablePaymentMethods.Add(System.Enum.Parse<AvailablePaymentMethods>((string)method, true));
+                    availablePaymentMethods.Add(Enum.Parse<AvailablePaymentMethods>((string)method, true));
                 }
             }
 
