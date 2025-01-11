@@ -1,8 +1,8 @@
+using System.Text.Json;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Notifications.Entities.Product;
 using PaddleWrapper.Notifications.Entities.Shared;
 
-namespace PaddleWrapper.Notifications.Entities.Transaction;
+namespace PaddleWrapper.Notifications.Entities.Transactions;
 
 public class TransactionLineItem
 {
@@ -41,7 +41,7 @@ public class TransactionLineItem
             TaxRate = data.GetProperty("tax_rate").GetString()!,
             UnitTotals = UnitTotals.FromJson(data.GetProperty("unit_totals")),
             Totals = Totals.FromJson(data.GetProperty("totals")),
-            Product = Product.FromJson(data.GetProperty("product"))
+            Product = (Product)Product.FromJson(data.GetProperty("product"))
         };
     }
 } 

@@ -6,7 +6,7 @@ namespace PaddleWrapper.Entities.PricingPreview
     public class PricePreviewLineItem
     {
         [JsonPropertyName("price")]
-        public Price.Price Price { get; }
+        public Price Price { get; }
 
         [JsonPropertyName("quantity")]
         public int Quantity { get; }

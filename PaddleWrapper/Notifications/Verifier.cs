@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Http;
+using PaddleWrapper.Http;
 
 namespace PaddleWrapper.Notifications;
 
@@ -11,14 +11,14 @@ public sealed class Verifier
         _maximumVariance = maximumVariance;
     }
 
-    public bool Verify(HttpRequest request, params Secret[] secrets)
+    public async Task<bool> VerifyAsync(IHttpRequest request, params Secret[] secrets)
     {
-        if (!request.Headers.TryGetValue(PaddleSignature.HEADER, out var signatureData) || signatureData.Count == 0)
+        if (!request.Headers.TryGetValue(PaddleSignature.HEADER, out var signatureData) || !signatureData.Any())
         {
             return false;
         }
 
-        var signature = PaddleSignature.Parse(signatureData[0]!);
+        var signature = PaddleSignature.Parse(signatureData.First());
 
         if (_maximumVariance > 0 && DateTimeOffset.UtcNow.ToUnixTimeSeconds() > signature.Timestamp + _maximumVariance)
         {
@@ -27,8 +27,13 @@ public sealed class Verifier
 
         request.Body.Position = 0;
         using var reader = new StreamReader(request.Body);
-        var body = reader.ReadToEndAsync().Result;
+        var body = await reader.ReadToEndAsync();
 
         return signature.Verify(body, secrets);
+    }
+
+    public bool Verify(IHttpRequest request, params Secret[] secrets)
+    {
+        return VerifyAsync(request, secrets).GetAwaiter().GetResult();
     }
 } 

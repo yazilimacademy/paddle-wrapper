@@ -1,6 +1,6 @@
 using System.Runtime.Serialization;
 
-namespace PaddleWrapper.Notifications.Entities.Adjustment;
+namespace PaddleWrapper.Notifications.Entities.Adjustments;
 
 public enum AdjustmentType
 {

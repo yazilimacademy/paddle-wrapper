@@ -1,7 +1,8 @@
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using PaddleWrapper.Notifications.Entities.Shared;
 
-namespace PaddleWrapper.Notifications.Entities.Adjustment;
+namespace PaddleWrapper.Notifications.Entities.Adjustments;
 
 public class AdjustmentItem
 {
@@ -35,17 +36,17 @@ public class AdjustmentItem
         Totals = totals;
     }
 
-    public static AdjustmentItem From(JsonElement data)
+    public static AdjustmentItem FromJson(JsonElement data)
     {
         return new AdjustmentItem(
             id: data.GetProperty("id").GetString()!,
             itemId: data.GetProperty("item_id").GetString()!,
-            type: AdjustmentType.From(data.GetProperty("type")),
+            type: AdjustmentType.FromJson(data.GetProperty("type")),
             amount: data.TryGetProperty("amount", out JsonElement amountElement) ? amountElement.GetString() : null,
             proration: data.TryGetProperty("proration", out JsonElement prorationElement) && !prorationElement.ValueKind.Equals(JsonValueKind.Null) 
-                ? AdjustmentProration.From(prorationElement) 
+                ? AdjustmentProration.FromJson(prorationElement) 
                 : null,
-            totals: AdjustmentItemTotals.From(data.GetProperty("totals"))
+            totals: AdjustmentItemTotals.FromJson(data.GetProperty("totals"))
         );
     }
 } 

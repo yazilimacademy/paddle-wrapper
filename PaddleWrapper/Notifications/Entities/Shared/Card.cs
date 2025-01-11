@@ -1,6 +1,6 @@
+using PaddleWrapper.Notifications.Entities.Transactions;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Notifications.Entities.Transaction;
 
 namespace PaddleWrapper.Notifications.Entities.Shared;
 

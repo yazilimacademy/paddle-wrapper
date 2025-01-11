@@ -1,7 +1,9 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Notifications.Entities.Adjustment;
+using PaddleWrapper.Notifications.Entities.Adjustments;
 using PaddleWrapper.Notifications.Entities.Shared;
+using Action = PaddleWrapper.Notifications.Entities.Shared.Action;
+using AdjustmentType = PaddleWrapper.Notifications.Entities.Adjustments.AdjustmentType;
 
 namespace PaddleWrapper.Notifications.Entities;
 

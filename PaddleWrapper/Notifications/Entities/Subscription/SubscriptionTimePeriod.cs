@@ -1,7 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace PaddleWrapper.Notifications.Entities.Subscription;
+namespace PaddleWrapper.Notifications.Entities.Subscriptions;
 
 public class SubscriptionTimePeriod
 {

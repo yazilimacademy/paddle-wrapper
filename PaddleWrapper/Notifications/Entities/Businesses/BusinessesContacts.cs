@@ -1,6 +1,7 @@
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace PaddleWrapper.Notifications.Entities.Business;
+namespace PaddleWrapper.Notifications.Entities.Businesses;
 
 public class BusinessesContacts
 {

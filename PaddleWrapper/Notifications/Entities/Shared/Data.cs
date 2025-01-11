@@ -6,11 +6,11 @@ namespace PaddleWrapper.Notifications.Entities.Shared;
 public class Data
 {
     [JsonPropertyName("data")]
-    public JsonElement Data { get; }
+    public JsonElement data { get; }
 
     private Data(JsonElement data)
     {
-        Data = data;
+        this.data = data;
     }
 
     public static Data FromJson(JsonElement element)

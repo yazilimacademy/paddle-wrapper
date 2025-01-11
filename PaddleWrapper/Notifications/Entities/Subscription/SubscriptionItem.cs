@@ -1,8 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Notifications.Entities.Product;
 
-namespace PaddleWrapper.Notifications.Entities.Subscription;
+namespace PaddleWrapper.Notifications.Entities.Subscriptions;
 
 public class SubscriptionItem
 {
@@ -55,9 +54,9 @@ public class SubscriptionItem
                 ? SubscriptionTimePeriod.FromJson(trialDates)
                 : null,
             Price = SubscriptionPrice.FromJson(data.GetProperty("price")),
-            Product = data.TryGetProperty("product", out var product)
+            Product = (Product)(data.TryGetProperty("product", out var product)
                 ? Product.FromJson(product)
-                : null
+                : null)
         };
     }
 } 

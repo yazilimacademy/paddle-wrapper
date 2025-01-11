@@ -1,7 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace PaddleWrapper.Notifications.Entities.Adjustment;
+namespace PaddleWrapper.Notifications.Entities.Adjustments;
 
 public class AdjustmentTaxRatesUsed
 {
@@ -17,11 +17,11 @@ public class AdjustmentTaxRatesUsed
         Totals = totals;
     }
 
-    public static AdjustmentTaxRatesUsed From(JsonElement data)
+    public static AdjustmentTaxRatesUsed FromJson(JsonElement data)
     {
         return new AdjustmentTaxRatesUsed(
             data.GetProperty("tax_rate").GetString()!,
-            AdjustmentTaxRatesUsedTotals.From(data.GetProperty("totals"))
+            AdjustmentTaxRatesUsedTotals.FromJson(data.GetProperty("totals"))
         );
     }
 } 

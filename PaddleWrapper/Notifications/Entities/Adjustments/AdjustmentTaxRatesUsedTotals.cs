@@ -1,7 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace PaddleWrapper.Notifications.Entities.Adjustment;
+namespace PaddleWrapper.Notifications.Entities.Adjustments;
 
 public class AdjustmentTaxRatesUsedTotals
 {
@@ -21,7 +21,7 @@ public class AdjustmentTaxRatesUsedTotals
         Total = total;
     }
 
-    public static AdjustmentTaxRatesUsedTotals From(JsonElement data)
+    public static AdjustmentTaxRatesUsedTotals FromJson(JsonElement data)
     {
         return new AdjustmentTaxRatesUsedTotals(
             data.GetProperty("subtotal").GetString()!,

@@ -2,7 +2,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using PaddleWrapper.Notifications.Entities.Shared;
 
-namespace PaddleWrapper.Notifications.Entities.Transaction;
+namespace PaddleWrapper.Notifications.Entities.Transactions;
 
 public class TransactionAdjustmentsTotals
 {

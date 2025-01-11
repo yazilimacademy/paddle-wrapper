@@ -1,7 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace PaddleWrapper.Notifications.Entities.Report;
+namespace PaddleWrapper.Notifications.Entities.Reports;
 
 public class ReportFilter
 {

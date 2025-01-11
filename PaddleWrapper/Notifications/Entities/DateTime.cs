@@ -1,6 +1,3 @@
-using System;
-using System.Text.Json.Serialization;
-
 namespace PaddleWrapper.Notifications.Entities
 {
     public class DateTime
@@ -34,6 +31,16 @@ namespace PaddleWrapper.Notifications.Entities
             {
                 return null;
             }
+        }
+
+        public static DateTime? Parse(string date)
+        {
+            return FromString(date);
+        }
+
+        public static DateTime? Parse(DateTime dateTime)
+        {
+            return dateTime;
         }
 
         public static implicit operator System.DateTime(DateTime paddleDateTime)

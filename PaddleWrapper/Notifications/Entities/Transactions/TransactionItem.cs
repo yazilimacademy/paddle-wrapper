@@ -1,7 +1,7 @@
+using System.Text.Json;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Notifications.Entities.Price;
 
-namespace PaddleWrapper.Notifications.Entities.Transaction;
+namespace PaddleWrapper.Notifications.Entities.Transactions;
 
 public class TransactionItem
 {

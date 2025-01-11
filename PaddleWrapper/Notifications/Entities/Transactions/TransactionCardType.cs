@@ -1,6 +1,6 @@
 using System.Runtime.Serialization;
 
-namespace PaddleWrapper.Notifications.Entities.Transaction;
+namespace PaddleWrapper.Notifications.Entities.Transactions;
 
 public enum TransactionCardType
 {
