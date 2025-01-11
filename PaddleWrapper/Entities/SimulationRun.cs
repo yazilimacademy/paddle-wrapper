@@ -48,7 +48,7 @@ namespace PaddleWrapper.Entities
 
             try
             {
-                var eventType = Enum.Parse<EventTypeName>(typeStr, true);
+                EventTypeName eventType = Enum.Parse<EventTypeName>(typeStr, true);
                 type = eventType;
             }
             catch

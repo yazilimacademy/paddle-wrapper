@@ -1,0 +1,58 @@
+using System.Text.Json.Serialization;
+using PaddleWrapper.Entities.Event;
+using PaddleWrapper.Entities.Simulation;
+using PaddleWrapper.Notifications.Entities;
+
+namespace PaddleWrapper.Resources.Simulations.Operations
+{
+    public class UpdateSimulation
+    {
+        [JsonPropertyName("notification_setting_id")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? NotificationSettingId { get; }
+
+        [JsonPropertyName("type")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? Type { get; private set; }
+
+        [JsonPropertyName("name")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? Name { get; }
+
+        [JsonPropertyName("status")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? Status { get; private set; }
+
+        [JsonPropertyName("payload")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public Entity? Payload { get; }
+
+        public UpdateSimulation(
+            string? notificationSettingId = null,
+            EventTypeName? type = null,
+            string? name = null,
+            SimulationStatus? status = null,
+            Entity? payload = null)
+        {
+            NotificationSettingId = notificationSettingId;
+            Type = type?.ToString();
+            Name = name;
+            Status = status?.ToString()?.ToLower();
+            Payload = payload;
+        }
+
+        public UpdateSimulation(
+            string? notificationSettingId = null,
+            SimulationScenarioType? type = null,
+            string? name = null,
+            SimulationStatus? status = null,
+            Entity? payload = null)
+        {
+            NotificationSettingId = notificationSettingId;
+            Type = type?.ToString();
+            Name = name;
+            Status = status?.ToString()?.ToLower();
+            Payload = payload;
+        }
+    }
+} 
