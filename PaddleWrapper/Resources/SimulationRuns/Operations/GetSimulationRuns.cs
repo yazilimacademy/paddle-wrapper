@@ -9,13 +9,13 @@ namespace PaddleWrapper.Resources.SimulationRuns.Operations
             _includes = includes ?? Array.Empty<Includes>();
         }
 
-        public Dictionary<string, string> GetParameters()
+        public IDictionary<string, object> GetParameters()
         {
-            Dictionary<string, string> parameters = new();
+            var parameters = new Dictionary<string, object>();
 
             if (_includes.Any())
             {
-                parameters.Add("include", string.Join(",", _includes.Select(i => i.ToString().ToLower())));
+                parameters["include"] = string.Join(",", _includes.Select(i => i.ToString().ToLower()));
             }
 
             return parameters;

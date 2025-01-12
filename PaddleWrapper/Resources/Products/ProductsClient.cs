@@ -51,7 +51,7 @@ namespace PaddleWrapper.Resources.Products
 
         public async Task<Product> CreateAsync(CreateProduct createOperation)
         {
-            var response = await _client.PostRawAsync("/products", createOperation);
+            var response = await _client.PostRaw("/products", createOperation);
             ResponseParser parser = new(response);
 
             return Product.From(parser.GetData());
@@ -59,7 +59,7 @@ namespace PaddleWrapper.Resources.Products
 
         public async Task<Product> UpdateAsync(string id, UpdateProduct operation)
         {
-            var response = await _client.PatchRawAsync($"/products/{id}", operation);
+            var response = await _client.PatchRaw($"/products/{id}", operation);
             ResponseParser parser = new(response);
 
             return Product.From(parser.GetData());

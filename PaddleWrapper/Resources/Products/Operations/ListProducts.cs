@@ -75,13 +75,21 @@ namespace PaddleWrapper.Resources.Products.Operations
             }
         }
 
-        public Dictionary<string, object> GetParameters()
+        public IDictionary<string, object> GetParameters()
         {
-            Dictionary<string, object> parameters = _pager?.GetParameters() ?? new Dictionary<string, object>();
+            var parameters = new Dictionary<string, object>();
+
+            if (_pager != null)
+            {
+                foreach (var param in _pager.GetParameters())
+                {
+                    parameters[param.Key] = param.Value;
+                }
+            }
 
             if (_includes.Any())
             {
-                parameters["include"] = string.Join(",", _includes.Select(x => x.ToString()));
+                parameters["include"] = string.Join(",", _includes.Select(x => x.ToString().ToLower()));
             }
 
             if (_ids.Any())
@@ -91,17 +99,17 @@ namespace PaddleWrapper.Resources.Products.Operations
 
             if (_types.Any())
             {
-                parameters["type"] = string.Join(",", _types.Select(x => x.ToString()));
+                parameters["type"] = string.Join(",", _types.Select(x => x.ToString().ToLower()));
             }
 
             if (_statuses.Any())
             {
-                parameters["status"] = string.Join(",", _statuses.Select(x => x.ToString()));
+                parameters["status"] = string.Join(",", _statuses.Select(x => x.ToString().ToLower()));
             }
 
             if (_taxCategories.Any())
             {
-                parameters["tax_category"] = string.Join(",", _taxCategories.Select(x => x.ToString()));
+                parameters["tax_category"] = string.Join(",", _taxCategories.Select(x => x.ToString().ToLower()));
             }
 
             return parameters;

@@ -1,6 +1,7 @@
 using PaddleWrapper.Entities.Shared;
 using PaddleWrapper.Resources.Adjustments.Operations.Create;
 using System.Text.Json.Serialization;
+using Action = PaddleWrapper.Entities.Shared.Action;
 
 namespace PaddleWrapper.Resources.Adjustments.Operations
 {

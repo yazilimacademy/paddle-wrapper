@@ -15,21 +15,21 @@ namespace PaddleWrapper.Resources.SimulationRunEvents.Operations
             _ids = ids ?? Array.Empty<string>();
         }
 
-        public Dictionary<string, string> GetParameters()
+        public IDictionary<string, object> GetParameters()
         {
-            Dictionary<string, string> parameters = new();
+            var parameters = new Dictionary<string, object>();
 
             if (_pager != null)
             {
-                foreach (KeyValuePair<string, object> param in _pager.GetParameters())
+                foreach (var param in _pager.GetParameters())
                 {
-                    parameters.Add(param.Key, param.Value);
+                    parameters[param.Key] = param.Value;
                 }
             }
 
             if (_ids.Any())
             {
-                parameters.Add("id", string.Join(",", _ids));
+                parameters["id"] = string.Join(",", _ids);
             }
 
             return parameters;

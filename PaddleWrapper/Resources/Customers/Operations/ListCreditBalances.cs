@@ -11,9 +11,9 @@ namespace PaddleWrapper.Resources.Customers.Operations
             _currencyCodes = currencyCodes?.ToList() ?? new List<CurrencyCode>();
         }
 
-        public Dictionary<string, object> GetParameters()
+        public IDictionary<string, object> GetParameters()
         {
-            Dictionary<string, object> parameters = new();
+            var parameters = new Dictionary<string, object>();
 
             if (_currencyCodes.Any())
             {

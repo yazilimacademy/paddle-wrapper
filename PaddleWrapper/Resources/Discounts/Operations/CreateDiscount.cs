@@ -1,4 +1,5 @@
 using PaddleWrapper.Entities.Shared;
+using PaddleWrapper.Notifications.Entities.Discounts;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Resources.Discounts.Operations

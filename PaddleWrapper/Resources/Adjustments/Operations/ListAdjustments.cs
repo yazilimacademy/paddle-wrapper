@@ -1,5 +1,6 @@
 using PaddleWrapper.Entities.Shared;
 using PaddleWrapper.Resources.Shared.Operations.List;
+using Action = PaddleWrapper.Entities.Shared.Action;
 
 namespace PaddleWrapper.Resources.Adjustments.Operations
 {
@@ -44,9 +45,17 @@ namespace PaddleWrapper.Resources.Adjustments.Operations
             }
         }
 
-        public Dictionary<string, object> GetParameters()
+        public IDictionary<string, object> GetParameters()
         {
-            Dictionary<string, object> parameters = _pager?.GetParameters() ?? new Dictionary<string, object>();
+            var parameters = new Dictionary<string, object>();
+
+            if (_pager != null)
+            {
+                foreach (var param in _pager.GetParameters())
+                {
+                    parameters[param.Key] = param.Value;
+                }
+            }
 
             if (_ids.Any())
             {

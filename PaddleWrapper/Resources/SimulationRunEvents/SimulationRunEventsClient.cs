@@ -35,7 +35,7 @@ namespace PaddleWrapper.Resources.SimulationRunEvents
 
         public async Task<SimulationRunEvent> ReplayAsync(string simulationId, string runId, string id)
         {
-            var response = await _client.PostRawAsync($"/simulations/{simulationId}/runs/{runId}/events/{id}/replay");
+            var response = await _client.PostRaw($"/simulations/{simulationId}/runs/{runId}/events/{id}/replay");
             ResponseParser parser = new(response);
 
             return SimulationRunEvent.From(parser.GetData());

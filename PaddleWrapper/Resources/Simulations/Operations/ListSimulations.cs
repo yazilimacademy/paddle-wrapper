@@ -1,3 +1,4 @@
+using PaddleWrapper.Entities.Simulations;
 using PaddleWrapper.Resources.Shared.Operations.List;
 
 namespace PaddleWrapper.Resources.Simulations.Operations
@@ -21,31 +22,31 @@ namespace PaddleWrapper.Resources.Simulations.Operations
             _statuses = statuses ?? Array.Empty<SimulationStatus>();
         }
 
-        public Dictionary<string, string> GetParameters()
+        public IDictionary<string, object> GetParameters()
         {
-            Dictionary<string, string> parameters = new();
+            var parameters = new Dictionary<string, object>();
 
             if (_pager != null)
             {
-                foreach (KeyValuePair<string, object> param in _pager.GetParameters())
+                foreach (var param in _pager.GetParameters())
                 {
-                    parameters.Add(param.Key, param.Value);
+                    parameters[param.Key] = param.Value;
                 }
             }
 
             if (_notificationSettingIds.Any())
             {
-                parameters.Add("notification_setting_id", string.Join(",", _notificationSettingIds));
+                parameters["notification_setting_id"] = string.Join(",", _notificationSettingIds);
             }
 
             if (_ids.Any())
             {
-                parameters.Add("id", string.Join(",", _ids));
+                parameters["id"] = string.Join(",", _ids);
             }
 
             if (_statuses.Any())
             {
-                parameters.Add("status", string.Join(",", _statuses.Select(s => s.ToString().ToLower())));
+                parameters["status"] = string.Join(",", _statuses.Select(s => s.ToString().ToLower()));
             }
 
             return parameters;

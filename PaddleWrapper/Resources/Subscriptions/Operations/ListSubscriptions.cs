@@ -35,51 +35,51 @@ namespace PaddleWrapper.Resources.Subscriptions.Operations
             _statuses = statuses ?? Array.Empty<SubscriptionStatus>();
         }
 
-        public Dictionary<string, string> GetParameters()
+        public IDictionary<string, object> GetParameters()
         {
-            Dictionary<string, string> parameters = new();
+            var parameters = new Dictionary<string, object>();
 
             if (_pager != null)
             {
-                foreach (KeyValuePair<string, object> param in _pager.GetParameters())
+                foreach (var param in _pager.GetParameters())
                 {
-                    parameters.Add(param.Key, param.Value);
+                    parameters[param.Key] = param.Value;
                 }
             }
 
             if (_addressIds.Any())
             {
-                parameters.Add("address_id", string.Join(",", _addressIds));
+                parameters["address_id"] = string.Join(",", _addressIds);
             }
 
             if (_collectionMode.HasValue)
             {
-                parameters.Add("collection_mode", _collectionMode.ToString().ToLower());
+                parameters["collection_mode"] = _collectionMode.ToString().ToLower();
             }
 
             if (_customerIds.Any())
             {
-                parameters.Add("customer_id", string.Join(",", _customerIds));
+                parameters["customer_id"] = string.Join(",", _customerIds);
             }
 
             if (_ids.Any())
             {
-                parameters.Add("id", string.Join(",", _ids));
+                parameters["id"] = string.Join(",", _ids);
             }
 
             if (_priceIds.Any())
             {
-                parameters.Add("price_id", string.Join(",", _priceIds));
+                parameters["price_id"] = string.Join(",", _priceIds);
             }
 
             if (_scheduledChangeActions.Any())
             {
-                parameters.Add("scheduled_change_action", string.Join(",", _scheduledChangeActions.Select(s => s.ToString().ToLower())));
+                parameters["scheduled_change_action"] = string.Join(",", _scheduledChangeActions.Select(s => s.ToString().ToLower()));
             }
 
             if (_statuses.Any())
             {
-                parameters.Add("status", string.Join(",", _statuses.Select(s => s.ToString().ToLower())));
+                parameters["status"] = string.Join(",", _statuses.Select(s => s.ToString().ToLower()));
             }
 
             return parameters;

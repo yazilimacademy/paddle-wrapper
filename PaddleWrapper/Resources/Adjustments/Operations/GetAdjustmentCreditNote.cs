@@ -11,9 +11,9 @@ namespace PaddleWrapper.Resources.Adjustments.Operations
             _disposition = disposition;
         }
 
-        public Dictionary<string, object> GetParameters()
+        public IDictionary<string, object> GetParameters()
         {
-            Dictionary<string, object> parameters = new();
+            var parameters = new Dictionary<string, object>();
 
             if (_disposition.HasValue)
             {

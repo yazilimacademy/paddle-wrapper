@@ -11,9 +11,19 @@ namespace PaddleWrapper.Resources.Events.Operations
             _pager = pager;
         }
 
-        public Dictionary<string, object> GetParameters()
+        public IDictionary<string, object> GetParameters()
         {
-            return _pager?.GetParameters() ?? new Dictionary<string, object>();
+            var parameters = new Dictionary<string, object>();
+
+            if (_pager != null)
+            {
+                foreach (var param in _pager.GetParameters())
+                {
+                    parameters[param.Key] = param.Value;
+                }
+            }
+
+            return parameters;
         }
     }
 }

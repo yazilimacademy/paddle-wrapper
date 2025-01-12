@@ -36,7 +36,7 @@ namespace PaddleWrapper.Resources.Businesses
 
         public async Task<Business> CreateAsync(string customerId, CreateBusiness createOperation)
         {
-            var response = await _client.PostRawAsync($"/customers/{customerId}/businesses", createOperation);
+            var response = await _client.PostRaw($"/customers/{customerId}/businesses", createOperation);
             ResponseParser parser = new(response);
 
             return Business.From(parser.GetData());
@@ -44,7 +44,7 @@ namespace PaddleWrapper.Resources.Businesses
 
         public async Task<Business> UpdateAsync(string customerId, string id, UpdateBusiness operation)
         {
-            var response = await _client.PatchRawAsync($"/customers/{customerId}/businesses/{id}", operation);
+            var response = await _client.PatchRaw($"/customers/{customerId}/businesses/{id}", operation);
             ResponseParser parser = new(response);
 
             return Business.From(parser.GetData());

@@ -36,7 +36,7 @@ namespace PaddleWrapper.Resources.Customers
 
         public async Task<Customer> CreateAsync(CreateCustomer createOperation)
         {
-            var response = await _client.PostRawAsync("/customers", createOperation);
+            var response = await _client.PostRaw("/customers", createOperation);
             ResponseParser parser = new(response);
 
             return Customer.From(parser.GetData());
@@ -44,7 +44,7 @@ namespace PaddleWrapper.Resources.Customers
 
         public async Task<Customer> UpdateAsync(string id, UpdateCustomer operation)
         {
-            var response = await _client.PatchRawAsync($"/customers/{id}", operation);
+            var response = await _client.PatchRaw($"/customers/{id}", operation);
             ResponseParser parser = new(response);
 
             return Customer.From(parser.GetData());
@@ -66,7 +66,7 @@ namespace PaddleWrapper.Resources.Customers
 
         public async Task<CustomerAuthToken> GenerateAuthTokenAsync(string id)
         {
-            var response = await _client.PostRawAsync($"/customers/{id}/auth-token", null);
+            var response = await _client.PostRaw($"/customers/{id}/auth-token", null);
             ResponseParser parser = new(response);
 
             return CustomerAuthToken.From(parser.GetData());

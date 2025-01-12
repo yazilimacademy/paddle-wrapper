@@ -51,7 +51,7 @@ namespace PaddleWrapper.Resources.Prices
 
         public async Task<Price> CreateAsync(CreatePrice createOperation)
         {
-            var response = await _client.PostRawAsync("/prices", createOperation);
+            var response = await _client.PostRaw("/prices", createOperation);
             ResponseParser parser = new(response);
 
             return Price.From(parser.GetData());
@@ -59,7 +59,7 @@ namespace PaddleWrapper.Resources.Prices
 
         public async Task<Price> UpdateAsync(string id, UpdatePrice operation)
         {
-            var response = await _client.PatchRawAsync($"/prices/{id}", operation);
+            var response = await _client.PatchRaw($"/prices/{id}", operation);
             ResponseParser parser = new(response);
 
             return Price.From(parser.GetData());

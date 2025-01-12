@@ -1,4 +1,5 @@
 using PaddleWrapper.Entities.Shared;
+using PaddleWrapper.Notifications.Entities.Transactions;
 using PaddleWrapper.Resources.Transactions.Operations.Update;
 using System.Text.Json.Serialization;
 

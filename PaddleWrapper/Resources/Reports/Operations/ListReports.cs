@@ -1,3 +1,4 @@
+using PaddleWrapper.Notifications.Entities.Reports;
 using PaddleWrapper.Resources.Shared.Operations.List;
 
 namespace PaddleWrapper.Resources.Reports.Operations
@@ -13,21 +14,21 @@ namespace PaddleWrapper.Resources.Reports.Operations
             _statuses = statuses ?? Array.Empty<ReportStatus>();
         }
 
-        public Dictionary<string, string> GetParameters()
+        public IDictionary<string, object> GetParameters()
         {
-            Dictionary<string, string> parameters = new();
+            var parameters = new Dictionary<string, object>();
 
             if (_pager != null)
             {
-                foreach (KeyValuePair<string, object> param in _pager.GetParameters())
+                foreach (var param in _pager.GetParameters())
                 {
-                    parameters.Add(param.Key, param.Value);
+                    parameters[param.Key] = param.Value;
                 }
             }
 
             if (_statuses.Any())
             {
-                parameters.Add("status", string.Join(",", _statuses.Select(s => s.ToString().ToLower())));
+                parameters["status"] = string.Join(",", _statuses.Select(s => s.ToString().ToLower()));
             }
 
             return parameters;

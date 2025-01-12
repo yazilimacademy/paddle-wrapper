@@ -27,7 +27,7 @@ namespace PaddleWrapper.Resources.Adjustments
 
         public async Task<Adjustment> CreateAsync(CreateAdjustment createOperation)
         {
-            var response = await _client.PostRawAsync("/adjustments", createOperation);
+            var response = await _client.PostRaw("/adjustments", createOperation);
             ResponseParser parser = new(response);
 
             return Adjustment.From(parser.GetData());

@@ -9,6 +9,13 @@ public static class EntityFactory
         { "payment_method.deleted", typeof(DeletedPaymentMethod) }
     };
 
+    public static IEntity Create(string eventType, Dictionary<string, object> data)
+    {
+        var jsonString = JsonSerializer.Serialize(data);
+        var jsonElement = JsonDocument.Parse(jsonString).RootElement;
+        return Create(eventType, jsonElement);
+    }
+
     public static IEntity Create(string eventType, JsonElement data)
     {
         Type entityType = EventEntityTypes.TryGetValue(eventType, out Type? type)
@@ -38,7 +45,7 @@ public static class EntityFactory
 
         if (entityType == null || !typeof(IEntity).IsAssignableFrom(entityType))
         {
-            throw new UnexpectedValueException($"Event type '{identifier}' cannot be mapped to an object");
+            throw new InvalidOperationException($"Event type '{identifier}' cannot be mapped to an object");
         }
 
         return entityType;

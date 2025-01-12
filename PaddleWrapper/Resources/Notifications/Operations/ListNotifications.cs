@@ -1,3 +1,4 @@
+using PaddleWrapper.Entities.Notifications;
 using PaddleWrapper.Resources.Shared.Operations.List;
 
 namespace PaddleWrapper.Resources.Notifications.Operations
@@ -40,9 +41,17 @@ namespace PaddleWrapper.Resources.Notifications.Operations
             }
         }
 
-        public Dictionary<string, object> GetParameters()
+        public IDictionary<string, object> GetParameters()
         {
-            Dictionary<string, object> parameters = _pager?.GetParameters() ?? new Dictionary<string, object>();
+            var parameters = new Dictionary<string, object>();
+
+            if (_pager != null)
+            {
+                foreach (var param in _pager.GetParameters())
+                {
+                    parameters[param.Key] = param.Value;
+                }
+            }
 
             if (_notificationSettingIds.Any())
             {
@@ -56,7 +65,7 @@ namespace PaddleWrapper.Resources.Notifications.Operations
 
             if (_statuses.Any())
             {
-                parameters["status"] = string.Join(",", _statuses);
+                parameters["status"] = string.Join(",", _statuses.Select(s => s.ToString().ToLower()));
             }
 
             if (!string.IsNullOrEmpty(_filter))

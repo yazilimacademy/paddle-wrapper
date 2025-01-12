@@ -1,5 +1,6 @@
 using PaddleWrapper.Entities.Shared;
 using PaddleWrapper.Exceptions;
+using System.Reflection;
 using System.Text.Json;
 
 namespace PaddleWrapper.Entities.Collections
@@ -34,7 +35,7 @@ namespace PaddleWrapper.Entities.Collections
             }
 
             Dictionary<string, object>? data = JsonSerializer.Deserialize<Dictionary<string, object>>(content);
-            System.Reflection.MethodInfo? method = _collectionType.GetMethod("From");
+            MethodInfo? method = _collectionType.GetMethod("From");
 
             Paginator pagination = new(
                 _client,

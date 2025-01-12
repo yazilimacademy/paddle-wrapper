@@ -35,7 +35,7 @@ namespace PaddleWrapper.Resources.Notifications
 
         public async Task<string> ReplayAsync(string id)
         {
-            var response = await _client.PostRawAsync($"/notifications/{id}/replay", null);
+            var response = await _client.PostRaw($"/notifications/{id}/replay", null);
             ResponseParser parser = new(response);
             var data = parser.GetData();
 

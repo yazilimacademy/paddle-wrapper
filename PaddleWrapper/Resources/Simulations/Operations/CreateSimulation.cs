@@ -1,4 +1,7 @@
+using PaddleWrapper.Entities.Events;
+using PaddleWrapper.Entities.Simulations;
 using System.Text.Json.Serialization;
+using NotificationEntity = PaddleWrapper.Notifications.Entities.IEntity;
 
 namespace PaddleWrapper.Resources.Simulations.Operations
 {
@@ -15,13 +18,13 @@ namespace PaddleWrapper.Resources.Simulations.Operations
 
         [JsonPropertyName("payload")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public Entity? Payload { get; }
+        public NotificationEntity? Payload { get; }
 
         public CreateSimulation(
             string notificationSettingId,
             EventTypeName type,
             string name,
-            Entity? payload = null)
+            NotificationEntity? payload = null)
         {
             NotificationSettingId = notificationSettingId;
             Type = type.ToString();
@@ -33,7 +36,7 @@ namespace PaddleWrapper.Resources.Simulations.Operations
             string notificationSettingId,
             SimulationScenarioType type,
             string name,
-            Entity? payload = null)
+            NotificationEntity? payload = null)
         {
             NotificationSettingId = notificationSettingId;
             Type = type.ToString();

@@ -36,7 +36,7 @@ namespace PaddleWrapper.Resources.SimulationRuns
 
         public async Task<SimulationRun> CreateAsync(string simulationId)
         {
-            var response = await _client.PostRawAsync($"/simulations/{simulationId}/runs");
+            var response = await _client.PostRaw($"/simulations/{simulationId}/runs");
             ResponseParser parser = new(response);
 
             return SimulationRun.From(parser.GetData());

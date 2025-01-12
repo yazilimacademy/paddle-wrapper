@@ -1,3 +1,4 @@
+using PaddleWrapper.Entities.NotificationSettings;
 using PaddleWrapper.Resources.Shared.Operations.List;
 
 namespace PaddleWrapper.Resources.NotificationSettings.Operations
@@ -18,9 +19,17 @@ namespace PaddleWrapper.Resources.NotificationSettings.Operations
             _trafficSource = trafficSource;
         }
 
-        public Dictionary<string, object> GetParameters()
+        public IDictionary<string, object> GetParameters()
         {
-            Dictionary<string, object> parameters = _pager?.GetParameters() ?? new Dictionary<string, object>();
+            var parameters = new Dictionary<string, object>();
+
+            if (_pager != null)
+            {
+                foreach (var param in _pager.GetParameters())
+                {
+                    parameters[param.Key] = param.Value;
+                }
+            }
 
             if (_active.HasValue)
             {
@@ -29,7 +38,7 @@ namespace PaddleWrapper.Resources.NotificationSettings.Operations
 
             if (_trafficSource.HasValue)
             {
-                parameters["traffic_source"] = _trafficSource.Value.ToString();
+                parameters["traffic_source"] = _trafficSource.Value.ToString().ToLower();
             }
 
             return parameters;

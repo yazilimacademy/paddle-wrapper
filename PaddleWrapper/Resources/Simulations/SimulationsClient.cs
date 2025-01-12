@@ -35,7 +35,7 @@ namespace PaddleWrapper.Resources.Simulations
 
         public async Task<Simulation> CreateAsync(CreateSimulation createOperation)
         {
-            var response = await _client.PostRawAsync("/simulations", createOperation);
+            var response = await _client.PostRaw("/simulations", createOperation);
             ResponseParser parser = new(response);
 
             return Simulation.From(parser.GetData());
@@ -43,7 +43,7 @@ namespace PaddleWrapper.Resources.Simulations
 
         public async Task<Simulation> UpdateAsync(string id, UpdateSimulation operation)
         {
-            var response = await _client.PatchRawAsync($"/simulations/{id}", operation);
+            var response = await _client.PatchRaw($"/simulations/{id}", operation);
             ResponseParser parser = new(response);
 
             return Simulation.From(parser.GetData());

@@ -1,3 +1,4 @@
+using PaddleWrapper.Notifications.Entities.Reports;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Resources.Reports.Operations

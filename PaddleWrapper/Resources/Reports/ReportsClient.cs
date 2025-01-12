@@ -43,7 +43,7 @@ namespace PaddleWrapper.Resources.Reports
 
         public async Task<Report> CreateAsync(CreateReport createOperation)
         {
-            var response = await _client.PostRawAsync("/reports", createOperation);
+            var response = await _client.PostRaw("/reports", createOperation);
             ResponseParser parser = new(response);
 
             return Report.From(parser.GetData());

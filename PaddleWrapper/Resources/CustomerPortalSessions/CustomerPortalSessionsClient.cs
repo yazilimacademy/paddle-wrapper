@@ -14,7 +14,7 @@ namespace PaddleWrapper.Resources.CustomerPortalSessions
 
         public async Task<CustomerPortalSession> CreateAsync(string customerId, CreateCustomerPortalSession createOperation)
         {
-            var response = await _client.PostRawAsync($"/customers/{customerId}/portal-sessions", createOperation);
+            var response = await _client.PostRaw($"/customers/{customerId}/portal-sessions", createOperation);
             ResponseParser parser = new(response);
 
             return CustomerPortalSession.From(parser.GetData());

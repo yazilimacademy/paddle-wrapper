@@ -1,3 +1,4 @@
+using PaddleWrapper.Entities.Events;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Resources.NotificationSettings.Operations
