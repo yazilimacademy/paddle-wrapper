@@ -51,10 +51,10 @@ namespace PaddleWrapper.Entities
                 eventType = typeof(UndefinedEvent);
             }
 
-            MethodInfo? fromEventMethod = eventType.GetMethod("FromEvent");
+            MethodInfo? fromEventMethod = eventType.GetMethod(nameof(CreateFromEvent), BindingFlags.Public | BindingFlags.Static);
             if (fromEventMethod == null)
             {
-                throw new InvalidOperationException($"Event type {eventType.Name} does not implement FromEvent method");
+                throw new InvalidOperationException($"Event type {eventType.Name} does not implement CreateFromEvent method");
             }
 
             return (Event)fromEventMethod.Invoke(null, new object[]
@@ -67,11 +67,14 @@ namespace PaddleWrapper.Entities
             });
         }
 
-        public abstract static Event FromEvent(
+        public static Event CreateFromEvent(
             string eventId,
             EventTypeName eventType,
             DateTime occurredAt,
             NotificationEntity data,
-            string? notificationId = null);
+            string? notificationId = null)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

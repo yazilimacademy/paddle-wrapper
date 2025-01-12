@@ -2,18 +2,19 @@ using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Events;
 using DateTime = PaddleWrapper.Notifications.Entities.DateTime;
 using IEntity = PaddleWrapper.Notifications.Entities.IEntity;
+using NotificationDiscount = PaddleWrapper.Notifications.Entities.Discount;
 
 namespace PaddleWrapper.Notifications.Events;
 
 public sealed class DiscountCreated : Event
 {
-    public Discount Discount { get; }
+    public NotificationDiscount Discount { get; }
 
     private DiscountCreated(
         string eventId,
         EventTypeName eventType,
         DateTime occurredAt,
-        Discount discount,
+        NotificationDiscount discount,
         string? notificationId)
         : base(eventId, eventType, occurredAt, discount, notificationId)
     {
@@ -27,9 +28,9 @@ public sealed class DiscountCreated : Event
         IEntity data,
         string? notificationId = null)
     {
-        if (data is not Discount discount)
+        if (data is not NotificationDiscount discount)
         {
-            throw new ArgumentException($"Expected data to be of type {nameof(Discount)}", nameof(data));
+            throw new ArgumentException($"Expected data to be of type {nameof(NotificationDiscount)}", nameof(data));
         }
 
         return new DiscountCreated(eventId, eventType, occurredAt, discount, notificationId);

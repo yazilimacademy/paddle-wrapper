@@ -1,6 +1,9 @@
 using PaddleWrapper.Entities.Events;
 using PaddleWrapper.Entities.SimulationRunEvents;
+using PaddleWrapper.Notifications.Entities;
 using System.Text.Json.Serialization;
+using DateTime = PaddleWrapper.Notifications.Entities.DateTime;
+using NotificationEntity = PaddleWrapper.Notifications.Entities.IEntity;
 
 namespace PaddleWrapper.Entities
 {

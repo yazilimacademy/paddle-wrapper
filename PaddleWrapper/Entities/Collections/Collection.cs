@@ -14,7 +14,10 @@ namespace PaddleWrapper.Entities.Collections
             Paginator = paginator;
         }
 
-        public abstract static Collection<T> From(Dictionary<string, object> data, Paginator? paginator);
+        public static Collection<T> From(Dictionary<string, object> data, Paginator? paginator)
+        {
+            throw new NotImplementedException();
+        }
 
         public IEnumerator<T> GetEnumerator()
         {
@@ -22,9 +25,16 @@ namespace PaddleWrapper.Entities.Collections
             {
                 if (_pointer >= Items.Count)
                 {
-                    Task<object> nextPage = Paginator!.NextPage();
+                    var nextPageTask = Paginator!.NextPage();
+                    nextPageTask.Wait(); // Task'i bekle
+                    var nextPage = nextPageTask.Result as Collection<T>;
+                    if (nextPage == null)
+                    {
+                        throw new InvalidOperationException("NextPage returned invalid collection type");
+                    }
+
                     Items.Clear();
-                    Items.AddRange(((Collection<T>)nextPage).Items);
+                    Items.AddRange(nextPage.Items);
                     _pointer = 0;
                 }
 

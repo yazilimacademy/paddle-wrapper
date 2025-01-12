@@ -19,13 +19,18 @@ public class Money
 
     public static Money FromJson(JsonElement element)
     {
-        var currencyCode = element.TryGetProperty("currency_code", out JsonElement code) && !string.IsNullOrEmpty(code.GetString())
-            ? JsonSerializer.Deserialize<CurrencyCode>(code.GetRawText())
-            : null;
+        var amount = element.GetProperty("amount").GetString()!;
+        CurrencyCode? currencyCode = null;
 
-        return new Money(
-            element.GetProperty("amount").GetString()!,
-            currencyCode
-        );
+        if (element.TryGetProperty("currency_code", out JsonElement code))
+        {
+            var codeStr = code.GetString();
+            if (!string.IsNullOrEmpty(codeStr))
+            {
+                currencyCode = JsonSerializer.Deserialize<CurrencyCode>(code.GetRawText());
+            }
+        }
+
+        return new Money(amount, currencyCode);
     }
 }

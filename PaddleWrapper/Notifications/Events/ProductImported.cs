@@ -2,18 +2,19 @@ using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Events;
 using DateTime = PaddleWrapper.Notifications.Entities.DateTime;
 using IEntity = PaddleWrapper.Notifications.Entities.IEntity;
+using NotificationProduct = PaddleWrapper.Notifications.Entities.Product;
 
 namespace PaddleWrapper.Notifications.Events;
 
 public sealed class ProductImported : Event
 {
-    public Product Product { get; }
+    public NotificationProduct Product { get; }
 
     private ProductImported(
         string eventId,
         EventTypeName eventType,
         DateTime occurredAt,
-        Product product,
+        NotificationProduct product,
         string? notificationId)
         : base(eventId, eventType, occurredAt, product, notificationId)
     {
@@ -27,9 +28,9 @@ public sealed class ProductImported : Event
         IEntity data,
         string? notificationId = null)
     {
-        if (data is not Product product)
+        if (data is not NotificationProduct product)
         {
-            throw new ArgumentException($"Expected data to be of type {nameof(Product)}", nameof(data));
+            throw new ArgumentException($"Expected data to be of type {nameof(NotificationProduct)}", nameof(data));
         }
 
         return new ProductImported(eventId, eventType, occurredAt, product, notificationId);

@@ -45,10 +45,10 @@ namespace PaddleWrapper.Entities.Transactions
             object[] taxRatesUsedData = (object[])data["tax_rates_used"];
             foreach (object item in taxRatesUsedData)
             {
-                taxRatesUsed.Add(TaxRatesUsed.From((Dictionary<string, object>)item));
+                taxRatesUsed.Add(Shared.TaxRatesUsed.From((Dictionary<string, object>)item));
             }
 
-            List<Transaction.TransactionLineItem> lineItems = new List<TransactionLineItem>();
+            List<TransactionLineItem> lineItems = new List<TransactionLineItem>();
             object[] lineItemsData = (object[])data["line_items"];
             foreach (object item in lineItemsData)
             {

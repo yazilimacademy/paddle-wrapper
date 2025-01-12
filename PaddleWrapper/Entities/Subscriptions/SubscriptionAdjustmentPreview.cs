@@ -26,7 +26,7 @@ namespace PaddleWrapper.Entities.Subscriptions
 
         public static SubscriptionAdjustmentPreview From(Dictionary<string, object> data)
         {
-            List<Subscription.SubscriptionAdjustmentItem> items = new List<SubscriptionAdjustmentItem>();
+            List<SubscriptionAdjustmentItem> items = new List<SubscriptionAdjustmentItem>();
             object[] itemsData = (object[])data["items"];
             foreach (object item in itemsData)
             {

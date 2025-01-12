@@ -47,11 +47,11 @@ namespace PaddleWrapper.Entities.Subscriptions
                 object[] taxRatesData = (object[])data["tax_rate_used"];
                 foreach (object item in taxRatesData)
                 {
-                    taxRatesUsed.Add(TaxRatesUsed.From((Dictionary<string, object>)item));
+                    taxRatesUsed.Add(Shared.TaxRatesUsed.From((Dictionary<string, object>)item));
                 }
             }
 
-            List<Subscription.SubscriptionTransactionLineItem> lineItems = new List<SubscriptionTransactionLineItem>();
+            List<SubscriptionTransactionLineItem> lineItems = new List<SubscriptionTransactionLineItem>();
             if (data.ContainsKey("line_items"))
             {
                 object[] lineItemsData = (object[])data["line_items"];

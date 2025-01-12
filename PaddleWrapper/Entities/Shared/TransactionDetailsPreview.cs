@@ -30,7 +30,7 @@ namespace PaddleWrapper.Entities.Shared
             object[] lineItemsArray = (object[])data["line_items"];
 
             return new TransactionDetailsPreview(
-                taxRatesUsed: taxRatesUsedArray.Select(item => TaxRatesUsed.From((Dictionary<string, object>)item)).ToList(),
+                taxRatesUsed: taxRatesUsedArray.Select(item => Shared.TaxRatesUsed.From((Dictionary<string, object>)item)).ToList(),
                 totals: TransactionTotals.From((Dictionary<string, object>)data["totals"]),
                 lineItems: lineItemsArray.Select(item => TransactionLineItemPreview.From((Dictionary<string, object>)item)).ToList()
             );

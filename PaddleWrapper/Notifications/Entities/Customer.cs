@@ -56,7 +56,7 @@ public class Customer : IEntity
         string? name = json.TryGetProperty("name", out JsonElement nameElement) ? nameElement.GetString() : null;
         string email = json.GetProperty("email").GetString()!;
         bool marketingConsent = json.GetProperty("marketing_consent").GetBoolean();
-        var status = Status.FromJson(json.GetProperty("status"));
+        var status = PaddleEnum.FromJson<Status>(json.GetProperty("status"));
         CustomData? customData = json.TryGetProperty("custom_data", out JsonElement customDataElement) ? CustomData.FromJson(customDataElement) : null;
         string locale = json.GetProperty("locale").GetString()!;
         DateTime? createdAt = DateTime.Parse(json.GetProperty("created_at").GetString()!);

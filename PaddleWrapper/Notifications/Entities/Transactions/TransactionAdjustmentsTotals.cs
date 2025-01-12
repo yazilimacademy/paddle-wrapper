@@ -47,7 +47,7 @@ public class TransactionAdjustmentsTotals
             data.GetProperty("fee").GetString()!,
             data.GetProperty("earnings").GetString()!,
             TransactionBreakdown.From(data.GetProperty("breakdown")),
-            CurrencyCode.From(data.GetProperty("currency_code").GetString()!)
+            JsonSerializer.Deserialize<CurrencyCode>(data.GetProperty("currency_code").GetRawText())!
         );
     }
 }

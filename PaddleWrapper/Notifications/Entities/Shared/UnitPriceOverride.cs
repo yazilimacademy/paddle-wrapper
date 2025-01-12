@@ -20,8 +20,9 @@ public class UnitPriceOverride
     public static UnitPriceOverride FromJson(JsonElement json)
     {
         var countryCodes = json.GetProperty("country_codes").EnumerateArray()
-            .Select(x => (CountryCode)x.GetString()!)
-            .ToArray();
+            .Select(x => JsonSerializer.Deserialize<CountryCode>(x.GetRawText()))
+            .Where(x => x != null)
+            .ToArray()!;
 
         Money unitPrice = Money.FromJson(json.GetProperty("unit_price"));
 

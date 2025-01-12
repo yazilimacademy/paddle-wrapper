@@ -2,18 +2,19 @@ using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Events;
 using DateTime = PaddleWrapper.Notifications.Entities.DateTime;
 using IEntity = PaddleWrapper.Notifications.Entities.IEntity;
+using NotificationSubscription = PaddleWrapper.Notifications.Entities.Subscription;
 
 namespace PaddleWrapper.Notifications.Events;
 
 public sealed class SubscriptionPastDue : Event
 {
-    public Subscription Subscription { get; }
+    public NotificationSubscription Subscription { get; }
 
     private SubscriptionPastDue(
         string eventId,
         EventTypeName eventType,
         DateTime occurredAt,
-        Subscription subscription,
+        NotificationSubscription subscription,
         string? notificationId)
         : base(eventId, eventType, occurredAt, subscription, notificationId)
     {
@@ -27,9 +28,9 @@ public sealed class SubscriptionPastDue : Event
         IEntity data,
         string? notificationId = null)
     {
-        if (data is not Subscription subscription)
+        if (data is not NotificationSubscription subscription)
         {
-            throw new ArgumentException($"Expected data to be of type {nameof(Subscription)}", nameof(data));
+            throw new ArgumentException($"Expected data to be of type {nameof(NotificationSubscription)}", nameof(data));
         }
 
         return new SubscriptionPastDue(eventId, eventType, occurredAt, subscription, notificationId);

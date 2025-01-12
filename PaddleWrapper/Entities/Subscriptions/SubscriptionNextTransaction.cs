@@ -26,7 +26,7 @@ namespace PaddleWrapper.Entities.Subscriptions
 
         public static SubscriptionNextTransaction From(Dictionary<string, object> data)
         {
-            List<Subscription.SubscriptionAdjustmentPreview> adjustments = new List<SubscriptionAdjustmentPreview>();
+            List<SubscriptionAdjustmentPreview> adjustments = new List<SubscriptionAdjustmentPreview>();
             object[] adjustmentsData = (object[])data["adjustments"];
             foreach (object item in adjustmentsData)
             {

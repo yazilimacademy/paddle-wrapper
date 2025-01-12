@@ -2,18 +2,19 @@ using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Events;
 using DateTime = PaddleWrapper.Notifications.Entities.DateTime;
 using IEntity = PaddleWrapper.Notifications.Entities.IEntity;
+using NotificationCustomer = PaddleWrapper.Notifications.Entities.Customer;
 
 namespace PaddleWrapper.Notifications.Events;
 
 public sealed class CustomerImported : Event
 {
-    public Customer Customer { get; }
+    public NotificationCustomer Customer { get; }
 
     private CustomerImported(
         string eventId,
         EventTypeName eventType,
         DateTime occurredAt,
-        Customer customer,
+        NotificationCustomer customer,
         string? notificationId)
         : base(eventId, eventType, occurredAt, customer, notificationId)
     {
@@ -27,9 +28,9 @@ public sealed class CustomerImported : Event
         IEntity data,
         string? notificationId = null)
     {
-        if (data is not Customer customer)
+        if (data is not NotificationCustomer customer)
         {
-            throw new ArgumentException($"Expected data to be of type {nameof(Customer)}", nameof(data));
+            throw new ArgumentException($"Expected data to be of type {nameof(NotificationCustomer)}", nameof(data));
         }
 
         return new CustomerImported(eventId, eventType, occurredAt, customer, notificationId);

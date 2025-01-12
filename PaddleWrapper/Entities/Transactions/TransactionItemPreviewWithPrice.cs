@@ -36,7 +36,7 @@ namespace PaddleWrapper.Entities.Transactions
             // Determine which type of price object to create based on the data
             if (priceData.ContainsKey("id") && priceData.ContainsKey("product_id"))
             {
-                price = Price.Price.From(priceData);
+                price = Entities.Price.From(priceData);
             }
             else
             {

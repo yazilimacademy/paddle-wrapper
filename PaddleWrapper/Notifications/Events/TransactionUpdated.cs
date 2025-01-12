@@ -2,18 +2,19 @@ using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Events;
 using DateTime = PaddleWrapper.Notifications.Entities.DateTime;
 using IEntity = PaddleWrapper.Notifications.Entities.IEntity;
+using NotificationTransaction = PaddleWrapper.Notifications.Entities.Transaction;
 
 namespace PaddleWrapper.Notifications.Events;
 
 public sealed class TransactionUpdated : Event
 {
-    public Transaction Transaction { get; }
+    public NotificationTransaction Transaction { get; }
 
     private TransactionUpdated(
         string eventId,
         EventTypeName eventType,
         DateTime occurredAt,
-        Transaction transaction,
+        NotificationTransaction transaction,
         string? notificationId)
         : base(eventId, eventType, occurredAt, transaction, notificationId)
     {
@@ -27,9 +28,9 @@ public sealed class TransactionUpdated : Event
         IEntity data,
         string? notificationId = null)
     {
-        if (data is not Transaction transaction)
+        if (data is not NotificationTransaction transaction)
         {
-            throw new ArgumentException($"Expected data to be of type {nameof(Transaction)}", nameof(data));
+            throw new ArgumentException($"Expected data to be of type {nameof(NotificationTransaction)}", nameof(data));
         }
 
         return new TransactionUpdated(eventId, eventType, occurredAt, transaction, notificationId);

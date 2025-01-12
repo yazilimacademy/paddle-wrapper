@@ -72,7 +72,7 @@ namespace PaddleWrapper.Entities
                 object[] contactsData = (object[])data["contacts"];
                 foreach (object contact in contactsData)
                 {
-                    contacts.Add(Contacts.From((Dictionary<string, object>)contact));
+                    contacts.Add(Shared.Contacts.From((Dictionary<string, object>)contact));
                 }
             }
 

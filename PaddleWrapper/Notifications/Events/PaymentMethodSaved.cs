@@ -2,18 +2,19 @@ using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Events;
 using DateTime = PaddleWrapper.Notifications.Entities.DateTime;
 using IEntity = PaddleWrapper.Notifications.Entities.IEntity;
+using NotificationPaymentMethod = PaddleWrapper.Notifications.Entities.PaymentMethod;
 
 namespace PaddleWrapper.Notifications.Events;
 
 public sealed class PaymentMethodSaved : Event
 {
-    public PaymentMethod PaymentMethod { get; }
+    public NotificationPaymentMethod PaymentMethod { get; }
 
     private PaymentMethodSaved(
         string eventId,
         EventTypeName eventType,
         DateTime occurredAt,
-        PaymentMethod paymentMethod,
+        NotificationPaymentMethod paymentMethod,
         string? notificationId)
         : base(eventId, eventType, occurredAt, paymentMethod, notificationId)
     {
@@ -27,9 +28,9 @@ public sealed class PaymentMethodSaved : Event
         IEntity data,
         string? notificationId = null)
     {
-        if (data is not PaymentMethod paymentMethod)
+        if (data is not NotificationPaymentMethod paymentMethod)
         {
-            throw new ArgumentException($"Expected data to be of type {nameof(PaymentMethod)}", nameof(data));
+            throw new ArgumentException($"Expected data to be of type {nameof(NotificationPaymentMethod)}", nameof(data));
         }
 
         return new PaymentMethodSaved(eventId, eventType, occurredAt, paymentMethod, notificationId);
