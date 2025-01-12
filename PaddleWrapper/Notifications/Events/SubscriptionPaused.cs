@@ -14,7 +14,7 @@ public sealed class SubscriptionPaused : Event
         EventTypeName eventType,
         DateTime occurredAt,
         Subscription subscription,
-        string? notificationId) 
+        string? notificationId)
         : base(eventId, eventType, occurredAt, subscription, notificationId)
     {
         Subscription = subscription;
@@ -34,4 +34,4 @@ public sealed class SubscriptionPaused : Event
 
         return new SubscriptionPaused(eventId, eventType, occurredAt, subscription, notificationId);
     }
-} 
+}

@@ -21,7 +21,7 @@ public class MethodDetails
     {
         return new MethodDetails(
             JsonSerializer.Deserialize<PaymentMethodType>(element.GetProperty("type").GetRawText()),
-            element.TryGetProperty("card", out var card) ? Card.FromJson(card) : null
+            element.TryGetProperty("card", out JsonElement card) ? Card.FromJson(card) : null
         );
     }
-} 
+}

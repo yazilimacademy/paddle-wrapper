@@ -15,8 +15,8 @@ public class AddressPreview
     {
         return new AddressPreview
         {
-            PostalCode = data.TryGetProperty("postal_code", out var postalCode) ? postalCode.GetString() : null,
+            PostalCode = data.TryGetProperty("postal_code", out JsonElement postalCode) ? postalCode.GetString() : null,
             CountryCode = JsonSerializer.Deserialize<CountryCode>(data.GetProperty("country_code").GetRawText())
         };
     }
-} 
+}

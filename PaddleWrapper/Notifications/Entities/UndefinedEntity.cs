@@ -15,4 +15,4 @@ public class UndefinedEntity : IEntity
     {
         return new UndefinedEntity(data);
     }
-} 
+}

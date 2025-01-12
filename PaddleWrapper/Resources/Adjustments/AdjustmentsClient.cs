@@ -1,17 +1,14 @@
-using System.Threading.Tasks;
-using PaddleWrapper.Client;
 using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Collections;
-using PaddleWrapper.Exceptions;
 using PaddleWrapper.Resources.Adjustments.Operations;
 
 namespace PaddleWrapper.Resources.Adjustments
 {
     public class AdjustmentsClient
     {
-        private readonly IPaddleClient _client;
+        private readonly Client _client;
 
-        public AdjustmentsClient(IPaddleClient client)
+        public AdjustmentsClient(Client client)
         {
             _client = client;
         }
@@ -19,8 +16,8 @@ namespace PaddleWrapper.Resources.Adjustments
         public async Task<AdjustmentCollection> ListAsync(ListAdjustments listOperation = null)
         {
             listOperation ??= new ListAdjustments();
-            var response = await _client.GetRawAsync("/adjustments", listOperation);
-            var parser = new ResponseParser(response);
+            var response = await _client.GetRaw("/adjustments", listOperation);
+            ResponseParser parser = new(response);
 
             return AdjustmentCollection.From(
                 parser.GetData(),
@@ -31,7 +28,7 @@ namespace PaddleWrapper.Resources.Adjustments
         public async Task<Adjustment> CreateAsync(CreateAdjustment createOperation)
         {
             var response = await _client.PostRawAsync("/adjustments", createOperation);
-            var parser = new ResponseParser(response);
+            ResponseParser parser = new(response);
 
             return Adjustment.From(parser.GetData());
         }
@@ -39,10 +36,10 @@ namespace PaddleWrapper.Resources.Adjustments
         public async Task<AdjustmentCreditNote> GetCreditNoteAsync(string id, GetAdjustmentCreditNote getOperation = null)
         {
             getOperation ??= new GetAdjustmentCreditNote();
-            var response = await _client.GetRawAsync($"/adjustments/{id}/credit-note", getOperation);
-            var parser = new ResponseParser(response);
+            var response = await _client.GetRaw($"/adjustments/{id}/credit-note", getOperation);
+            ResponseParser parser = new(response);
 
             return AdjustmentCreditNote.From(parser.GetData());
         }
     }
-} 
+}

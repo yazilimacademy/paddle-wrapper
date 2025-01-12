@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using PaddleWrapper.Resources.Shared.Operations.List;
 
 namespace PaddleWrapper.Resources.SimulationRunEvents.Operations
@@ -20,11 +17,11 @@ namespace PaddleWrapper.Resources.SimulationRunEvents.Operations
 
         public Dictionary<string, string> GetParameters()
         {
-            var parameters = new Dictionary<string, string>();
+            Dictionary<string, string> parameters = new();
 
             if (_pager != null)
             {
-                foreach (var param in _pager.GetParameters())
+                foreach (KeyValuePair<string, object> param in _pager.GetParameters())
                 {
                     parameters.Add(param.Key, param.Value);
                 }
@@ -38,4 +35,4 @@ namespace PaddleWrapper.Resources.SimulationRunEvents.Operations
             return parameters;
         }
     }
-} 
+}

@@ -14,7 +14,7 @@ public sealed class CustomerUpdated : Event
         EventTypeName eventType,
         DateTime occurredAt,
         Customer customer,
-        string? notificationId) 
+        string? notificationId)
         : base(eventId, eventType, occurredAt, customer, notificationId)
     {
         Customer = customer;
@@ -34,4 +34,4 @@ public sealed class CustomerUpdated : Event
 
         return new CustomerUpdated(eventId, eventType, occurredAt, customer, notificationId);
     }
-} 
+}

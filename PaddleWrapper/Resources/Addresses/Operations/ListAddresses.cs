@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using PaddleWrapper.Entities.Shared;
 using PaddleWrapper.Resources.Shared.Operations.List;
 
@@ -24,7 +21,7 @@ namespace PaddleWrapper.Resources.Addresses.Operations
             _statuses = statuses?.ToList() ?? new List<Status>();
             _search = search;
 
-            if (_ids.Any(id => string.IsNullOrEmpty(id)))
+            if (_ids.Any(string.IsNullOrEmpty))
             {
                 throw new ArgumentException("IDs cannot be null or empty", nameof(ids));
             }
@@ -32,7 +29,7 @@ namespace PaddleWrapper.Resources.Addresses.Operations
 
         public Dictionary<string, object> GetParameters()
         {
-            var parameters = _pager?.GetParameters() ?? new Dictionary<string, object>();
+            Dictionary<string, object> parameters = _pager?.GetParameters() ?? new Dictionary<string, object>();
 
             if (_ids.Any())
             {
@@ -52,4 +49,4 @@ namespace PaddleWrapper.Resources.Addresses.Operations
             return parameters;
         }
     }
-} 
+}

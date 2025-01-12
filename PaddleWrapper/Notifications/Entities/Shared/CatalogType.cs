@@ -10,4 +10,4 @@ public enum CatalogType
 
     [JsonPropertyName("custom")]
     Custom
-} 
+}

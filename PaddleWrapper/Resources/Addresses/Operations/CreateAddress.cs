@@ -1,5 +1,5 @@
-using System.Text.Json.Serialization;
 using PaddleWrapper.Entities.Shared;
+using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Resources.Addresses.Operations
 {
@@ -29,4 +29,4 @@ namespace PaddleWrapper.Resources.Addresses.Operations
         [JsonPropertyName("custom_data")]
         public CustomData? CustomData { get; set; }
     }
-} 
+}

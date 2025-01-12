@@ -16,4 +16,4 @@ public enum DiscountStatus
 
     [JsonPropertyName("used")]
     Used
-} 
+}

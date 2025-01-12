@@ -9,4 +9,4 @@ public enum AdjustmentType
 
     [EnumMember(Value = "partial")]
     Partial
-} 
+}

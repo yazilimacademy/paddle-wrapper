@@ -10,4 +10,4 @@ public sealed class Options
         ApiKey = apiKey;
         Environment = environment;
     }
-} 
+}

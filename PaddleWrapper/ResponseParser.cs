@@ -6,8 +6,8 @@ public sealed class ResponseParser
 {
     public static async Task<T> ParseResponse<T>(HttpResponseMessage response) where T : class
     {
-        var content = await response.Content.ReadAsStringAsync();
-        
+        string content = await response.Content.ReadAsStringAsync();
+
         if (!response.IsSuccessStatusCode)
         {
             throw new HttpRequestException($"Request failed with status code {response.StatusCode}: {content}");
@@ -15,10 +15,10 @@ public sealed class ResponseParser
 
         try
         {
-            var jsonDocument = JsonDocument.Parse(content);
-            var root = jsonDocument.RootElement;
+            JsonDocument jsonDocument = JsonDocument.Parse(content);
+            JsonElement root = jsonDocument.RootElement;
 
-            if (root.TryGetProperty("data", out var data))
+            if (root.TryGetProperty("data", out JsonElement data))
             {
                 return JsonSerializer.Deserialize<T>(data.GetRawText());
             }
@@ -33,8 +33,8 @@ public sealed class ResponseParser
 
     public static async Task<IList<T>> ParseResponseList<T>(HttpResponseMessage response) where T : class
     {
-        var content = await response.Content.ReadAsStringAsync();
-        
+        string content = await response.Content.ReadAsStringAsync();
+
         if (!response.IsSuccessStatusCode)
         {
             throw new HttpRequestException($"Request failed with status code {response.StatusCode}: {content}");
@@ -42,10 +42,10 @@ public sealed class ResponseParser
 
         try
         {
-            var jsonDocument = JsonDocument.Parse(content);
-            var root = jsonDocument.RootElement;
+            JsonDocument jsonDocument = JsonDocument.Parse(content);
+            JsonElement root = jsonDocument.RootElement;
 
-            if (root.TryGetProperty("data", out var data))
+            if (root.TryGetProperty("data", out JsonElement data))
             {
                 return JsonSerializer.Deserialize<List<T>>(data.GetRawText());
             }
@@ -57,4 +57,4 @@ public sealed class ResponseParser
             throw new JsonException($"Failed to parse response: {ex.Message}", ex);
         }
     }
-} 
+}

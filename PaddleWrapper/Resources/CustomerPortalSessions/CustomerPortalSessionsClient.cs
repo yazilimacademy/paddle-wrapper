@@ -1,16 +1,13 @@
-using System.Threading.Tasks;
-using PaddleWrapper.Client;
 using PaddleWrapper.Entities;
-using PaddleWrapper.Exceptions;
 using PaddleWrapper.Resources.CustomerPortalSessions.Operations;
 
 namespace PaddleWrapper.Resources.CustomerPortalSessions
 {
     public class CustomerPortalSessionsClient
     {
-        private readonly IPaddleClient _client;
+        private readonly Client _client;
 
-        public CustomerPortalSessionsClient(IPaddleClient client)
+        public CustomerPortalSessionsClient(Client client)
         {
             _client = client;
         }
@@ -18,9 +15,9 @@ namespace PaddleWrapper.Resources.CustomerPortalSessions
         public async Task<CustomerPortalSession> CreateAsync(string customerId, CreateCustomerPortalSession createOperation)
         {
             var response = await _client.PostRawAsync($"/customers/{customerId}/portal-sessions", createOperation);
-            var parser = new ResponseParser(response);
+            ResponseParser parser = new(response);
 
             return CustomerPortalSession.From(parser.GetData());
         }
     }
-} 
+}

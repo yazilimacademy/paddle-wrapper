@@ -1,5 +1,5 @@
-using System.Text.Json.Serialization;
 using PaddleWrapper.Entities.Subscriptions;
+using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Resources.Subscriptions.Operations
 {
@@ -14,4 +14,4 @@ namespace PaddleWrapper.Resources.Subscriptions.Operations
             EffectiveFrom = effectiveFrom?.ToString()?.ToLower();
         }
     }
-} 
+}

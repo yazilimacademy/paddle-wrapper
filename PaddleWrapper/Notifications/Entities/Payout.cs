@@ -1,8 +1,7 @@
-using System;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using PaddleWrapper.Notifications.Entities.Payouts;
 using PaddleWrapper.Notifications.Entities.Shared;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Notifications.Entities;
 
@@ -41,4 +40,4 @@ public class Payout : IEntity
             currencyCode: JsonSerializer.Deserialize<CurrencyCodePayouts>(json.GetProperty("currency_code").GetRawText())!
         );
     }
-} 
+}

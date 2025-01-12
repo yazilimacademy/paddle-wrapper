@@ -24,7 +24,7 @@ namespace PaddleWrapper.Notifications.Entities
 
             try
             {
-                var parsedDate = System.DateTime.Parse(date).ToUniversalTime();
+                System.DateTime parsedDate = System.DateTime.Parse(date).ToUniversalTime();
                 return new DateTime(parsedDate);
             }
             catch (Exception)
@@ -53,4 +53,4 @@ namespace PaddleWrapper.Notifications.Entities
             return new DateTime(dateTime);
         }
     }
-} 
+}

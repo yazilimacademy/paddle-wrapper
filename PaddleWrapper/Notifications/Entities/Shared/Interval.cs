@@ -13,4 +13,4 @@ public enum Interval
     Month,
     [JsonPropertyName("year")]
     Year
-} 
+}

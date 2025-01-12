@@ -1,5 +1,5 @@
-using System.Text.Json.Serialization;
 using PaddleWrapper.Entities.Shared;
+using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Resources.Customers.Operations
 {
@@ -34,4 +34,4 @@ namespace PaddleWrapper.Resources.Customers.Operations
             Status = status;
         }
     }
-} 
+}

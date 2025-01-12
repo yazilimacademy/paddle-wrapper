@@ -15,4 +15,4 @@ public class TransactionCreateItem
         PriceId = priceId;
         Quantity = quantity;
     }
-} 
+}

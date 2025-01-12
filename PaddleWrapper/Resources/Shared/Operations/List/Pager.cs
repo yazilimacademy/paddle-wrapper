@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-
 namespace PaddleWrapper.Resources.Shared.Operations.List
 {
     public class Pager : IHasParameters
@@ -34,4 +31,4 @@ namespace PaddleWrapper.Resources.Shared.Operations.List
         /// </summary>
         Dictionary<string, object> GetParameters();
     }
-} 
+}

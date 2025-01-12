@@ -73,11 +73,11 @@ public class TransactionTotals
             element.GetProperty("total").GetString()!,
             element.GetProperty("credit").GetString()!,
             element.GetProperty("balance").GetString()!,
-            element.TryGetProperty("grand_total", out var grandTotal) ? grandTotal.GetString() : null,
-            element.TryGetProperty("fee", out var fee) ? fee.GetString() : null,
-            element.TryGetProperty("earnings", out var earnings) ? earnings.GetString() : null,
+            element.TryGetProperty("grand_total", out JsonElement grandTotal) ? grandTotal.GetString() : null,
+            element.TryGetProperty("fee", out JsonElement fee) ? fee.GetString() : null,
+            element.TryGetProperty("earnings", out JsonElement earnings) ? earnings.GetString() : null,
             JsonSerializer.Deserialize<CurrencyCode>(element.GetProperty("currency_code").GetRawText()),
-            element.TryGetProperty("credit_to_balance", out var creditToBalance) ? creditToBalance.GetString() : null
+            element.TryGetProperty("credit_to_balance", out JsonElement creditToBalance) ? creditToBalance.GetString() : null
         );
     }
-} 
+}

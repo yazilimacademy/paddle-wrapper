@@ -1,17 +1,14 @@
-using System.Threading.Tasks;
-using PaddleWrapper.Client;
 using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Collections;
-using PaddleWrapper.Exceptions;
 using PaddleWrapper.Resources.PaymentMethods.Operations;
 
 namespace PaddleWrapper.Resources.PaymentMethods
 {
     public class PaymentMethodsClient
     {
-        private readonly IPaddleClient _client;
+        private readonly Client _client;
 
-        public PaymentMethodsClient(IPaddleClient client)
+        public PaymentMethodsClient(Client client)
         {
             _client = client;
         }
@@ -19,8 +16,8 @@ namespace PaddleWrapper.Resources.PaymentMethods
         public async Task<PaymentMethodCollection> ListAsync(string customerId, ListPaymentMethods listOperation = null)
         {
             listOperation ??= new ListPaymentMethods();
-            var response = await _client.GetRawAsync($"/customers/{customerId}/payment-methods", listOperation);
-            var parser = new ResponseParser(response);
+            var response = await _client.GetRaw($"/customers/{customerId}/payment-methods", listOperation);
+            ResponseParser parser = new(response);
 
             return PaymentMethodCollection.From(
                 parser.GetData(),
@@ -30,8 +27,8 @@ namespace PaddleWrapper.Resources.PaymentMethods
 
         public async Task<PaymentMethod> GetAsync(string customerId, string id)
         {
-            var response = await _client.GetRawAsync($"/customers/{customerId}/payment-methods/{id}");
-            var parser = new ResponseParser(response);
+            HttpResponseMessage response = await _client.GetRaw($"/customers/{customerId}/payment-methods/{id}");
+            ResponseParser parser = new(response);
 
             return PaymentMethod.From(parser.GetData());
         }
@@ -42,4 +39,4 @@ namespace PaddleWrapper.Resources.PaymentMethods
             _ = new ResponseParser(response);
         }
     }
-} 
+}

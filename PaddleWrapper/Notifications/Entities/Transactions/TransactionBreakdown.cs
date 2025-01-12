@@ -8,7 +8,7 @@ public class TransactionBreakdown
     [JsonPropertyName("credit")]
     public string Credit { get; }
 
-    [JsonPropertyName("refund")] 
+    [JsonPropertyName("refund")]
     public string Refund { get; }
 
     [JsonPropertyName("chargeback")]
@@ -29,4 +29,4 @@ public class TransactionBreakdown
             data.GetProperty("chargeback").GetString()!
         );
     }
-} 
+}

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using PaddleWrapper.Resources.Shared.Operations.List;
 
 namespace PaddleWrapper.Resources.NotificationLogs.Operations
@@ -17,4 +16,4 @@ namespace PaddleWrapper.Resources.NotificationLogs.Operations
             return _pager?.GetParameters() ?? new Dictionary<string, object>();
         }
     }
-} 
+}

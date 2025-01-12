@@ -21,10 +21,10 @@ public class TransactionItem
     {
         return new TransactionItem
         {
-            PriceId = data.TryGetProperty("price_id", out var priceId) ? priceId.GetString() : null,
+            PriceId = data.TryGetProperty("price_id", out JsonElement priceId) ? priceId.GetString() : null,
             Price = Price.FromJson(data.GetProperty("price")),
-            Quantity = data.TryGetProperty("quantity", out var quantity) ? quantity.GetInt32() : null,
-            Proration = data.TryGetProperty("proration", out var proration) ? TransactionProration.FromJson(proration) : null
+            Quantity = data.TryGetProperty("quantity", out JsonElement quantity) ? quantity.GetInt32() : null,
+            Proration = data.TryGetProperty("proration", out JsonElement proration) ? TransactionProration.FromJson(proration) : null
         };
     }
-} 
+}

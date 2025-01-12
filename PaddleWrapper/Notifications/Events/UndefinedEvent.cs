@@ -1,7 +1,7 @@
-using System.Text.Json;
 using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Events;
 using PaddleWrapper.Notifications.Entities;
+using System.Text.Json;
 using DateTime = PaddleWrapper.Notifications.Entities.DateTime;
 using IEntity = PaddleWrapper.Notifications.Entities.IEntity;
 
@@ -16,7 +16,7 @@ public sealed class UndefinedEvent : Event
         EventTypeName eventType,
         DateTime occurredAt,
         JsonElement data,
-        string? notificationId) 
+        string? notificationId)
         : base(eventId, eventType, occurredAt, null, notificationId)
     {
         Data = data;
@@ -36,4 +36,4 @@ public sealed class UndefinedEvent : Event
 
         return new UndefinedEvent(eventId, eventType, occurredAt, undefinedEntity.Data, notificationId);
     }
-} 
+}

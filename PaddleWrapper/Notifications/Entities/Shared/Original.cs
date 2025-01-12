@@ -24,4 +24,4 @@ public class Original
             JsonSerializer.Deserialize<CurrencyCodeAdjustments>(element.GetProperty("currency_code").GetRawText())
         );
     }
-} 
+}

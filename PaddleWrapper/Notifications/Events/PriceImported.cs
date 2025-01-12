@@ -14,7 +14,7 @@ public sealed class PriceImported : Event
         EventTypeName eventType,
         DateTime occurredAt,
         Price price,
-        string? notificationId) 
+        string? notificationId)
         : base(eventId, eventType, occurredAt, price, notificationId)
     {
         Price = price;
@@ -34,4 +34,4 @@ public sealed class PriceImported : Event
 
         return new PriceImported(eventId, eventType, occurredAt, price, notificationId);
     }
-} 
+}

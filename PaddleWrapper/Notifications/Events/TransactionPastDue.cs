@@ -15,7 +15,7 @@ public sealed class TransactionPastDue : Event
         EventTypeName eventType,
         DateTime occurredAt,
         Transaction transaction,
-        string? notificationId) 
+        string? notificationId)
         : base(eventId, eventType, occurredAt, transaction, notificationId)
     {
         Transaction = transaction;
@@ -35,4 +35,4 @@ public sealed class TransactionPastDue : Event
 
         return new TransactionPastDue(eventId, eventType, occurredAt, transaction, notificationId);
     }
-} 
+}

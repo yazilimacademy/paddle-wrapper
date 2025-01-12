@@ -9,4 +9,4 @@ public enum SavedPaymentMethodOrigin
     SavedDuringPurchase,
     [JsonPropertyName("subscription")]
     Subscription
-} 
+}

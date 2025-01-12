@@ -11,4 +11,4 @@ public sealed class Secret
     {
         Key = key;
     }
-} 
+}

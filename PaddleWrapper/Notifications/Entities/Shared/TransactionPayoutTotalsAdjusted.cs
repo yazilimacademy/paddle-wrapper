@@ -56,4 +56,4 @@ public class TransactionPayoutTotalsAdjusted
             JsonSerializer.Deserialize<CurrencyCodePayouts>(element.GetProperty("currency_code").GetRawText())
         );
     }
-} 
+}

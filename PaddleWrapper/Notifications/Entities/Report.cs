@@ -1,7 +1,6 @@
-using System;
+using PaddleWrapper.Notifications.Entities.Reports;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Notifications.Entities.Reports;
 
 namespace PaddleWrapper.Notifications.Entities;
 
@@ -53,10 +52,10 @@ public class Report : IEntity
 
     public static IEntity FromJson(JsonElement json)
     {
-        var filters = new List<ReportFilter>();
-        if (json.TryGetProperty("filters", out var filtersElement))
+        List<ReportFilter> filters = new();
+        if (json.TryGetProperty("filters", out JsonElement filtersElement))
         {
-            foreach (var filter in filtersElement.EnumerateArray())
+            foreach (JsonElement filter in filtersElement.EnumerateArray())
             {
                 filters.Add(ReportFilter.FromJson(filter));
             }
@@ -65,14 +64,14 @@ public class Report : IEntity
         return new Report(
             id: json.GetProperty("id").GetString()!,
             status: JsonSerializer.Deserialize<ReportStatus>(json.GetProperty("status").GetRawText())!,
-            rows: json.TryGetProperty("rows", out var rowsElement) ? rowsElement.GetInt32() : null,
+            rows: json.TryGetProperty("rows", out JsonElement rowsElement) ? rowsElement.GetInt32() : null,
             type: JsonSerializer.Deserialize<ReportType>(json.GetProperty("type").GetRawText())!,
             filters: filters,
-            expiresAt: json.TryGetProperty("expires_at", out var expiresAtElement) 
-                ? DateTime.Parse(expiresAtElement.GetString()!) 
+            expiresAt: json.TryGetProperty("expires_at", out JsonElement expiresAtElement)
+                ? DateTime.Parse(expiresAtElement.GetString()!)
                 : null,
             createdAt: DateTime.Parse(json.GetProperty("created_at").GetString()!),
             updatedAt: DateTime.Parse(json.GetProperty("updated_at").GetString()!)
         );
     }
-} 
+}

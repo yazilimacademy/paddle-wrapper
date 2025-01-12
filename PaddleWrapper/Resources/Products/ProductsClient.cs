@@ -1,12 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using PaddleWrapper.Client;
 using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Collections;
 using PaddleWrapper.Entities.Shared;
-using PaddleWrapper.Exceptions;
 using PaddleWrapper.Resources.Products.Operations;
 using PaddleWrapper.Resources.Products.Operations.List;
 
@@ -14,9 +8,9 @@ namespace PaddleWrapper.Resources.Products
 {
     public class ProductsClient
     {
-        private readonly IPaddleClient _client;
+        private readonly Client _client;
 
-        public ProductsClient(IPaddleClient client)
+        public ProductsClient(Client client)
         {
             _client = client;
         }
@@ -24,8 +18,8 @@ namespace PaddleWrapper.Resources.Products
         public async Task<ProductCollection> ListAsync(ListProducts listOperation = null)
         {
             listOperation ??= new ListProducts();
-            var response = await _client.GetRawAsync("/products", listOperation);
-            var parser = new ResponseParser(response);
+            var response = await _client.GetRaw("/products", listOperation);
+            ResponseParser parser = new(response);
 
             return ProductCollection.From(
                 parser.GetData(),
@@ -36,21 +30,21 @@ namespace PaddleWrapper.Resources.Products
         public async Task<Product> GetAsync(string id, IEnumerable<Includes> includes = null)
         {
             includes ??= Array.Empty<Includes>();
-            var includesList = includes.ToList();
+            List<Includes> includesList = includes.ToList();
 
             if (includesList.Any(include => include == null))
             {
                 throw new ArgumentException("includes cannot contain null values", nameof(includes));
             }
 
-            var parameters = new Dictionary<string, object>();
+            Dictionary<string, object> parameters = new();
             if (includesList.Any())
             {
                 parameters["include"] = string.Join(",", includesList.Select(x => x.ToString()));
             }
 
-            var response = await _client.GetRawAsync($"/products/{id}", parameters);
-            var parser = new ResponseParser(response);
+            HttpResponseMessage response = await _client.GetRaw($"/products/{id}", parameters);
+            ResponseParser parser = new(response);
 
             return Product.From(parser.GetData());
         }
@@ -58,7 +52,7 @@ namespace PaddleWrapper.Resources.Products
         public async Task<Product> CreateAsync(CreateProduct createOperation)
         {
             var response = await _client.PostRawAsync("/products", createOperation);
-            var parser = new ResponseParser(response);
+            ResponseParser parser = new(response);
 
             return Product.From(parser.GetData());
         }
@@ -66,7 +60,7 @@ namespace PaddleWrapper.Resources.Products
         public async Task<Product> UpdateAsync(string id, UpdateProduct operation)
         {
             var response = await _client.PatchRawAsync($"/products/{id}", operation);
-            var parser = new ResponseParser(response);
+            ResponseParser parser = new(response);
 
             return Product.From(parser.GetData());
         }
@@ -76,4 +70,4 @@ namespace PaddleWrapper.Resources.Products
             return await UpdateAsync(id, new UpdateProduct { Status = Status.Archived });
         }
     }
-} 
+}

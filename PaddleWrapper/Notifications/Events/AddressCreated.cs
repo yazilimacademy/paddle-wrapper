@@ -14,7 +14,7 @@ public sealed class AddressCreated : Event
         EventTypeName eventType,
         DateTime occurredAt,
         Address address,
-        string? notificationId) 
+        string? notificationId)
         : base(eventId, eventType, occurredAt, address, notificationId)
     {
         Address = address;
@@ -34,4 +34,4 @@ public sealed class AddressCreated : Event
 
         return new AddressCreated(eventId, eventType, occurredAt, address, notificationId);
     }
-} 
+}

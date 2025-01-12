@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json.Serialization;
 using PaddleWrapper.Entities.PricingPreview;
 using PaddleWrapper.Entities.Shared;
+using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Resources.PricingPreviews.Operations
 {
@@ -50,8 +47,8 @@ namespace PaddleWrapper.Resources.PricingPreviews.Operations
             AddressPreview? address = null,
             string? customerIpAddress = null)
         {
-            var itemsList = items?.ToList() ?? new List<PricePreviewItem>();
-            
+            List<PricePreviewItem> itemsList = items?.ToList() ?? new List<PricePreviewItem>();
+
             if (!itemsList.Any())
             {
                 throw new ArgumentException("items cannot be empty", nameof(items));
@@ -72,4 +69,4 @@ namespace PaddleWrapper.Resources.PricingPreviews.Operations
             CustomerIpAddress = customerIpAddress;
         }
     }
-} 
+}

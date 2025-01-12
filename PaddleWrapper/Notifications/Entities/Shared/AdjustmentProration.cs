@@ -19,4 +19,4 @@ public class AdjustmentProration
             BillingPeriod = AdjustmentTimePeriod.FromJson(data.GetProperty("billing_period"))
         };
     }
-} 
+}

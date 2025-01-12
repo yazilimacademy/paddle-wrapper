@@ -68,16 +68,16 @@ public class TransactionPayoutTotals
     {
         return new TransactionPayoutTotals(
             element.GetProperty("subtotal").GetString()!,
-            element.TryGetProperty("discount", out var discount) ? discount.GetString() : null,
+            element.TryGetProperty("discount", out JsonElement discount) ? discount.GetString() : null,
             element.GetProperty("tax").GetString()!,
             element.GetProperty("total").GetString()!,
-            element.TryGetProperty("credit", out var credit) ? credit.GetString() : null,
-            element.TryGetProperty("balance", out var balance) ? balance.GetString() : null,
-            element.TryGetProperty("grand_total", out var grandTotal) ? grandTotal.GetString() : null,
+            element.TryGetProperty("credit", out JsonElement credit) ? credit.GetString() : null,
+            element.TryGetProperty("balance", out JsonElement balance) ? balance.GetString() : null,
+            element.TryGetProperty("grand_total", out JsonElement grandTotal) ? grandTotal.GetString() : null,
             element.GetProperty("fee").GetString()!,
             element.GetProperty("earnings").GetString()!,
             JsonSerializer.Deserialize<CurrencyCodePayouts>(element.GetProperty("currency_code").GetRawText()),
-            element.TryGetProperty("credit_to_balance", out var creditToBalance) ? creditToBalance.GetString() : null
+            element.TryGetProperty("credit_to_balance", out JsonElement creditToBalance) ? creditToBalance.GetString() : null
         );
     }
-} 
+}

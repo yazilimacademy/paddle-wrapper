@@ -10,4 +10,4 @@ namespace PaddleWrapper.Resources.Subscriptions.Operations.Get
         [EnumMember(Value = "recurring_transaction_details")]
         RecurringTransactionDetails
     }
-} 
+}

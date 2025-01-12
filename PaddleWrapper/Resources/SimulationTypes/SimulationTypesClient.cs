@@ -13,10 +13,9 @@ namespace PaddleWrapper.Resources.SimulationTypes
 
         public async Task<SimulationTypeCollection> ListAsync()
         {
-            var response = await _client.GetRaw("/simulation-types");
-            var parser = ResponseParser.ParseResponse(response);
-
-            return SimulationTypeCollection.From(parser.GetData());
+            HttpResponseMessage response = await _client.GetRaw("/simulation-types");
+            SimulationTypeCollection data = await ResponseParser.ParseResponse<SimulationTypeCollection>(response);
+            return data;
         }
     }
-} 
+}

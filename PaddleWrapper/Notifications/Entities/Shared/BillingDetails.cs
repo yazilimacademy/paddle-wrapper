@@ -23,8 +23,8 @@ public class BillingDetails
         {
             EnableCheckout = data.GetProperty("enable_checkout").GetBoolean(),
             PaymentTerms = TimePeriod.FromJson(data.GetProperty("payment_terms")),
-            PurchaseOrderNumber = data.TryGetProperty("purchase_order_number", out var pon) ? pon.GetString() : null,
-            AdditionalInformation = data.TryGetProperty("additional_information", out var ai) ? ai.GetString() : null
+            PurchaseOrderNumber = data.TryGetProperty("purchase_order_number", out JsonElement pon) ? pon.GetString() : null,
+            AdditionalInformation = data.TryGetProperty("additional_information", out JsonElement ai) ? ai.GetString() : null
         };
     }
-} 
+}

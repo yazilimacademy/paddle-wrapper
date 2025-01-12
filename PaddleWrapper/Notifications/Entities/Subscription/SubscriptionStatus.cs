@@ -22,4 +22,4 @@ public enum SubscriptionStatus
 
     [JsonPropertyName("inactive")]
     Inactive
-} 
+}

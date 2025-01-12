@@ -24,4 +24,4 @@ public class TaxRatesUsed
             Totals.FromJson(element.GetProperty("totals"))
         );
     }
-} 
+}

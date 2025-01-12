@@ -19,12 +19,12 @@ public class SubscriptionScheduledChange
         return new SubscriptionScheduledChange
         {
             Action = JsonSerializer.Deserialize<SubscriptionScheduledChangeAction>(data.GetProperty("action").GetRawText()),
-            EffectiveAt = data.TryGetProperty("effective_at", out var effectiveAt) && !effectiveAt.ValueKind.Equals(JsonValueKind.Null)
+            EffectiveAt = data.TryGetProperty("effective_at", out JsonElement effectiveAt) && !effectiveAt.ValueKind.Equals(JsonValueKind.Null)
                 ? DateTime.Parse(effectiveAt.GetString()!)
                 : null,
-            ResumeAt = data.TryGetProperty("resume_at", out var resumeAt) && !resumeAt.ValueKind.Equals(JsonValueKind.Null)
+            ResumeAt = data.TryGetProperty("resume_at", out JsonElement resumeAt) && !resumeAt.ValueKind.Equals(JsonValueKind.Null)
                 ? DateTime.Parse(resumeAt.GetString()!)
                 : null
         };
     }
-} 
+}

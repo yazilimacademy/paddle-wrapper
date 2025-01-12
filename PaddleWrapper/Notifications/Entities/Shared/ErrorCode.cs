@@ -39,4 +39,4 @@ public enum ErrorCode
     TransactionNotPermitted,
     [JsonPropertyName("unknown")]
     Unknown
-} 
+}

@@ -1,6 +1,6 @@
+using PaddleWrapper.Notifications.Entities.Shared;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Notifications.Entities.Shared;
 
 namespace PaddleWrapper.Notifications.Entities.Subscriptions;
 
@@ -27,9 +27,9 @@ public class SubscriptionAdjustmentItem
         {
             ItemId = data.GetProperty("item_id").GetString()!,
             Type = JsonSerializer.Deserialize<AdjustmentType>(data.GetProperty("type").GetRawText()),
-            Amount = data.TryGetProperty("amount", out var amount) ? amount.GetString() : null,
+            Amount = data.TryGetProperty("amount", out JsonElement amount) ? amount.GetString() : null,
             Proration = AdjustmentProration.FromJson(data.GetProperty("proration")),
             Totals = AdjustmentItemTotals.FromJson(data.GetProperty("totals"))
         };
     }
-} 
+}

@@ -1,7 +1,4 @@
-using System.Collections.Generic;
-using System.Linq;
 using PaddleWrapper.Entities.Shared;
-using PaddleWrapper.Resources.Shared.Operations.List;
 
 namespace PaddleWrapper.Resources.Customers.Operations
 {
@@ -16,7 +13,7 @@ namespace PaddleWrapper.Resources.Customers.Operations
 
         public Dictionary<string, object> GetParameters()
         {
-            var parameters = new Dictionary<string, object>();
+            Dictionary<string, object> parameters = new();
 
             if (_currencyCodes.Any())
             {
@@ -26,4 +23,4 @@ namespace PaddleWrapper.Resources.Customers.Operations
             return parameters;
         }
     }
-} 
+}

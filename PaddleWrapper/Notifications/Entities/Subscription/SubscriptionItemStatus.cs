@@ -13,4 +13,4 @@ public enum SubscriptionItemStatus
 
     [JsonPropertyName("trialing")]
     Trialing
-} 
+}

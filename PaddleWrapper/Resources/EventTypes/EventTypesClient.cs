@@ -1,25 +1,22 @@
-using System.Threading.Tasks;
-using PaddleWrapper.Client;
 using PaddleWrapper.Entities.Collections;
-using PaddleWrapper.Exceptions;
 
 namespace PaddleWrapper.Resources.EventTypes
 {
     public class EventTypesClient
     {
-        private readonly IPaddleClient _client;
+        private readonly Client _client;
 
-        public EventTypesClient(IPaddleClient client)
+        public EventTypesClient(Client client)
         {
             _client = client;
         }
 
         public async Task<EventTypeCollection> ListAsync()
         {
-            var response = await _client.GetRawAsync("/event-types");
-            var parser = new ResponseParser(response);
+            HttpResponseMessage response = await _client.GetRaw("/event-types");
+            ResponseParser parser = new(response);
 
             return EventTypeCollection.From(parser.GetData());
         }
     }
-} 
+}

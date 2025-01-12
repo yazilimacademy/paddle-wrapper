@@ -24,4 +24,4 @@ public class TimePeriod
             element.GetProperty("frequency").GetInt32()
         );
     }
-} 
+}

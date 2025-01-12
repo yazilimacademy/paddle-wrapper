@@ -25,4 +25,4 @@ public enum PaymentAttemptStatus
     Unknown,
     [JsonPropertyName("dropped")]
     Dropped
-} 
+}

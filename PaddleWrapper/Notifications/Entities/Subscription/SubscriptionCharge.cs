@@ -1,6 +1,6 @@
+using PaddleWrapper.Notifications.Entities.Shared;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Notifications.Entities.Shared;
 
 namespace PaddleWrapper.Notifications.Entities.Subscriptions;
 
@@ -20,4 +20,4 @@ public class SubscriptionCharge
             CurrencyCode = JsonSerializer.Deserialize<CurrencyCode>(data.GetProperty("currency_code").GetRawText())
         };
     }
-} 
+}

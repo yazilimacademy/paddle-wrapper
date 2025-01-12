@@ -1,7 +1,6 @@
-using System;
+using PaddleWrapper.Notifications.Entities.Shared;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Notifications.Entities.Shared;
 
 namespace PaddleWrapper.Notifications.Entities;
 
@@ -93,10 +92,10 @@ public class Price : IEntity
 
     public static IEntity FromJson(JsonElement json)
     {
-        var unitPriceOverrides = new List<UnitPriceOverride>();
-        if (json.TryGetProperty("unit_price_overrides", out var overridesElement))
+        List<UnitPriceOverride> unitPriceOverrides = new();
+        if (json.TryGetProperty("unit_price_overrides", out JsonElement overridesElement))
         {
-            foreach (var override_ in overridesElement.EnumerateArray())
+            foreach (JsonElement override_ in overridesElement.EnumerateArray())
             {
                 unitPriceOverrides.Add(UnitPriceOverride.FromJson(override_));
             }
@@ -105,34 +104,34 @@ public class Price : IEntity
         return new Price(
             id: json.GetProperty("id").GetString()!,
             productId: json.GetProperty("product_id").GetString()!,
-            name: json.TryGetProperty("name", out var nameElement) ? nameElement.GetString() : null,
+            name: json.TryGetProperty("name", out JsonElement nameElement) ? nameElement.GetString() : null,
             description: json.GetProperty("description").GetString()!,
-            type: json.TryGetProperty("type", out var typeElement) 
-                ? JsonSerializer.Deserialize<CatalogType>(typeElement.GetRawText()) 
+            type: json.TryGetProperty("type", out JsonElement typeElement)
+                ? JsonSerializer.Deserialize<CatalogType>(typeElement.GetRawText())
                 : null,
-            billingCycle: json.TryGetProperty("billing_cycle", out var billingElement) 
-                ? TimePeriod.FromJson(billingElement) 
+            billingCycle: json.TryGetProperty("billing_cycle", out JsonElement billingElement)
+                ? TimePeriod.FromJson(billingElement)
                 : null,
-            trialPeriod: json.TryGetProperty("trial_period", out var trialElement) 
-                ? TimePeriod.FromJson(trialElement) 
+            trialPeriod: json.TryGetProperty("trial_period", out JsonElement trialElement)
+                ? TimePeriod.FromJson(trialElement)
                 : null,
             taxMode: JsonSerializer.Deserialize<TaxMode>(json.GetProperty("tax_mode").GetRawText())!,
             unitPrice: Money.FromJson(json.GetProperty("unit_price")),
             unitPriceOverrides: unitPriceOverrides,
             quantity: PriceQuantity.FromJson(json.GetProperty("quantity")),
             status: JsonSerializer.Deserialize<Status>(json.GetProperty("status").GetRawText())!,
-            customData: json.TryGetProperty("custom_data", out var customDataElement) 
-                ? CustomData.FromJson(customDataElement) 
+            customData: json.TryGetProperty("custom_data", out JsonElement customDataElement)
+                ? CustomData.FromJson(customDataElement)
                 : null,
-            importMeta: json.TryGetProperty("import_meta", out var importMetaElement) 
-                ? ImportMeta.FromJson(importMetaElement) 
+            importMeta: json.TryGetProperty("import_meta", out JsonElement importMetaElement)
+                ? ImportMeta.FromJson(importMetaElement)
                 : null,
-            createdAt: json.TryGetProperty("created_at", out var createdAtElement) 
-                ? DateTime.Parse(createdAtElement.GetString()!) 
+            createdAt: json.TryGetProperty("created_at", out JsonElement createdAtElement)
+                ? DateTime.Parse(createdAtElement.GetString()!)
                 : null,
-            updatedAt: json.TryGetProperty("updated_at", out var updatedAtElement) 
-                ? DateTime.Parse(updatedAtElement.GetString()!) 
+            updatedAt: json.TryGetProperty("updated_at", out JsonElement updatedAtElement)
+                ? DateTime.Parse(updatedAtElement.GetString()!)
                 : null
         );
     }
-} 
+}

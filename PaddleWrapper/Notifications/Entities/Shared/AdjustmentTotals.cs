@@ -35,4 +35,4 @@ public class AdjustmentTotals
             CurrencyCode = JsonSerializer.Deserialize<CurrencyCode>(data.GetProperty("currency_code").GetRawText())
         };
     }
-} 
+}

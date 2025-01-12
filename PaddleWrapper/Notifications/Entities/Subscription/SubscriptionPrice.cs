@@ -1,6 +1,6 @@
+using PaddleWrapper.Notifications.Entities.Shared;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Notifications.Entities.Shared;
 
 namespace PaddleWrapper.Notifications.Entities.Subscriptions;
 
@@ -60,38 +60,38 @@ public class SubscriptionPrice
         {
             Id = data.GetProperty("id").GetString()!,
             ProductId = data.GetProperty("product_id").GetString()!,
-            Name = data.TryGetProperty("name", out var name) ? name.GetString() : null,
+            Name = data.TryGetProperty("name", out JsonElement name) ? name.GetString() : null,
             Description = data.GetProperty("description").GetString()!,
-            Type = data.TryGetProperty("type", out var type) 
-                ? JsonSerializer.Deserialize<CatalogType>(type.GetRawText()) 
+            Type = data.TryGetProperty("type", out JsonElement type)
+                ? JsonSerializer.Deserialize<CatalogType>(type.GetRawText())
                 : null,
-            BillingCycle = data.TryGetProperty("billing_cycle", out var billingCycle) 
-                ? TimePeriod.FromJson(billingCycle) 
+            BillingCycle = data.TryGetProperty("billing_cycle", out JsonElement billingCycle)
+                ? TimePeriod.FromJson(billingCycle)
                 : null,
-            TrialPeriod = data.TryGetProperty("trial_period", out var trialPeriod) 
-                ? TimePeriod.FromJson(trialPeriod) 
+            TrialPeriod = data.TryGetProperty("trial_period", out JsonElement trialPeriod)
+                ? TimePeriod.FromJson(trialPeriod)
                 : null,
             TaxMode = JsonSerializer.Deserialize<TaxMode>(data.GetProperty("tax_mode").GetRawText()),
             UnitPrice = Money.FromJson(data.GetProperty("unit_price")),
-            UnitPriceOverrides = data.TryGetProperty("unit_price_overrides", out var overrides)
+            UnitPriceOverrides = data.TryGetProperty("unit_price_overrides", out JsonElement overrides)
                 ? overrides.EnumerateArray()
-                    .Select(o => UnitPriceOverride.FromJson(o))
+                    .Select(UnitPriceOverride.FromJson)
                     .ToList()
                 : new List<UnitPriceOverride>(),
-            Quantity = data.TryGetProperty("quantity", out var quantity) 
-                ? PriceQuantity.FromJson(quantity) 
+            Quantity = data.TryGetProperty("quantity", out JsonElement quantity)
+                ? PriceQuantity.FromJson(quantity)
                 : null,
-            Status = data.TryGetProperty("status", out var status) 
-                ? JsonSerializer.Deserialize<Status>(status.GetRawText()) 
+            Status = data.TryGetProperty("status", out JsonElement status)
+                ? JsonSerializer.Deserialize<Status>(status.GetRawText())
                 : null,
-            CustomData = data.TryGetProperty("custom_data", out var customData) 
-                ? CustomData.FromJson(customData) 
+            CustomData = data.TryGetProperty("custom_data", out JsonElement customData)
+                ? CustomData.FromJson(customData)
                 : null,
-            ImportMeta = data.TryGetProperty("import_meta", out var importMeta) 
-                ? ImportMeta.FromJson(importMeta) 
+            ImportMeta = data.TryGetProperty("import_meta", out JsonElement importMeta)
+                ? ImportMeta.FromJson(importMeta)
                 : null,
             CreatedAt = DateTime.Parse(data.GetProperty("created_at").GetString()!),
             UpdatedAt = DateTime.Parse(data.GetProperty("updated_at").GetString()!)
         };
     }
-} 
+}

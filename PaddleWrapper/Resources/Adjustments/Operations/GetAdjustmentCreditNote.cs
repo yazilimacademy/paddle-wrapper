@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using PaddleWrapper.Entities.Shared;
-using PaddleWrapper.Resources.Shared.Operations.List;
 
 namespace PaddleWrapper.Resources.Adjustments.Operations
 {
@@ -15,7 +13,7 @@ namespace PaddleWrapper.Resources.Adjustments.Operations
 
         public Dictionary<string, object> GetParameters()
         {
-            var parameters = new Dictionary<string, object>();
+            Dictionary<string, object> parameters = new();
 
             if (_disposition.HasValue)
             {
@@ -25,4 +23,4 @@ namespace PaddleWrapper.Resources.Adjustments.Operations
             return parameters;
         }
     }
-} 
+}

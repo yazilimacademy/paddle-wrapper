@@ -11,4 +11,4 @@ public enum TaxMode
     External,
     [JsonPropertyName("internal")]
     Internal
-} 
+}

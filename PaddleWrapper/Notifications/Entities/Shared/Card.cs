@@ -29,7 +29,7 @@ public class Card
             Last4 = data.GetProperty("last4").GetString()!,
             ExpiryMonth = data.GetProperty("expiry_month").GetInt32(),
             ExpiryYear = data.GetProperty("expiry_year").GetInt32(),
-            CardholderName = data.TryGetProperty("cardholder_name", out var name) ? name.GetString() : null
+            CardholderName = data.TryGetProperty("cardholder_name", out JsonElement name) ? name.GetString() : null
         };
     }
-} 
+}

@@ -1,16 +1,13 @@
-using System.Threading.Tasks;
-using PaddleWrapper.Client;
 using PaddleWrapper.Entities.Collections;
-using PaddleWrapper.Exceptions;
 using PaddleWrapper.Resources.NotificationLogs.Operations;
 
 namespace PaddleWrapper.Resources.NotificationLogs
 {
     public class NotificationLogsClient
     {
-        private readonly IPaddleClient _client;
+        private readonly Client _client;
 
-        public NotificationLogsClient(IPaddleClient client)
+        public NotificationLogsClient(Client client)
         {
             _client = client;
         }
@@ -18,8 +15,8 @@ namespace PaddleWrapper.Resources.NotificationLogs
         public async Task<NotificationLogCollection> ListAsync(string notificationId, ListNotificationLogs listOperation = null)
         {
             listOperation ??= new ListNotificationLogs();
-            var response = await _client.GetRawAsync($"/notifications/{notificationId}/logs", listOperation);
-            var parser = new ResponseParser(response);
+            var response = await _client.GetRaw($"/notifications/{notificationId}/logs", listOperation);
+            ResponseParser parser = new(response);
 
             return NotificationLogCollection.From(
                 parser.GetData(),
@@ -27,4 +24,4 @@ namespace PaddleWrapper.Resources.NotificationLogs
             );
         }
     }
-} 
+}

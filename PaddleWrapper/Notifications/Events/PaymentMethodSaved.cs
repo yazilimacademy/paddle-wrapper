@@ -14,7 +14,7 @@ public sealed class PaymentMethodSaved : Event
         EventTypeName eventType,
         DateTime occurredAt,
         PaymentMethod paymentMethod,
-        string? notificationId) 
+        string? notificationId)
         : base(eventId, eventType, occurredAt, paymentMethod, notificationId)
     {
         PaymentMethod = paymentMethod;
@@ -34,4 +34,4 @@ public sealed class PaymentMethodSaved : Event
 
         return new PaymentMethodSaved(eventId, eventType, occurredAt, paymentMethod, notificationId);
     }
-} 
+}

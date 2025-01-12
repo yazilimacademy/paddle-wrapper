@@ -14,7 +14,7 @@ public sealed class DiscountCreated : Event
         EventTypeName eventType,
         DateTime occurredAt,
         Discount discount,
-        string? notificationId) 
+        string? notificationId)
         : base(eventId, eventType, occurredAt, discount, notificationId)
     {
         Discount = discount;
@@ -34,4 +34,4 @@ public sealed class DiscountCreated : Event
 
         return new DiscountCreated(eventId, eventType, occurredAt, discount, notificationId);
     }
-} 
+}

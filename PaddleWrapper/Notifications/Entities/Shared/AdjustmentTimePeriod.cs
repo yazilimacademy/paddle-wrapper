@@ -19,4 +19,4 @@ public class AdjustmentTimePeriod
             EndsAt = DateTime.Parse(data.GetProperty("ends_at").GetString()!)
         };
     }
-} 
+}

@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using PaddleWrapper.Resources.Shared.Operations.List;
-
 namespace PaddleWrapper.Resources.SimulationRuns.Operations
 {
     public class GetSimulationRuns : IHasParameters
@@ -16,7 +11,7 @@ namespace PaddleWrapper.Resources.SimulationRuns.Operations
 
         public Dictionary<string, string> GetParameters()
         {
-            var parameters = new Dictionary<string, string>();
+            Dictionary<string, string> parameters = new();
 
             if (_includes.Any())
             {
@@ -26,4 +21,4 @@ namespace PaddleWrapper.Resources.SimulationRuns.Operations
             return parameters;
         }
     }
-} 
+}

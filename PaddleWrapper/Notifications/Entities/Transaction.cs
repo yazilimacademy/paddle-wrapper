@@ -1,8 +1,7 @@
-using System;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using PaddleWrapper.Notifications.Entities.Shared;
 using PaddleWrapper.Notifications.Entities.Transactions;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Notifications.Entities;
 
@@ -124,19 +123,19 @@ public class Transaction : IEntity
 
     public static IEntity FromJson(JsonElement json)
     {
-        var items = new List<TransactionItem>();
-        if (json.TryGetProperty("items", out var itemsElement))
+        List<TransactionItem> items = new();
+        if (json.TryGetProperty("items", out JsonElement itemsElement))
         {
-            foreach (var item in itemsElement.EnumerateArray())
+            foreach (JsonElement item in itemsElement.EnumerateArray())
             {
                 items.Add(TransactionItem.FromJson(item));
             }
         }
 
-        var payments = new List<TransactionPaymentAttempt>();
-        if (json.TryGetProperty("payments", out var paymentsElement))
+        List<TransactionPaymentAttempt> payments = new();
+        if (json.TryGetProperty("payments", out JsonElement paymentsElement))
         {
-            foreach (var payment in paymentsElement.EnumerateArray())
+            foreach (JsonElement payment in paymentsElement.EnumerateArray())
             {
                 payments.Add(TransactionPaymentAttempt.FromJson(payment));
             }
@@ -145,36 +144,36 @@ public class Transaction : IEntity
         return new Transaction(
             id: json.GetProperty("id").GetString()!,
             status: JsonSerializer.Deserialize<TransactionStatus>(json.GetProperty("status").GetRawText())!,
-            customerId: json.TryGetProperty("customer_id", out var customerIdElement) ? customerIdElement.GetString() : null,
-            addressId: json.TryGetProperty("address_id", out var addressIdElement) ? addressIdElement.GetString() : null,
-            businessId: json.TryGetProperty("business_id", out var businessIdElement) ? businessIdElement.GetString() : null,
-            customData: json.TryGetProperty("custom_data", out var customDataElement) 
-                ? CustomData.FromJson(customDataElement) 
+            customerId: json.TryGetProperty("customer_id", out JsonElement customerIdElement) ? customerIdElement.GetString() : null,
+            addressId: json.TryGetProperty("address_id", out JsonElement addressIdElement) ? addressIdElement.GetString() : null,
+            businessId: json.TryGetProperty("business_id", out JsonElement businessIdElement) ? businessIdElement.GetString() : null,
+            customData: json.TryGetProperty("custom_data", out JsonElement customDataElement)
+                ? CustomData.FromJson(customDataElement)
                 : null,
             currencyCode: JsonSerializer.Deserialize<CurrencyCode>(json.GetProperty("currency_code").GetRawText())!,
             origin: JsonSerializer.Deserialize<TransactionOrigin>(json.GetProperty("origin").GetRawText())!,
-            subscriptionId: json.TryGetProperty("subscription_id", out var subscriptionIdElement) ? subscriptionIdElement.GetString() : null,
-            invoiceId: json.TryGetProperty("invoice_id", out var invoiceIdElement) ? invoiceIdElement.GetString() : null,
-            invoiceNumber: json.TryGetProperty("invoice_number", out var invoiceNumberElement) ? invoiceNumberElement.GetString() : null,
+            subscriptionId: json.TryGetProperty("subscription_id", out JsonElement subscriptionIdElement) ? subscriptionIdElement.GetString() : null,
+            invoiceId: json.TryGetProperty("invoice_id", out JsonElement invoiceIdElement) ? invoiceIdElement.GetString() : null,
+            invoiceNumber: json.TryGetProperty("invoice_number", out JsonElement invoiceNumberElement) ? invoiceNumberElement.GetString() : null,
             collectionMode: JsonSerializer.Deserialize<CollectionMode>(json.GetProperty("collection_mode").GetRawText())!,
-            discountId: json.TryGetProperty("discount_id", out var discountIdElement) ? discountIdElement.GetString() : null,
-            billingDetails: json.TryGetProperty("billing_details", out var billingDetailsElement) 
-                ? BillingDetails.FromJson(billingDetailsElement) 
+            discountId: json.TryGetProperty("discount_id", out JsonElement discountIdElement) ? discountIdElement.GetString() : null,
+            billingDetails: json.TryGetProperty("billing_details", out JsonElement billingDetailsElement)
+                ? BillingDetails.FromJson(billingDetailsElement)
                 : null,
-            billingPeriod: json.TryGetProperty("billing_period", out var billingPeriodElement) 
-                ? TransactionTimePeriod.FromJson(billingPeriodElement) 
+            billingPeriod: json.TryGetProperty("billing_period", out JsonElement billingPeriodElement)
+                ? TransactionTimePeriod.FromJson(billingPeriodElement)
                 : null,
             items: items,
             details: TransactionDetails.FromJson(json.GetProperty("details")),
             payments: payments,
-            checkout: json.TryGetProperty("checkout", out var checkoutElement) 
-                ? Checkout.FromJson(checkoutElement) 
+            checkout: json.TryGetProperty("checkout", out JsonElement checkoutElement)
+                ? Checkout.FromJson(checkoutElement)
                 : null,
             createdAt: DateTime.Parse(json.GetProperty("created_at").GetString()!),
             updatedAt: DateTime.Parse(json.GetProperty("updated_at").GetString()!),
-            billedAt: json.TryGetProperty("billed_at", out var billedAtElement) 
-                ? DateTime.Parse(billedAtElement.GetString()!) 
+            billedAt: json.TryGetProperty("billed_at", out JsonElement billedAtElement)
+                ? DateTime.Parse(billedAtElement.GetString()!)
                 : null
         );
     }
-} 
+}

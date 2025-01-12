@@ -19,4 +19,4 @@ public class SubscriptionTimePeriod
             EndsAt = DateTime.Parse(data.GetProperty("ends_at").GetString()!)
         };
     }
-} 
+}

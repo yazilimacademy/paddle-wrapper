@@ -24,9 +24,9 @@ public sealed class PaddleSignature
     /// </summary>
     public bool Verify(string data, params Secret[] secrets)
     {
-        foreach (var secret in secrets)
+        foreach (Secret secret in secrets)
         {
-            foreach (var (hashAlgorithm, possibleHashes) in _hashes)
+            foreach ((string hashAlgorithm, List<string> possibleHashes) in _hashes)
             {
                 string hash = hashAlgorithm switch
                 {
@@ -34,7 +34,7 @@ public sealed class PaddleSignature
                     _ => throw new InvalidOperationException($"Unknown hash algorithm {hashAlgorithm}")
                 };
 
-                foreach (var possibleHash in possibleHashes)
+                foreach (string possibleHash in possibleHashes)
                 {
                     if (CryptographicOperations.FixedTimeEquals(
                         Convert.FromHexString(hash),
@@ -51,27 +51,27 @@ public sealed class PaddleSignature
 
     public static string CalculateHMAC(string data, string key)
     {
-        using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(key));
-        var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(data));
+        using HMACSHA256 hmac = new(Encoding.UTF8.GetBytes(key));
+        byte[] hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(data));
         return Convert.ToHexString(hash).ToLower();
     }
 
     public static PaddleSignature Parse(string header)
     {
-        var components = new Dictionary<string, object>
+        Dictionary<string, object> components = new()
         {
             [TIMESTAMP] = 0,
             ["hashes"] = new Dictionary<string, List<string>>()
         };
 
-        var parts = header.Split(';', StringSplitOptions.RemoveEmptyEntries);
-        foreach (var part in parts)
+        string[] parts = header.Split(';', StringSplitOptions.RemoveEmptyEntries);
+        foreach (string part in parts)
         {
             if (part.Contains('='))
             {
-                var keyValue = part.Split('=', 2);
-                var key = keyValue[0];
-                var value = keyValue[1];
+                string[] keyValue = part.Split('=', 2);
+                string key = keyValue[0];
+                string value = keyValue[1];
 
                 switch (key)
                 {
@@ -79,7 +79,7 @@ public sealed class PaddleSignature
                         components[TIMESTAMP] = int.Parse(value);
                         break;
                     case HASH_ALGORITHM_1:
-                        var hashes = (Dictionary<string, List<string>>)components["hashes"];
+                        Dictionary<string, List<string>> hashes = (Dictionary<string, List<string>>)components["hashes"];
                         if (!hashes.ContainsKey(HASH_ALGORITHM_1))
                         {
                             hashes[HASH_ALGORITHM_1] = new List<string>();
@@ -97,4 +97,4 @@ public sealed class PaddleSignature
             (Dictionary<string, List<string>>)components["hashes"]
         );
     }
-} 
+}

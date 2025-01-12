@@ -1,6 +1,6 @@
+using PaddleWrapper.Notifications.Entities.Shared;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Notifications.Entities.Shared;
 using SharedAdjustmentType = PaddleWrapper.Notifications.Entities.Shared.AdjustmentType;
 
 namespace PaddleWrapper.Notifications.Entities.Adjustments;
@@ -50,4 +50,4 @@ public class AdjustmentItem
             totals: AdjustmentItemTotals.FromJson(data.GetProperty("totals"))
         );
     }
-} 
+}

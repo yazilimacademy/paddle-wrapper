@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json.Serialization;
-using PaddleWrapper.Entities.Adjustment;
 using PaddleWrapper.Entities.Shared;
 using PaddleWrapper.Resources.Adjustments.Operations.Create;
+using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Resources.Adjustments.Operations
 {
@@ -54,4 +50,4 @@ namespace PaddleWrapper.Resources.Adjustments.Operations
             return new CreateAdjustment(action, items, reason, transactionId, AdjustmentType.Partial);
         }
     }
-} 
+}

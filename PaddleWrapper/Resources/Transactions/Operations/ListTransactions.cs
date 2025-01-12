@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using PaddleWrapper.Entities.Shared;
 using PaddleWrapper.Resources.Shared.Operations.List;
 using PaddleWrapper.Resources.Transactions.Operations.List;
@@ -51,11 +49,11 @@ namespace PaddleWrapper.Resources.Transactions.Operations
 
         public IDictionary<string, object> GetParameters()
         {
-            var parameters = _pager?.GetParameters() ?? new Dictionary<string, object>();
+            Dictionary<string, object> parameters = _pager?.GetParameters() ?? new Dictionary<string, object>();
 
             if (_billedAt != null)
             {
-                parameters.Add($"billed_at{_billedAt.GetComparator()}", _billedAt.GetFormattedDate());
+                parameters.Add($"billed_at{_billedAt.GetComparatorString()}", _billedAt.GetFormattedDate());
             }
 
             if (_collectionMode.HasValue)
@@ -65,7 +63,7 @@ namespace PaddleWrapper.Resources.Transactions.Operations
 
             if (_createdAt != null)
             {
-                parameters.Add($"created_at{_createdAt.GetComparator()}", _createdAt.GetFormattedDate());
+                parameters.Add($"created_at{_createdAt.GetComparatorString()}", _createdAt.GetFormattedDate());
             }
 
             if (_customerIds.Any())
@@ -100,7 +98,7 @@ namespace PaddleWrapper.Resources.Transactions.Operations
 
             if (_updatedAt != null)
             {
-                parameters.Add($"updated_at{_updatedAt.GetComparator()}", _updatedAt.GetFormattedDate());
+                parameters.Add($"updated_at{_updatedAt.GetComparatorString()}", _updatedAt.GetFormattedDate());
             }
 
             if (_origins.Any())
@@ -111,4 +109,4 @@ namespace PaddleWrapper.Resources.Transactions.Operations
             return parameters;
         }
     }
-} 
+}

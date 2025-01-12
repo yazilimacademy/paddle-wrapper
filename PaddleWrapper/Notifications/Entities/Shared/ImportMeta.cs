@@ -20,8 +20,8 @@ public class ImportMeta
     public static ImportMeta FromJson(JsonElement element)
     {
         return new ImportMeta(
-            element.TryGetProperty("external_id", out var externalId) ? externalId.GetString() : null,
+            element.TryGetProperty("external_id", out JsonElement externalId) ? externalId.GetString() : null,
             element.GetProperty("imported_from").GetString()!
         );
     }
-} 
+}

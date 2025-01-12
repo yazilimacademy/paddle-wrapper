@@ -1,6 +1,4 @@
-using System;
 using System.Text.Json;
-using System.Text.RegularExpressions;
 
 namespace PaddleWrapper.Notifications.Entities;
 
@@ -13,11 +11,11 @@ public static class EntityFactory
 
     public static IEntity Create(string eventType, JsonElement data)
     {
-        Type entityType = EventEntityTypes.TryGetValue(eventType, out var type) 
-            ? type 
+        Type entityType = EventEntityTypes.TryGetValue(eventType, out Type? type)
+            ? type
             : ResolveEntityType(eventType);
 
-        var fromJsonMethod = entityType.GetMethod("FromJson");
+        System.Reflection.MethodInfo? fromJsonMethod = entityType.GetMethod("FromJson");
         if (fromJsonMethod == null)
         {
             throw new InvalidOperationException($"Entity type '{entityType.Name}' does not implement FromJson method");
@@ -28,11 +26,11 @@ public static class EntityFactory
 
     private static Type ResolveEntityType(string eventType)
     {
-        var type = eventType.Split('.');
-        var entity = SnakeToPascalCase(type[0] ?? "Unknown");
-        var identifier = SnakeToPascalCase(string.Join("_", type));
+        string[] type = eventType.Split('.');
+        string entity = SnakeToPascalCase(type[0] ?? "Unknown");
+        string identifier = SnakeToPascalCase(string.Join("_", type));
 
-        var entityType = Type.GetType($"PaddleWrapper.Notifications.Entities.{entity}, PaddleWrapper");
+        Type? entityType = Type.GetType($"PaddleWrapper.Notifications.Entities.{entity}, PaddleWrapper");
         if (entityType == null)
         {
             entityType = typeof(UndefinedEntity);
@@ -51,4 +49,4 @@ public static class EntityFactory
         return string.Join("", input.Split('_')
             .Select(word => char.ToUpper(word[0]) + word[1..].ToLower()));
     }
-} 
+}

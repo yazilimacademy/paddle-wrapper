@@ -15,7 +15,7 @@ public sealed class PayoutPaid : Event
         EventTypeName eventType,
         DateTime occurredAt,
         Payout payout,
-        string? notificationId) 
+        string? notificationId)
         : base(eventId, eventType, occurredAt, payout, notificationId)
     {
         Payout = payout;
@@ -35,4 +35,4 @@ public sealed class PayoutPaid : Event
 
         return new PayoutPaid(eventId, eventType, occurredAt, payout, notificationId);
     }
-} 
+}

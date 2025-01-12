@@ -1,18 +1,15 @@
-using System.Threading.Tasks;
-using PaddleWrapper.Client;
 using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Collections;
 using PaddleWrapper.Entities.Shared;
-using PaddleWrapper.Exceptions;
 using PaddleWrapper.Resources.Businesses.Operations;
 
 namespace PaddleWrapper.Resources.Businesses
 {
     public class BusinessesClient
     {
-        private readonly IPaddleClient _client;
+        private readonly Client _client;
 
-        public BusinessesClient(IPaddleClient client)
+        public BusinessesClient(Client client)
         {
             _client = client;
         }
@@ -20,8 +17,8 @@ namespace PaddleWrapper.Resources.Businesses
         public async Task<BusinessCollection> ListAsync(string customerId, ListBusinesses listOperation = null)
         {
             listOperation ??= new ListBusinesses();
-            var response = await _client.GetRawAsync($"/customers/{customerId}/businesses", listOperation);
-            var parser = new ResponseParser(response);
+            var response = await _client.GetRaw($"/customers/{customerId}/businesses", listOperation);
+            ResponseParser parser = new(response);
 
             return BusinessCollection.From(
                 parser.GetData(),
@@ -31,8 +28,8 @@ namespace PaddleWrapper.Resources.Businesses
 
         public async Task<Business> GetAsync(string customerId, string id)
         {
-            var response = await _client.GetRawAsync($"/customers/{customerId}/businesses/{id}");
-            var parser = new ResponseParser(response);
+            HttpResponseMessage response = await _client.GetRaw($"/customers/{customerId}/businesses/{id}");
+            ResponseParser parser = new(response);
 
             return Business.From(parser.GetData());
         }
@@ -40,7 +37,7 @@ namespace PaddleWrapper.Resources.Businesses
         public async Task<Business> CreateAsync(string customerId, CreateBusiness createOperation)
         {
             var response = await _client.PostRawAsync($"/customers/{customerId}/businesses", createOperation);
-            var parser = new ResponseParser(response);
+            ResponseParser parser = new(response);
 
             return Business.From(parser.GetData());
         }
@@ -48,7 +45,7 @@ namespace PaddleWrapper.Resources.Businesses
         public async Task<Business> UpdateAsync(string customerId, string id, UpdateBusiness operation)
         {
             var response = await _client.PatchRawAsync($"/customers/{customerId}/businesses/{id}", operation);
-            var parser = new ResponseParser(response);
+            ResponseParser parser = new(response);
 
             return Business.From(parser.GetData());
         }
@@ -58,4 +55,4 @@ namespace PaddleWrapper.Resources.Businesses
             return await UpdateAsync(customerId, id, new UpdateBusiness { Status = Status.Archived });
         }
     }
-} 
+}

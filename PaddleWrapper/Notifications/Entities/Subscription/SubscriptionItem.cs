@@ -44,19 +44,19 @@ public class SubscriptionItem
             Recurring = data.GetProperty("recurring").GetBoolean(),
             CreatedAt = DateTime.Parse(data.GetProperty("created_at").GetString()!),
             UpdatedAt = DateTime.Parse(data.GetProperty("updated_at").GetString()!),
-            PreviouslyBilledAt = data.TryGetProperty("previously_billed_at", out var previouslyBilledAt) && !previouslyBilledAt.ValueKind.Equals(JsonValueKind.Null)
+            PreviouslyBilledAt = data.TryGetProperty("previously_billed_at", out JsonElement previouslyBilledAt) && !previouslyBilledAt.ValueKind.Equals(JsonValueKind.Null)
                 ? DateTime.Parse(previouslyBilledAt.GetString()!)
                 : null,
-            NextBilledAt = data.TryGetProperty("next_billed_at", out var nextBilledAt) && !nextBilledAt.ValueKind.Equals(JsonValueKind.Null)
+            NextBilledAt = data.TryGetProperty("next_billed_at", out JsonElement nextBilledAt) && !nextBilledAt.ValueKind.Equals(JsonValueKind.Null)
                 ? DateTime.Parse(nextBilledAt.GetString()!)
                 : null,
-            TrialDates = data.TryGetProperty("trial_dates", out var trialDates)
+            TrialDates = data.TryGetProperty("trial_dates", out JsonElement trialDates)
                 ? SubscriptionTimePeriod.FromJson(trialDates)
                 : null,
             Price = SubscriptionPrice.FromJson(data.GetProperty("price")),
-            Product = (Product)(data.TryGetProperty("product", out var product)
+            Product = (Product)(data.TryGetProperty("product", out JsonElement product)
                 ? Product.FromJson(product)
                 : null)
         };
     }
-} 
+}

@@ -14,7 +14,7 @@ public sealed class BusinessCreated : Event
         EventTypeName eventType,
         DateTime occurredAt,
         Business business,
-        string? notificationId) 
+        string? notificationId)
         : base(eventId, eventType, occurredAt, business, notificationId)
     {
         Business = business;
@@ -34,4 +34,4 @@ public sealed class BusinessCreated : Event
 
         return new BusinessCreated(eventId, eventType, occurredAt, business, notificationId);
     }
-} 
+}

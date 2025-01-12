@@ -1,7 +1,5 @@
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
-using PaddleWrapper.Entities.Discount;
 using PaddleWrapper.Entities.Shared;
+using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Resources.Discounts.Operations
 {
@@ -76,4 +74,4 @@ namespace PaddleWrapper.Resources.Discounts.Operations
             CustomData = customData;
         }
     }
-} 
+}

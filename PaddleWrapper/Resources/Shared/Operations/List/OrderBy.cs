@@ -26,4 +26,4 @@ namespace PaddleWrapper.Resources.Shared.Operations.List
             return $"{_field}[{_direction}]";
         }
     }
-} 
+}

@@ -1,6 +1,6 @@
-using System.Text.Json.Serialization;
 using PaddleWrapper.Entities.Shared;
 using PaddleWrapper.Entities.Subscriptions;
+using System.Text.Json.Serialization;
 using SubscriptionDiscount = PaddleWrapper.Resources.Subscriptions.Operations.Update.SubscriptionDiscount;
 
 namespace PaddleWrapper.Resources.Subscriptions.Operations
@@ -89,4 +89,4 @@ namespace PaddleWrapper.Resources.Subscriptions.Operations
             OnPaymentFailure = onPaymentFailure?.ToString()?.ToLower();
         }
     }
-} 
+}

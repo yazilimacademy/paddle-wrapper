@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace PaddleWrapper;
 
 public interface IHasParameters
@@ -20,4 +18,4 @@ public abstract class HasParameters : IHasParameters
     {
         return Parameters;
     }
-} 
+}

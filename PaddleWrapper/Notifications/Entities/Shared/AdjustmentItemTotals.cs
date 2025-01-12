@@ -23,4 +23,4 @@ public class AdjustmentItemTotals
             Total = data.GetProperty("total").GetString()!
         };
     }
-} 
+}

@@ -19,12 +19,12 @@ public class SubscriptionDiscount
         return new SubscriptionDiscount
         {
             Id = data.GetProperty("id").GetString()!,
-            StartsAt = data.TryGetProperty("starts_at", out var startsAt) && !startsAt.ValueKind.Equals(JsonValueKind.Null)
+            StartsAt = data.TryGetProperty("starts_at", out JsonElement startsAt) && !startsAt.ValueKind.Equals(JsonValueKind.Null)
                 ? DateTime.Parse(startsAt.GetString()!)
                 : null,
-            EndsAt = data.TryGetProperty("ends_at", out var endsAt) && !endsAt.ValueKind.Equals(JsonValueKind.Null)
+            EndsAt = data.TryGetProperty("ends_at", out JsonElement endsAt) && !endsAt.ValueKind.Equals(JsonValueKind.Null)
                 ? DateTime.Parse(endsAt.GetString()!)
                 : null
         };
     }
-} 
+}

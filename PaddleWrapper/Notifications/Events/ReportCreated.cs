@@ -14,7 +14,7 @@ public sealed class ReportCreated : Event
         EventTypeName eventType,
         DateTime occurredAt,
         Report report,
-        string? notificationId) 
+        string? notificationId)
         : base(eventId, eventType, occurredAt, report, notificationId)
     {
         Report = report;
@@ -34,4 +34,4 @@ public sealed class ReportCreated : Event
 
         return new ReportCreated(eventId, eventType, occurredAt, report, notificationId);
     }
-} 
+}

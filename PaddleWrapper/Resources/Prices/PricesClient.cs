@@ -1,12 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using PaddleWrapper.Client;
 using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Collections;
 using PaddleWrapper.Entities.Shared;
-using PaddleWrapper.Exceptions;
 using PaddleWrapper.Resources.Prices.Operations;
 using PaddleWrapper.Resources.Prices.Operations.List;
 
@@ -14,9 +8,9 @@ namespace PaddleWrapper.Resources.Prices
 {
     public class PricesClient
     {
-        private readonly IPaddleClient _client;
+        private readonly Client _client;
 
-        public PricesClient(IPaddleClient client)
+        public PricesClient(Client client)
         {
             _client = client;
         }
@@ -24,8 +18,8 @@ namespace PaddleWrapper.Resources.Prices
         public async Task<PriceCollection> ListAsync(ListPrices listOperation = null)
         {
             listOperation ??= new ListPrices();
-            var response = await _client.GetRawAsync("/prices", listOperation);
-            var parser = new ResponseParser(response);
+            var response = await _client.GetRaw("/prices", listOperation);
+            ResponseParser parser = new(response);
 
             return PriceCollection.From(
                 parser.GetData(),
@@ -36,21 +30,21 @@ namespace PaddleWrapper.Resources.Prices
         public async Task<Price> GetAsync(string id, IEnumerable<Includes> includes = null)
         {
             includes ??= Array.Empty<Includes>();
-            var includesList = includes.ToList();
+            List<Includes> includesList = includes.ToList();
 
             if (includesList.Any(include => include == null))
             {
                 throw new ArgumentException("includes cannot contain null values", nameof(includes));
             }
 
-            var parameters = new Dictionary<string, object>();
+            Dictionary<string, object> parameters = new();
             if (includesList.Any())
             {
                 parameters["include"] = string.Join(",", includesList.Select(x => x.ToString()));
             }
 
-            var response = await _client.GetRawAsync($"/prices/{id}", parameters);
-            var parser = new ResponseParser(response);
+            HttpResponseMessage response = await _client.GetRaw($"/prices/{id}", parameters);
+            ResponseParser parser = new(response);
 
             return Price.From(parser.GetData());
         }
@@ -58,7 +52,7 @@ namespace PaddleWrapper.Resources.Prices
         public async Task<Price> CreateAsync(CreatePrice createOperation)
         {
             var response = await _client.PostRawAsync("/prices", createOperation);
-            var parser = new ResponseParser(response);
+            ResponseParser parser = new(response);
 
             return Price.From(parser.GetData());
         }
@@ -66,7 +60,7 @@ namespace PaddleWrapper.Resources.Prices
         public async Task<Price> UpdateAsync(string id, UpdatePrice operation)
         {
             var response = await _client.PatchRawAsync($"/prices/{id}", operation);
-            var parser = new ResponseParser(response);
+            ResponseParser parser = new(response);
 
             return Price.From(parser.GetData());
         }
@@ -76,4 +70,4 @@ namespace PaddleWrapper.Resources.Prices
             return await UpdateAsync(id, new UpdatePrice { Status = Status.Archived });
         }
     }
-} 
+}

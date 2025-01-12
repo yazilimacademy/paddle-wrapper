@@ -39,25 +39,25 @@ public class TransactionTotalsAdjusted
 
     public static TransactionTotalsAdjusted FromJson(JsonElement json)
     {
-        var subtotal = json.GetProperty("subtotal").GetString()!;
-        var tax = json.GetProperty("tax").GetString()!;
-        var total = json.GetProperty("total").GetString()!;
-        var grandTotal = json.GetProperty("grand_total").GetString()!;
-        
+        string subtotal = json.GetProperty("subtotal").GetString()!;
+        string tax = json.GetProperty("tax").GetString()!;
+        string total = json.GetProperty("total").GetString()!;
+        string grandTotal = json.GetProperty("grand_total").GetString()!;
+
         string? fee = null;
-        if (json.TryGetProperty("fee", out var feeElement))
+        if (json.TryGetProperty("fee", out JsonElement feeElement))
         {
             fee = feeElement.GetString();
         }
 
         string? earnings = null;
-        if (json.TryGetProperty("earnings", out var earningsElement))
+        if (json.TryGetProperty("earnings", out JsonElement earningsElement))
         {
             earnings = earningsElement.GetString();
         }
 
-        var currencyCode = (CurrencyCode)json.GetProperty("currency_code").GetString()!;
+        CurrencyCode currencyCode = (CurrencyCode)json.GetProperty("currency_code").GetString()!;
 
         return new TransactionTotalsAdjusted(subtotal, tax, total, grandTotal, fee, earnings, currencyCode);
     }
-} 
+}

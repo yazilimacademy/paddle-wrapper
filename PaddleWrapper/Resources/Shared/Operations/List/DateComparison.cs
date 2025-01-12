@@ -1,5 +1,3 @@
-using System;
-
 namespace PaddleWrapper.Resources.Shared.Operations.List
 {
     public class DateComparison
@@ -24,4 +22,4 @@ namespace PaddleWrapper.Resources.Shared.Operations.List
             return Date.ToString("O");
         }
     }
-} 
+}

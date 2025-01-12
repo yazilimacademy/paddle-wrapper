@@ -67,4 +67,4 @@ public enum CurrencyCode
     VND,
     [JsonPropertyName("ZAR")]
     ZAR
-} 
+}

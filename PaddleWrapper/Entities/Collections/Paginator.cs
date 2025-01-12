@@ -24,7 +24,7 @@ namespace PaddleWrapper.Entities.Collections
 
         public async Task<object> NextPage()
         {
-            HttpResponseMessage response = await _client.GetAsync(_pagination.Next);
+            HttpResponseMessage response = await _client.Get(_pagination.Next);
             string content = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)

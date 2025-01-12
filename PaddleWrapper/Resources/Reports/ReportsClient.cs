@@ -1,17 +1,14 @@
-using System.Threading.Tasks;
-using PaddleWrapper.Client;
 using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Collections;
-using PaddleWrapper.Exceptions;
 using PaddleWrapper.Resources.Reports.Operations;
 
 namespace PaddleWrapper.Resources.Reports
 {
     public class ReportsClient
     {
-        private readonly IPaddleClient _client;
+        private readonly Client _client;
 
-        public ReportsClient(IPaddleClient client)
+        public ReportsClient(Client client)
         {
             _client = client;
         }
@@ -19,8 +16,8 @@ namespace PaddleWrapper.Resources.Reports
         public async Task<ReportCollection> ListAsync(ListReports listOperation = null)
         {
             listOperation ??= new ListReports();
-            var response = await _client.GetRawAsync("/reports", listOperation);
-            var parser = new ResponseParser(response);
+            var response = await _client.GetRaw("/reports", listOperation);
+            ResponseParser parser = new(response);
 
             return ReportCollection.From(
                 parser.GetData(),
@@ -30,16 +27,16 @@ namespace PaddleWrapper.Resources.Reports
 
         public async Task<Report> GetAsync(string id)
         {
-            var response = await _client.GetRawAsync($"/reports/{id}");
-            var parser = new ResponseParser(response);
+            HttpResponseMessage response = await _client.GetRaw($"/reports/{id}");
+            ResponseParser parser = new(response);
 
             return Report.From(parser.GetData());
         }
 
         public async Task<ReportCSV> GetReportCsvAsync(string id)
         {
-            var response = await _client.GetRawAsync($"/reports/{id}/download-url");
-            var parser = new ResponseParser(response);
+            HttpResponseMessage response = await _client.GetRaw($"/reports/{id}/download-url");
+            ResponseParser parser = new(response);
 
             return ReportCSV.From(parser.GetData());
         }
@@ -47,9 +44,9 @@ namespace PaddleWrapper.Resources.Reports
         public async Task<Report> CreateAsync(CreateReport createOperation)
         {
             var response = await _client.PostRawAsync("/reports", createOperation);
-            var parser = new ResponseParser(response);
+            ResponseParser parser = new(response);
 
             return Report.From(parser.GetData());
         }
     }
-} 
+}

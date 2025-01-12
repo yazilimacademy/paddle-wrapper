@@ -44,9 +44,9 @@ public class PayoutTotalsAdjustment
             element.GetProperty("tax").GetString()!,
             element.GetProperty("total").GetString()!,
             element.GetProperty("fee").GetString()!,
-            element.TryGetProperty("chargeback_fee", out var chargebackFee) ? Shared.ChargebackFee.FromJson(chargebackFee) : null,
+            element.TryGetProperty("chargeback_fee", out JsonElement chargebackFee) ? Shared.ChargebackFee.FromJson(chargebackFee) : null,
             element.GetProperty("earnings").GetString()!,
             JsonSerializer.Deserialize<CurrencyCodePayouts>(element.GetProperty("currency_code").GetRawText())
         );
     }
-} 
+}

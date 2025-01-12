@@ -15,7 +15,7 @@ public sealed class TransactionPaid : Event
         EventTypeName eventType,
         DateTime occurredAt,
         Transaction transaction,
-        string? notificationId) 
+        string? notificationId)
         : base(eventId, eventType, occurredAt, transaction, notificationId)
     {
         Transaction = transaction;
@@ -35,4 +35,4 @@ public sealed class TransactionPaid : Event
 
         return new TransactionPaid(eventId, eventType, occurredAt, transaction, notificationId);
     }
-} 
+}

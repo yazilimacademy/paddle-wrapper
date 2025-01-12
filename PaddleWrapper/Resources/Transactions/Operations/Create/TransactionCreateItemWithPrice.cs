@@ -1,6 +1,5 @@
-using System;
-using System.Text.Json.Serialization;
 using PaddleWrapper.Resources.Transactions.Operations.Price;
+using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Resources.Transactions.Operations.Create
 {
@@ -14,7 +13,7 @@ namespace PaddleWrapper.Resources.Transactions.Operations.Create
 
         public TransactionCreateItemWithPrice(object price, int quantity)
         {
-            if (price is not TransactionNonCatalogPrice && price is not TransactionNonCatalogPriceWithProduct)
+            if (price is not TransactionNonCatalogPrice and not TransactionNonCatalogPriceWithProduct)
             {
                 throw new ArgumentException("Price must be either TransactionNonCatalogPrice or TransactionNonCatalogPriceWithProduct", nameof(price));
             }
@@ -23,4 +22,4 @@ namespace PaddleWrapper.Resources.Transactions.Operations.Create
             Quantity = quantity;
         }
     }
-} 
+}

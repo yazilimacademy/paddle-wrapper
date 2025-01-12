@@ -25,4 +25,4 @@ public enum PaymentMethodType
     Unknown,
     [JsonPropertyName("wire_transfer")]
     WireTransfer
-} 
+}

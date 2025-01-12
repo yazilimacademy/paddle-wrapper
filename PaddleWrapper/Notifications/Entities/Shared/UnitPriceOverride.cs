@@ -23,8 +23,8 @@ public class UnitPriceOverride
             .Select(x => (CountryCode)x.GetString()!)
             .ToArray();
 
-        var unitPrice = Money.FromJson(json.GetProperty("unit_price"));
+        Money unitPrice = Money.FromJson(json.GetProperty("unit_price"));
 
         return new UnitPriceOverride(countryCodes, unitPrice);
     }
-} 
+}

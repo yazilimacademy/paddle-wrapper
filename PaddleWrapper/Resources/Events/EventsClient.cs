@@ -1,17 +1,13 @@
-using System.Threading.Tasks;
-using PaddleWrapper.Client;
-using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Collections;
-using PaddleWrapper.Exceptions;
 using PaddleWrapper.Resources.Events.Operations;
 
 namespace PaddleWrapper.Resources.Events
 {
     public class EventsClient
     {
-        private readonly IPaddleClient _client;
+        private readonly Client _client;
 
-        public EventsClient(IPaddleClient client)
+        public EventsClient(Client client)
         {
             _client = client;
         }
@@ -19,8 +15,8 @@ namespace PaddleWrapper.Resources.Events
         public async Task<EventCollection> ListAsync(ListEvents listOperation = null)
         {
             listOperation ??= new ListEvents();
-            var response = await _client.GetRawAsync("/events", listOperation);
-            var parser = new ResponseParser(response);
+            var response = await _client.GetRaw("/events", listOperation);
+            ResponseParser parser = new(response);
 
             return EventCollection.From(
                 parser.GetData(),
@@ -28,4 +24,4 @@ namespace PaddleWrapper.Resources.Events
             );
         }
     }
-} 
+}

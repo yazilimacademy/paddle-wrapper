@@ -16,4 +16,4 @@ public enum ReportStatus
 
     [JsonPropertyName("expired")]
     Expired
-} 
+}

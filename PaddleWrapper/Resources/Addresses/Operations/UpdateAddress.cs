@@ -1,5 +1,5 @@
-using System.Text.Json.Serialization;
 using PaddleWrapper.Entities.Shared;
+using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Resources.Addresses.Operations
 {
@@ -32,4 +32,4 @@ namespace PaddleWrapper.Resources.Addresses.Operations
         [JsonPropertyName("status")]
         public Status? Status { get; set; }
     }
-} 
+}

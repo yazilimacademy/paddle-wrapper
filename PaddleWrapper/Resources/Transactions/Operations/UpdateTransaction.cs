@@ -1,8 +1,6 @@
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using PaddleWrapper.Entities.Shared;
-using PaddleWrapper.Entities.Transaction;
 using PaddleWrapper.Resources.Transactions.Operations.Update;
+using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Resources.Transactions.Operations
 {
@@ -84,4 +82,4 @@ namespace PaddleWrapper.Resources.Transactions.Operations
             Checkout = checkout;
         }
     }
-} 
+}

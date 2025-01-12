@@ -19,4 +19,4 @@ public enum TransactionStatus
     Canceled,
     [JsonPropertyName("past_due")]
     PastDue
-} 
+}

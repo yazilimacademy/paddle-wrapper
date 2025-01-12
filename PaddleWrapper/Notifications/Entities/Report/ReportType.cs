@@ -22,4 +22,4 @@ public enum ReportType
 
     [JsonPropertyName("transaction_line_items")]
     TransactionLineItems
-} 
+}

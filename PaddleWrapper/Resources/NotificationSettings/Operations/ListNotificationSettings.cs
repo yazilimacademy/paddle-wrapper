@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using PaddleWrapper.Entities.NotificationSetting;
 using PaddleWrapper.Resources.Shared.Operations.List;
 
 namespace PaddleWrapper.Resources.NotificationSettings.Operations
@@ -22,7 +20,7 @@ namespace PaddleWrapper.Resources.NotificationSettings.Operations
 
         public Dictionary<string, object> GetParameters()
         {
-            var parameters = _pager?.GetParameters() ?? new Dictionary<string, object>();
+            Dictionary<string, object> parameters = _pager?.GetParameters() ?? new Dictionary<string, object>();
 
             if (_active.HasValue)
             {
@@ -37,4 +35,4 @@ namespace PaddleWrapper.Resources.NotificationSettings.Operations
             return parameters;
         }
     }
-} 
+}

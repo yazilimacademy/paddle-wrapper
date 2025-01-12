@@ -24,4 +24,4 @@ public class AdjustmentTaxRatesUsed
             AdjustmentTaxRatesUsedTotals.FromJson(data.GetProperty("totals"))
         );
     }
-} 
+}

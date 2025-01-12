@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 
@@ -26,13 +24,13 @@ public abstract class PaddleEnum
 
     protected static T FromString<T>(string value) where T : PaddleEnum
     {
-        var type = typeof(T);
-        var fields = type.GetFields(BindingFlags.Public | BindingFlags.Static)
+        Type type = typeof(T);
+        IEnumerable<FieldInfo> fields = type.GetFields(BindingFlags.Public | BindingFlags.Static)
             .Where(f => f.FieldType == type);
 
-        foreach (var field in fields)
+        foreach (FieldInfo? field in fields)
         {
-            var enumValue = (T)field.GetValue(null);
+            T? enumValue = (T)field.GetValue(null);
             if (enumValue.ToString().Equals(value, StringComparison.OrdinalIgnoreCase))
             {
                 return enumValue;
@@ -41,4 +39,4 @@ public abstract class PaddleEnum
 
         throw new ArgumentException($"No matching value found in {type.Name} for '{value}'");
     }
-} 
+}

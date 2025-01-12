@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using PaddleWrapper.Entities;
-using PaddleWrapper.Entities.Notification;
 using PaddleWrapper.Resources.Shared.Operations.List;
 
 namespace PaddleWrapper.Resources.Notifications.Operations
@@ -39,7 +34,7 @@ namespace PaddleWrapper.Resources.Notifications.Operations
 
         private void ValidateIds(List<string> ids, string paramName)
         {
-            if (ids.Any(id => string.IsNullOrEmpty(id)))
+            if (ids.Any(string.IsNullOrEmpty))
             {
                 throw new ArgumentException($"{paramName} cannot contain null or empty values", paramName);
             }
@@ -47,7 +42,7 @@ namespace PaddleWrapper.Resources.Notifications.Operations
 
         public Dictionary<string, object> GetParameters()
         {
-            var parameters = _pager?.GetParameters() ?? new Dictionary<string, object>();
+            Dictionary<string, object> parameters = _pager?.GetParameters() ?? new Dictionary<string, object>();
 
             if (_notificationSettingIds.Any())
             {
@@ -82,4 +77,4 @@ namespace PaddleWrapper.Resources.Notifications.Operations
             return parameters;
         }
     }
-} 
+}

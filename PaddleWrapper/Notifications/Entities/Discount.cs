@@ -1,7 +1,7 @@
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using PaddleWrapper.Notifications.Entities.Discounts;
 using PaddleWrapper.Notifications.Entities.Shared;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Notifications.Entities;
 
@@ -58,7 +58,7 @@ public class Discount : IEntity
     [JsonPropertyName("updated_at")]
     public DateTime UpdatedAt { get; }
 
-    private Discount(string id, DiscountStatus status, string description, bool enabledForCheckout, string? code, 
+    private Discount(string id, DiscountStatus status, string description, bool enabledForCheckout, string? code,
         DiscountType type, string amount, CurrencyCode? currencyCode, bool recur, int? maximumRecurringIntervals,
         int? usageLimit, JsonElement? restrictTo, CustomData? customData, ImportMeta? importMeta, DateTime? expiresAt,
         DateTime createdAt, DateTime updatedAt)
@@ -84,63 +84,63 @@ public class Discount : IEntity
 
     public static Discount FromJson(JsonElement element)
     {
-        var id = element.GetProperty("id").GetString()!;
-        var status = JsonSerializer.Deserialize<DiscountStatus>(element.GetProperty("status"));
-        var description = element.GetProperty("description").GetString()!;
-        var enabledForCheckout = element.GetProperty("enabled_for_checkout").GetBoolean();
-        var code = element.TryGetProperty("code", out var codeElement) ? codeElement.GetString() : null;
-        var type = JsonSerializer.Deserialize<DiscountType>(element.GetProperty("type"));
-        var amount = element.GetProperty("amount").GetString()!;
-        
+        string id = element.GetProperty("id").GetString()!;
+        DiscountStatus status = JsonSerializer.Deserialize<DiscountStatus>(element.GetProperty("status"));
+        string description = element.GetProperty("description").GetString()!;
+        bool enabledForCheckout = element.GetProperty("enabled_for_checkout").GetBoolean();
+        string? code = element.TryGetProperty("code", out JsonElement codeElement) ? codeElement.GetString() : null;
+        DiscountType type = JsonSerializer.Deserialize<DiscountType>(element.GetProperty("type"));
+        string amount = element.GetProperty("amount").GetString()!;
+
         CurrencyCode? currencyCode = null;
-        if (element.TryGetProperty("currency_code", out var currencyCodeElement) && !currencyCodeElement.ValueKind.Equals(JsonValueKind.Null))
+        if (element.TryGetProperty("currency_code", out JsonElement currencyCodeElement) && !currencyCodeElement.ValueKind.Equals(JsonValueKind.Null))
         {
             currencyCode = JsonSerializer.Deserialize<CurrencyCode>(currencyCodeElement);
         }
 
-        var recur = element.GetProperty("recur").GetBoolean();
-        
+        bool recur = element.GetProperty("recur").GetBoolean();
+
         int? maximumRecurringIntervals = null;
-        if (element.TryGetProperty("maximum_recurring_intervals", out var maxIntervalsElement) && !maxIntervalsElement.ValueKind.Equals(JsonValueKind.Null))
+        if (element.TryGetProperty("maximum_recurring_intervals", out JsonElement maxIntervalsElement) && !maxIntervalsElement.ValueKind.Equals(JsonValueKind.Null))
         {
             maximumRecurringIntervals = maxIntervalsElement.GetInt32();
         }
 
         int? usageLimit = null;
-        if (element.TryGetProperty("usage_limit", out var usageLimitElement) && !usageLimitElement.ValueKind.Equals(JsonValueKind.Null))
+        if (element.TryGetProperty("usage_limit", out JsonElement usageLimitElement) && !usageLimitElement.ValueKind.Equals(JsonValueKind.Null))
         {
             usageLimit = usageLimitElement.GetInt32();
         }
 
         JsonElement? restrictTo = null;
-        if (element.TryGetProperty("restrict_to", out var restrictToElement) && !restrictToElement.ValueKind.Equals(JsonValueKind.Null))
+        if (element.TryGetProperty("restrict_to", out JsonElement restrictToElement) && !restrictToElement.ValueKind.Equals(JsonValueKind.Null))
         {
             restrictTo = restrictToElement;
         }
 
         CustomData? customData = null;
-        if (element.TryGetProperty("custom_data", out var customDataElement) && !customDataElement.ValueKind.Equals(JsonValueKind.Null))
+        if (element.TryGetProperty("custom_data", out JsonElement customDataElement) && !customDataElement.ValueKind.Equals(JsonValueKind.Null))
         {
             customData = CustomData.FromJson(customDataElement);
         }
 
         ImportMeta? importMeta = null;
-        if (element.TryGetProperty("import_meta", out var importMetaElement) && !importMetaElement.ValueKind.Equals(JsonValueKind.Null))
+        if (element.TryGetProperty("import_meta", out JsonElement importMetaElement) && !importMetaElement.ValueKind.Equals(JsonValueKind.Null))
         {
             importMeta = ImportMeta.FromJson(importMetaElement);
         }
 
         DateTime? expiresAt = null;
-        if (element.TryGetProperty("expires_at", out var expiresAtElement) && !expiresAtElement.ValueKind.Equals(JsonValueKind.Null))
+        if (element.TryGetProperty("expires_at", out JsonElement expiresAtElement) && !expiresAtElement.ValueKind.Equals(JsonValueKind.Null))
         {
             expiresAt = DateTime.Parse(expiresAtElement.GetString()!);
         }
 
-        var createdAt = DateTime.Parse(element.GetProperty("created_at").GetString()!);
-        var updatedAt = DateTime.Parse(element.GetProperty("updated_at").GetString()!);
+        DateTime? createdAt = DateTime.Parse(element.GetProperty("created_at").GetString()!);
+        DateTime? updatedAt = DateTime.Parse(element.GetProperty("updated_at").GetString()!);
 
         return new Discount(id, status, description, enabledForCheckout, code, type, amount, currencyCode,
             recur, maximumRecurringIntervals, usageLimit, restrictTo, customData, importMeta, expiresAt,
             createdAt, updatedAt);
     }
-} 
+}

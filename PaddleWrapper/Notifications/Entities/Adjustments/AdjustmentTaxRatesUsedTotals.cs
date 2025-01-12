@@ -29,4 +29,4 @@ public class AdjustmentTaxRatesUsedTotals
             data.GetProperty("total").GetString()!
         );
     }
-} 
+}

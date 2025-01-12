@@ -1,7 +1,7 @@
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using PaddleWrapper.Notifications.Entities.Adjustments;
 using PaddleWrapper.Notifications.Entities.Shared;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Action = PaddleWrapper.Notifications.Entities.Shared.Action;
 using AdjustmentType = PaddleWrapper.Notifications.Entities.Adjustments.AdjustmentType;
 
@@ -99,25 +99,25 @@ public class Adjustment : IEntity
             json.GetProperty("id").GetString()!,
             JsonSerializer.Deserialize<Action>(json.GetProperty("action").GetRawText()),
             json.GetProperty("transaction_id").GetString()!,
-            json.TryGetProperty("subscription_id", out var subscriptionId) ? subscriptionId.GetString() : null,
+            json.TryGetProperty("subscription_id", out JsonElement subscriptionId) ? subscriptionId.GetString() : null,
             json.GetProperty("customer_id").GetString()!,
             json.GetProperty("reason").GetString()!,
-            json.TryGetProperty("credit_applied_to_balance", out var creditAppliedToBalance) ? creditAppliedToBalance.GetBoolean() : null,
+            json.TryGetProperty("credit_applied_to_balance", out JsonElement creditAppliedToBalance) ? creditAppliedToBalance.GetBoolean() : null,
             JsonSerializer.Deserialize<CurrencyCode>(json.GetProperty("currency_code").GetRawText()),
             JsonSerializer.Deserialize<AdjustmentStatus>(json.GetProperty("status").GetRawText()),
             json.GetProperty("items").EnumerateArray()
-                .Select(item => AdjustmentItem.FromJson(item))
+                .Select(AdjustmentItem.FromJson)
                 .ToList()
                 .AsReadOnly(),
             AdjustmentTotals.FromJson(json.GetProperty("totals")),
-            json.TryGetProperty("payout_totals", out var payoutTotals) ? PayoutTotalsAdjustment.FromJson(payoutTotals) : null,
+            json.TryGetProperty("payout_totals", out JsonElement payoutTotals) ? PayoutTotalsAdjustment.FromJson(payoutTotals) : null,
             json.GetProperty("tax_rates_used").EnumerateArray()
-                .Select(taxRate => AdjustmentTaxRatesUsed.FromJson(taxRate))
+                .Select(AdjustmentTaxRatesUsed.FromJson)
                 .ToList()
                 .AsReadOnly(),
             DateTime.Parse(json.GetProperty("created_at").GetString()!),
-            json.TryGetProperty("updated_at", out var updatedAt) ? DateTime.Parse(updatedAt.GetString()!) : null,
-            json.TryGetProperty("type", out var type) ? JsonSerializer.Deserialize<AdjustmentType>(type.GetRawText()) : null
+            json.TryGetProperty("updated_at", out JsonElement updatedAt) ? DateTime.Parse(updatedAt.GetString()!) : null,
+            json.TryGetProperty("type", out JsonElement type) ? JsonSerializer.Deserialize<AdjustmentType>(type.GetRawText()) : null
         );
     }
-} 
+}

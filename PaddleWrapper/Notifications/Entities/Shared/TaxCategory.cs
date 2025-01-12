@@ -23,4 +23,4 @@ public enum TaxCategory
     TrainingServices,
     [JsonPropertyName("website-hosting")]
     WebsiteHosting
-} 
+}

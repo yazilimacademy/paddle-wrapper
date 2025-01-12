@@ -1,5 +1,5 @@
-using System.Text.Json.Serialization;
 using PaddleWrapper.Resources.Transactions.Operations.Price;
+using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Resources.Transactions.Operations.Preview
 {
@@ -17,7 +17,7 @@ namespace PaddleWrapper.Resources.Transactions.Operations.Preview
 
         public TransactionItemPreviewWithNonCatalogPrice(object price, int quantity, bool? includeInTotals = null)
         {
-            if (price is not TransactionNonCatalogPrice && price is not TransactionNonCatalogPriceWithProduct)
+            if (price is not TransactionNonCatalogPrice and not TransactionNonCatalogPriceWithProduct)
             {
                 throw new System.ArgumentException("Price must be either TransactionNonCatalogPrice or TransactionNonCatalogPriceWithProduct", nameof(price));
             }
@@ -27,4 +27,4 @@ namespace PaddleWrapper.Resources.Transactions.Operations.Preview
             IncludeInTotals = includeInTotals;
         }
     }
-} 
+}

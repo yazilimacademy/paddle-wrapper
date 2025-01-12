@@ -1,6 +1,5 @@
-using System;
-using System.Text.Json.Serialization;
 using PaddleWrapper.Entities.Subscriptions;
+using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Resources.Subscriptions.Operations
 {
@@ -19,9 +18,9 @@ namespace PaddleWrapper.Resources.Subscriptions.Operations
             DateTime? effectiveFromDate = null,
             SubscriptionOnResume? onResume = null)
         {
-            EffectiveFrom = effectiveFromDate?.ToString("yyyy-MM-dd'T'HH:mm:ss.fff'Z'") 
+            EffectiveFrom = effectiveFromDate?.ToString("yyyy-MM-dd'T'HH:mm:ss.fff'Z'")
                 ?? effectiveFrom?.ToString()?.ToLower();
             OnResume = onResume?.ToString()?.ToLower();
         }
     }
-} 
+}

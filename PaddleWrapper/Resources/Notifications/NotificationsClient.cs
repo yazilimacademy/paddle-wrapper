@@ -1,17 +1,14 @@
-using System.Threading.Tasks;
-using PaddleWrapper.Client;
 using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Collections;
-using PaddleWrapper.Exceptions;
 using PaddleWrapper.Resources.Notifications.Operations;
 
 namespace PaddleWrapper.Resources.Notifications
 {
     public class NotificationsClient
     {
-        private readonly IPaddleClient _client;
+        private readonly Client _client;
 
-        public NotificationsClient(IPaddleClient client)
+        public NotificationsClient(Client client)
         {
             _client = client;
         }
@@ -19,8 +16,8 @@ namespace PaddleWrapper.Resources.Notifications
         public async Task<NotificationCollection> ListAsync(ListNotifications listOperation = null)
         {
             listOperation ??= new ListNotifications();
-            var response = await _client.GetRawAsync("/notifications", listOperation);
-            var parser = new ResponseParser(response);
+            var response = await _client.GetRaw("/notifications", listOperation);
+            ResponseParser parser = new(response);
 
             return NotificationCollection.From(
                 parser.GetData(),
@@ -30,8 +27,8 @@ namespace PaddleWrapper.Resources.Notifications
 
         public async Task<Notification> GetAsync(string id)
         {
-            var response = await _client.GetRawAsync($"/notifications/{id}");
-            var parser = new ResponseParser(response);
+            HttpResponseMessage response = await _client.GetRaw($"/notifications/{id}");
+            ResponseParser parser = new(response);
 
             return Notification.From(parser.GetData());
         }
@@ -39,10 +36,10 @@ namespace PaddleWrapper.Resources.Notifications
         public async Task<string> ReplayAsync(string id)
         {
             var response = await _client.PostRawAsync($"/notifications/{id}/replay", null);
-            var parser = new ResponseParser(response);
+            ResponseParser parser = new(response);
             var data = parser.GetData();
 
             return data.GetProperty("notification_id").GetString() ?? string.Empty;
         }
     }
-} 
+}

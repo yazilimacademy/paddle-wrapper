@@ -84,19 +84,19 @@ public class Address : IEntity
     {
         return new Address(
             json.GetProperty("id").GetString()!,
-            json.TryGetProperty("description", out var description) ? description.GetString() : null,
-            json.TryGetProperty("first_line", out var firstLine) ? firstLine.GetString() : null,
-            json.TryGetProperty("second_line", out var secondLine) ? secondLine.GetString() : null,
-            json.TryGetProperty("city", out var city) ? city.GetString() : null,
-            json.TryGetProperty("postal_code", out var postalCode) ? postalCode.GetString() : null,
-            json.TryGetProperty("region", out var region) ? region.GetString() : null,
+            json.TryGetProperty("description", out JsonElement description) ? description.GetString() : null,
+            json.TryGetProperty("first_line", out JsonElement firstLine) ? firstLine.GetString() : null,
+            json.TryGetProperty("second_line", out JsonElement secondLine) ? secondLine.GetString() : null,
+            json.TryGetProperty("city", out JsonElement city) ? city.GetString() : null,
+            json.TryGetProperty("postal_code", out JsonElement postalCode) ? postalCode.GetString() : null,
+            json.TryGetProperty("region", out JsonElement region) ? region.GetString() : null,
             JsonSerializer.Deserialize<CountryCode>(json.GetProperty("country_code").GetRawText()),
-            json.TryGetProperty("custom_data", out var customData) ? CustomData.FromJson(customData) : null,
+            json.TryGetProperty("custom_data", out JsonElement customData) ? CustomData.FromJson(customData) : null,
             JsonSerializer.Deserialize<Status>(json.GetProperty("status").GetRawText()),
             DateTime.Parse(json.GetProperty("created_at").GetString()!),
             DateTime.Parse(json.GetProperty("updated_at").GetString()!),
-            json.TryGetProperty("import_meta", out var importMeta) ? ImportMeta.FromJson(importMeta) : null,
-            json.TryGetProperty("customer_id", out var customerId) ? customerId.GetString() : null
+            json.TryGetProperty("import_meta", out JsonElement importMeta) ? ImportMeta.FromJson(importMeta) : null,
+            json.TryGetProperty("customer_id", out JsonElement customerId) ? customerId.GetString() : null
         );
     }
-} 
+}

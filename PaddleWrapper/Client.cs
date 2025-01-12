@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace PaddleWrapper;
 
@@ -34,38 +30,38 @@ public sealed class Client : IDisposable
 
     public async Task<T> Get<T>(string endpoint, IDictionary<string, object> parameters = null) where T : class
     {
-        var queryString = BuildQueryString(parameters);
-        var response = await _httpClient.GetAsync($"{endpoint}{queryString}");
+        string queryString = BuildQueryString(parameters);
+        HttpResponseMessage response = await _httpClient.GetAsync($"{endpoint}{queryString}");
         return await ResponseParser.ParseResponse<T>(response);
     }
 
     public async Task<HttpResponseMessage> GetRaw(string endpoint, IDictionary<string, object> parameters = null)
     {
-        var queryString = BuildQueryString(parameters);
-        var response = await _httpClient.GetAsync($"{endpoint}{queryString}");
+        string queryString = BuildQueryString(parameters);
+        HttpResponseMessage response = await _httpClient.GetAsync($"{endpoint}{queryString}");
         return response;
     }
 
     public async Task<IList<T>> GetList<T>(string endpoint, IDictionary<string, object> parameters = null) where T : class
     {
-        var queryString = BuildQueryString(parameters);
-        var response = await _httpClient.GetAsync($"{endpoint}{queryString}");
+        string queryString = BuildQueryString(parameters);
+        HttpResponseMessage response = await _httpClient.GetAsync($"{endpoint}{queryString}");
         return await ResponseParser.ParseResponseList<T>(response);
     }
 
     public async Task<T> Post<T>(string endpoint, object data) where T : class
     {
-        var json = JsonSerializer.Serialize(data, _jsonSerializerOptions);
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync(endpoint, content);
+        string json = JsonSerializer.Serialize(data, _jsonSerializerOptions);
+        StringContent content = new(json, Encoding.UTF8, "application/json");
+        HttpResponseMessage response = await _httpClient.PostAsync(endpoint, content);
         return await ResponseParser.ParseResponse<T>(response);
     }
 
     public async Task<T> Patch<T>(string endpoint, object data) where T : class
     {
-        var json = JsonSerializer.Serialize(data, _jsonSerializerOptions);
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
-        var response = await _httpClient.PatchAsync(endpoint, content);
+        string json = JsonSerializer.Serialize(data, _jsonSerializerOptions);
+        StringContent content = new(json, Encoding.UTF8, "application/json");
+        HttpResponseMessage response = await _httpClient.PatchAsync(endpoint, content);
         return await ResponseParser.ParseResponse<T>(response);
     }
 
@@ -76,15 +72,15 @@ public sealed class Client : IDisposable
             return string.Empty;
         }
 
-        var queryParams = new List<string>();
-        foreach (var (key, value) in parameters)
+        List<string> queryParams = new();
+        foreach ((string key, object value) in parameters)
         {
             if (value == null || value == Undefined.Instance)
             {
                 continue;
             }
 
-            var encodedValue = Uri.EscapeDataString(value.ToString());
+            string encodedValue = Uri.EscapeDataString(value.ToString());
             queryParams.Add($"{key}={encodedValue}");
         }
 

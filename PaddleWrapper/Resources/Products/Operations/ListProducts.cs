@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using PaddleWrapper.Entities.Shared;
 using PaddleWrapper.Resources.Products.Operations.List;
 using PaddleWrapper.Resources.Shared.Operations.List;
@@ -48,7 +45,7 @@ namespace PaddleWrapper.Resources.Products.Operations
 
         private void ValidateIds(List<string> ids)
         {
-            if (ids.Any(id => string.IsNullOrEmpty(id)))
+            if (ids.Any(string.IsNullOrEmpty))
             {
                 throw new ArgumentException("ids cannot contain null or empty values", nameof(ids));
             }
@@ -80,7 +77,7 @@ namespace PaddleWrapper.Resources.Products.Operations
 
         public Dictionary<string, object> GetParameters()
         {
-            var parameters = _pager?.GetParameters() ?? new Dictionary<string, object>();
+            Dictionary<string, object> parameters = _pager?.GetParameters() ?? new Dictionary<string, object>();
 
             if (_includes.Any())
             {
@@ -110,4 +107,4 @@ namespace PaddleWrapper.Resources.Products.Operations
             return parameters;
         }
     }
-} 
+}

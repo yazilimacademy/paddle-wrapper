@@ -21,4 +21,4 @@ namespace PaddleWrapper.Resources.Transactions.Operations.Preview
             IncludeInTotals = includeInTotals;
         }
     }
-} 
+}

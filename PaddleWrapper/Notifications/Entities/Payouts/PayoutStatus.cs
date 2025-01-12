@@ -10,4 +10,4 @@ public enum PayoutStatus
 
     [JsonPropertyName("paid")]
     Paid
-} 
+}

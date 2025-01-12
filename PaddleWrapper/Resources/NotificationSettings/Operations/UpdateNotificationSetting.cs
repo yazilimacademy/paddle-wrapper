@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Entities.Event;
 
 namespace PaddleWrapper.Resources.NotificationSettings.Operations
 {
@@ -46,4 +44,4 @@ namespace PaddleWrapper.Resources.NotificationSettings.Operations
             SubscribedEvents = subscribedEvents;
         }
     }
-} 
+}

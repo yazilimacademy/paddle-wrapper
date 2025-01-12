@@ -11,4 +11,4 @@ public enum CurrencyCodeAdjustments
     GBP,
     [JsonPropertyName("USD")]
     USD
-} 
+}

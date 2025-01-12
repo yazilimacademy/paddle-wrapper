@@ -13,4 +13,4 @@ public enum SubscriptionScheduledChangeAction
 
     [JsonPropertyName("resume")]
     Resume
-} 
+}

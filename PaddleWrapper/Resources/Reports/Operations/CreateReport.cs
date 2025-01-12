@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Entities.Report;
 
 namespace PaddleWrapper.Resources.Reports.Operations
 {
@@ -20,7 +16,7 @@ namespace PaddleWrapper.Resources.Reports.Operations
             IEnumerable<ReportFilter>? filters = null)
         {
             Type = type;
-            var filtersList = filters?.ToList() ?? new List<ReportFilter>();
+            List<ReportFilter> filtersList = filters?.ToList() ?? new List<ReportFilter>();
 
             if (filtersList.Any(filter => filter == null))
             {
@@ -30,4 +26,4 @@ namespace PaddleWrapper.Resources.Reports.Operations
             Filters = filtersList;
         }
     }
-} 
+}

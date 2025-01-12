@@ -13,4 +13,4 @@ public enum DiscountType
 
     [JsonPropertyName("percentage")]
     Percentage
-} 
+}

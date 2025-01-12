@@ -10,4 +10,4 @@ public enum SubscriptionEffectiveFrom
 
     [JsonPropertyName("immediately")]
     Immediately
-} 
+}

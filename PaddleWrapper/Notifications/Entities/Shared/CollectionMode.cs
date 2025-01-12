@@ -10,4 +10,4 @@ public enum CollectionMode
 
     [JsonPropertyName("manual")]
     Manual
-} 
+}

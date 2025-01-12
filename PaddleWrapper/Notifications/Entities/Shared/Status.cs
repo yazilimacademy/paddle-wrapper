@@ -9,4 +9,4 @@ public enum Status
     Active,
     [JsonPropertyName("archived")]
     Archived
-} 
+}

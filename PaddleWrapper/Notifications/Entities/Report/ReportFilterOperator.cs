@@ -10,4 +10,4 @@ public enum ReportFilterOperator
 
     [JsonPropertyName("gte")]
     Gte
-} 
+}

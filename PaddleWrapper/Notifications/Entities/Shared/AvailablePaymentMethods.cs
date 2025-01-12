@@ -34,4 +34,4 @@ public enum AvailablePaymentMethods
 
     [JsonPropertyName("wire_transfer")]
     WireTransfer
-} 
+}

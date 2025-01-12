@@ -1,5 +1,5 @@
-using System.Text.Json.Serialization;
 using PaddleWrapper.Entities.Shared;
+using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Resources.Transactions.Operations.Price
 {
@@ -37,4 +37,4 @@ namespace PaddleWrapper.Resources.Transactions.Operations.Price
             CustomData = customData;
         }
     }
-} 
+}

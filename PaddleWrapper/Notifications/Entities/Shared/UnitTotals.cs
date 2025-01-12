@@ -27,11 +27,11 @@ public class UnitTotals
 
     public static UnitTotals FromJson(JsonElement json)
     {
-        var subtotal = json.GetProperty("subtotal").GetString()!;
-        var discount = json.GetProperty("discount").GetString()!;
-        var tax = json.GetProperty("tax").GetString()!;
-        var total = json.GetProperty("total").GetString()!;
+        string subtotal = json.GetProperty("subtotal").GetString()!;
+        string discount = json.GetProperty("discount").GetString()!;
+        string tax = json.GetProperty("tax").GetString()!;
+        string total = json.GetProperty("total").GetString()!;
 
         return new UnitTotals(subtotal, discount, tax, total);
     }
-} 
+}

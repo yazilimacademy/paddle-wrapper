@@ -7,4 +7,4 @@ namespace PaddleWrapper.Resources.Prices.Operations.List
         [EnumMember(Value = "product")]
         Product
     }
-} 
+}

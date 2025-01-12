@@ -31,4 +31,4 @@ public enum CurrencyCodePayouts
     USD,
     [JsonPropertyName("ZAR")]
     ZAR
-} 
+}

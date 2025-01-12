@@ -19,10 +19,10 @@ public class ReportFilter
         return new ReportFilter
         {
             Name = JsonSerializer.Deserialize<ReportFilterName>(data.GetProperty("name").GetRawText()),
-            Operator = data.TryGetProperty("operator", out var op) 
-                ? JsonSerializer.Deserialize<ReportFilterOperator>(op.GetRawText()) 
+            Operator = data.TryGetProperty("operator", out JsonElement op)
+                ? JsonSerializer.Deserialize<ReportFilterOperator>(op.GetRawText())
                 : null,
             Value = data.GetProperty("value")
         };
     }
-} 
+}

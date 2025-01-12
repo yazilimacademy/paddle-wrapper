@@ -15,4 +15,4 @@ public enum SavedPaymentMethodType
     GooglePay,
     [JsonPropertyName("paypal")]
     Paypal
-} 
+}

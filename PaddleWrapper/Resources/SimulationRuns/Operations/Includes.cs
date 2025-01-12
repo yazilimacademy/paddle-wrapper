@@ -7,4 +7,4 @@ namespace PaddleWrapper.Resources.SimulationRuns.Operations
         [EnumMember(Value = "events")]
         Events
     }
-} 
+}

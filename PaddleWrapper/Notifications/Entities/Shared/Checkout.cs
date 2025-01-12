@@ -12,7 +12,7 @@ public class Checkout
     {
         return new Checkout
         {
-            Url = data.TryGetProperty("url", out var url) ? url.GetString() : null
+            Url = data.TryGetProperty("url", out JsonElement url) ? url.GetString() : null
         };
     }
-} 
+}

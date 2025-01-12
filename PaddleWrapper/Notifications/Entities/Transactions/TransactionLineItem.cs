@@ -1,6 +1,6 @@
+using PaddleWrapper.Notifications.Entities.Shared;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Notifications.Entities.Shared;
 
 namespace PaddleWrapper.Notifications.Entities.Transactions;
 
@@ -37,11 +37,11 @@ public class TransactionLineItem
             Id = data.GetProperty("id").GetString()!,
             PriceId = data.GetProperty("price_id").GetString()!,
             Quantity = data.GetProperty("quantity").GetInt32(),
-            Proration = data.TryGetProperty("proration", out var proration) ? TransactionProration.FromJson(proration) : null,
+            Proration = data.TryGetProperty("proration", out JsonElement proration) ? TransactionProration.FromJson(proration) : null,
             TaxRate = data.GetProperty("tax_rate").GetString()!,
             UnitTotals = UnitTotals.FromJson(data.GetProperty("unit_totals")),
             Totals = Totals.FromJson(data.GetProperty("totals")),
             Product = (Product)Product.FromJson(data.GetProperty("product"))
         };
     }
-} 
+}

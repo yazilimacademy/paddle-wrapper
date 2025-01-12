@@ -1,8 +1,7 @@
-using System;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using PaddleWrapper.Notifications.Entities.Shared;
 using PaddleWrapper.Notifications.Entities.Subscriptions;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Notifications.Entities;
 
@@ -129,10 +128,10 @@ public class Subscription : IEntity
 
     public static IEntity FromJson(JsonElement json)
     {
-        var items = new List<SubscriptionItem>();
-        if (json.TryGetProperty("items", out var itemsElement))
+        List<SubscriptionItem> items = new();
+        if (json.TryGetProperty("items", out JsonElement itemsElement))
         {
-            foreach (var item in itemsElement.EnumerateArray())
+            foreach (JsonElement item in itemsElement.EnumerateArray())
             {
                 items.Add(SubscriptionItem.FromJson(item));
             }
@@ -140,50 +139,50 @@ public class Subscription : IEntity
 
         return new Subscription(
             id: json.GetProperty("id").GetString()!,
-            transactionId: json.TryGetProperty("transaction_id", out var transactionIdElement) ? transactionIdElement.GetString() : null,
+            transactionId: json.TryGetProperty("transaction_id", out JsonElement transactionIdElement) ? transactionIdElement.GetString() : null,
             status: JsonSerializer.Deserialize<SubscriptionStatus>(json.GetProperty("status").GetRawText())!,
             customerId: json.GetProperty("customer_id").GetString()!,
             addressId: json.GetProperty("address_id").GetString()!,
-            businessId: json.TryGetProperty("business_id", out var businessIdElement) ? businessIdElement.GetString() : null,
+            businessId: json.TryGetProperty("business_id", out JsonElement businessIdElement) ? businessIdElement.GetString() : null,
             currencyCode: JsonSerializer.Deserialize<CurrencyCode>(json.GetProperty("currency_code").GetRawText())!,
             createdAt: DateTime.Parse(json.GetProperty("created_at").GetString()!),
             updatedAt: DateTime.Parse(json.GetProperty("updated_at").GetString()!),
-            startedAt: json.TryGetProperty("started_at", out var startedAtElement) 
-                ? DateTime.Parse(startedAtElement.GetString()!) 
+            startedAt: json.TryGetProperty("started_at", out JsonElement startedAtElement)
+                ? DateTime.Parse(startedAtElement.GetString()!)
                 : null,
-            firstBilledAt: json.TryGetProperty("first_billed_at", out var firstBilledAtElement) 
-                ? DateTime.Parse(firstBilledAtElement.GetString()!) 
+            firstBilledAt: json.TryGetProperty("first_billed_at", out JsonElement firstBilledAtElement)
+                ? DateTime.Parse(firstBilledAtElement.GetString()!)
                 : null,
-            nextBilledAt: json.TryGetProperty("next_billed_at", out var nextBilledAtElement) 
-                ? DateTime.Parse(nextBilledAtElement.GetString()!) 
+            nextBilledAt: json.TryGetProperty("next_billed_at", out JsonElement nextBilledAtElement)
+                ? DateTime.Parse(nextBilledAtElement.GetString()!)
                 : null,
-            pausedAt: json.TryGetProperty("paused_at", out var pausedAtElement) 
-                ? DateTime.Parse(pausedAtElement.GetString()!) 
+            pausedAt: json.TryGetProperty("paused_at", out JsonElement pausedAtElement)
+                ? DateTime.Parse(pausedAtElement.GetString()!)
                 : null,
-            canceledAt: json.TryGetProperty("canceled_at", out var canceledAtElement) 
-                ? DateTime.Parse(canceledAtElement.GetString()!) 
+            canceledAt: json.TryGetProperty("canceled_at", out JsonElement canceledAtElement)
+                ? DateTime.Parse(canceledAtElement.GetString()!)
                 : null,
-            discount: json.TryGetProperty("discount", out var discountElement) 
-                ? SubscriptionDiscount.FromJson(discountElement) 
+            discount: json.TryGetProperty("discount", out JsonElement discountElement)
+                ? SubscriptionDiscount.FromJson(discountElement)
                 : null,
             collectionMode: JsonSerializer.Deserialize<CollectionMode>(json.GetProperty("collection_mode").GetRawText())!,
-            billingDetails: json.TryGetProperty("billing_details", out var billingDetailsElement) 
-                ? BillingDetails.FromJson(billingDetailsElement) 
+            billingDetails: json.TryGetProperty("billing_details", out JsonElement billingDetailsElement)
+                ? BillingDetails.FromJson(billingDetailsElement)
                 : null,
-            currentBillingPeriod: json.TryGetProperty("current_billing_period", out var currentBillingPeriodElement) 
-                ? SubscriptionTimePeriod.FromJson(currentBillingPeriodElement) 
+            currentBillingPeriod: json.TryGetProperty("current_billing_period", out JsonElement currentBillingPeriodElement)
+                ? SubscriptionTimePeriod.FromJson(currentBillingPeriodElement)
                 : null,
             billingCycle: TimePeriod.FromJson(json.GetProperty("billing_cycle")),
-            scheduledChange: json.TryGetProperty("scheduled_change", out var scheduledChangeElement) 
-                ? SubscriptionScheduledChange.FromJson(scheduledChangeElement) 
+            scheduledChange: json.TryGetProperty("scheduled_change", out JsonElement scheduledChangeElement)
+                ? SubscriptionScheduledChange.FromJson(scheduledChangeElement)
                 : null,
             items: items,
-            customData: json.TryGetProperty("custom_data", out var customDataElement) 
-                ? CustomData.FromJson(customDataElement) 
+            customData: json.TryGetProperty("custom_data", out JsonElement customDataElement)
+                ? CustomData.FromJson(customDataElement)
                 : null,
-            importMeta: json.TryGetProperty("import_meta", out var importMetaElement) 
-                ? ImportMeta.FromJson(importMetaElement) 
+            importMeta: json.TryGetProperty("import_meta", out JsonElement importMetaElement)
+                ? ImportMeta.FromJson(importMetaElement)
                 : null
         );
     }
-} 
+}

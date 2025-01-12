@@ -59,14 +59,14 @@ public class TransactionPaymentAttempt
     {
         return new TransactionPaymentAttempt(
             element.GetProperty("payment_attempt_id").GetString()!,
-            element.TryGetProperty("payment_method_id", out var paymentMethodId) ? paymentMethodId.GetString() : null,
+            element.TryGetProperty("payment_method_id", out JsonElement paymentMethodId) ? paymentMethodId.GetString() : null,
             element.GetProperty("stored_payment_method_id").GetString()!,
             element.GetProperty("amount").GetString()!,
             JsonSerializer.Deserialize<PaymentAttemptStatus>(element.GetProperty("status").GetRawText()),
-            element.TryGetProperty("error_code", out var errorCode) ? JsonSerializer.Deserialize<ErrorCode>(errorCode.GetRawText()) : null,
+            element.TryGetProperty("error_code", out JsonElement errorCode) ? JsonSerializer.Deserialize<ErrorCode>(errorCode.GetRawText()) : null,
             MethodDetails.FromJson(element.GetProperty("method_details")),
             DateTime.Parse(element.GetProperty("created_at").GetString()!),
-            element.TryGetProperty("captured_at", out var capturedAt) ? DateTime.Parse(capturedAt.GetString()!) : null
+            element.TryGetProperty("captured_at", out JsonElement capturedAt) ? DateTime.Parse(capturedAt.GetString()!) : null
         );
     }
-} 
+}

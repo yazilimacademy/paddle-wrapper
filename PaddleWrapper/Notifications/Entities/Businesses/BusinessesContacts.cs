@@ -19,4 +19,4 @@ public class BusinessesContacts
             Email = data.GetProperty("email").GetString()!
         };
     }
-} 
+}

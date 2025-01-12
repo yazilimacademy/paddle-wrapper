@@ -1,18 +1,14 @@
-using System.Threading.Tasks;
-using PaddleWrapper.Client;
 using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Collections;
-using PaddleWrapper.Entities.Discount;
-using PaddleWrapper.Exceptions;
 using PaddleWrapper.Resources.Discounts.Operations;
 
 namespace PaddleWrapper.Resources.Discounts
 {
     public class DiscountsClient
     {
-        private readonly IPaddleClient _client;
+        private readonly Client _client;
 
-        public DiscountsClient(IPaddleClient client)
+        public DiscountsClient(Client client)
         {
             _client = client;
         }
@@ -20,8 +16,8 @@ namespace PaddleWrapper.Resources.Discounts
         public async Task<DiscountCollection> ListAsync(ListDiscounts listOperation = null)
         {
             listOperation ??= new ListDiscounts();
-            var response = await _client.GetRawAsync("/discounts", listOperation);
-            var parser = new ResponseParser(response);
+            var response = await _client.GetRaw("/discounts", listOperation);
+            ResponseParser parser = new(response);
 
             return DiscountCollection.From(
                 parser.GetData(),
@@ -31,8 +27,8 @@ namespace PaddleWrapper.Resources.Discounts
 
         public async Task<Discount> GetAsync(string id)
         {
-            var response = await _client.GetRawAsync($"/discounts/{id}");
-            var parser = new ResponseParser(response);
+            HttpResponseMessage response = await _client.GetRaw($"/discounts/{id}");
+            ResponseParser parser = new(response);
 
             return Discount.From(parser.GetData());
         }
@@ -40,7 +36,7 @@ namespace PaddleWrapper.Resources.Discounts
         public async Task<Discount> CreateAsync(CreateDiscount createOperation)
         {
             var response = await _client.PostRawAsync("/discounts", createOperation);
-            var parser = new ResponseParser(response);
+            ResponseParser parser = new(response);
 
             return Discount.From(parser.GetData());
         }
@@ -48,7 +44,7 @@ namespace PaddleWrapper.Resources.Discounts
         public async Task<Discount> UpdateAsync(string id, UpdateDiscount operation)
         {
             var response = await _client.PatchRawAsync($"/discounts/{id}", operation);
-            var parser = new ResponseParser(response);
+            ResponseParser parser = new(response);
 
             return Discount.From(parser.GetData());
         }
@@ -58,4 +54,4 @@ namespace PaddleWrapper.Resources.Discounts
             return await UpdateAsync(id, new UpdateDiscount { Status = DiscountStatus.Archived });
         }
     }
-} 
+}

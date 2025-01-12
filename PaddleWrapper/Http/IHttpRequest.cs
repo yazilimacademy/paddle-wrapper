@@ -4,4 +4,4 @@ public interface IHttpRequest
 {
     IDictionary<string, IList<string>> Headers { get; }
     Stream Body { get; }
-} 
+}

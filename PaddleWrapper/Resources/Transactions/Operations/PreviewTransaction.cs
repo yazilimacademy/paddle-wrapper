@@ -1,7 +1,6 @@
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using PaddleWrapper.Entities.Shared;
 using PaddleWrapper.Resources.Transactions.Operations.Preview;
+using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Resources.Transactions.Operations
 {
@@ -70,4 +69,4 @@ namespace PaddleWrapper.Resources.Transactions.Operations
             IgnoreTrials = ignoreTrials;
         }
     }
-} 
+}

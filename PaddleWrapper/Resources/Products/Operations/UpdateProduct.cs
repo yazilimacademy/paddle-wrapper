@@ -1,5 +1,5 @@
-using System.Text.Json.Serialization;
 using PaddleWrapper.Entities.Shared;
+using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Resources.Products.Operations
 {
@@ -33,4 +33,4 @@ namespace PaddleWrapper.Resources.Products.Operations
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Status? Status { get; set; }
     }
-} 
+}

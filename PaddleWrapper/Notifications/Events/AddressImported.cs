@@ -14,7 +14,7 @@ public sealed class AddressImported : Event
         EventTypeName eventType,
         DateTime occurredAt,
         Address address,
-        string? notificationId) 
+        string? notificationId)
         : base(eventId, eventType, occurredAt, address, notificationId)
     {
         Address = address;
@@ -34,4 +34,4 @@ public sealed class AddressImported : Event
 
         return new AddressImported(eventId, eventType, occurredAt, address, notificationId);
     }
-} 
+}

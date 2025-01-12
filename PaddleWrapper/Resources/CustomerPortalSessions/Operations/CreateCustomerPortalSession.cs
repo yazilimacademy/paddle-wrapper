@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Resources.CustomerPortalSessions.Operations
@@ -13,4 +12,4 @@ namespace PaddleWrapper.Resources.CustomerPortalSessions.Operations
             SubscriptionIds = subscriptionIds;
         }
     }
-} 
+}

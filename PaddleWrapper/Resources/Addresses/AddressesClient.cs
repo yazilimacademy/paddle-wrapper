@@ -1,18 +1,15 @@
-using System.Threading.Tasks;
-using PaddleWrapper.Client;
 using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Collections;
 using PaddleWrapper.Entities.Shared;
-using PaddleWrapper.Exceptions;
 using PaddleWrapper.Resources.Addresses.Operations;
 
 namespace PaddleWrapper.Resources.Addresses
 {
     public class AddressesClient
     {
-        private readonly IPaddleClient _client;
+        private readonly Client _client;
 
-        public AddressesClient(IPaddleClient client)
+        public AddressesClient(Client client)
         {
             _client = client;
         }
@@ -20,8 +17,8 @@ namespace PaddleWrapper.Resources.Addresses
         public async Task<AddressCollection> ListAsync(string customerId, ListAddresses listOperation = null)
         {
             listOperation ??= new ListAddresses();
-            var response = await _client.GetRawAsync($"/customers/{customerId}/addresses", listOperation);
-            var parser = new ResponseParser(response);
+            var response = await _client.GetRaw($"/customers/{customerId}/addresses", listOperation);
+            ResponseParser parser = new(response);
 
             return AddressCollection.From(
                 parser.GetData(),
@@ -31,8 +28,8 @@ namespace PaddleWrapper.Resources.Addresses
 
         public async Task<Address> GetAsync(string customerId, string id)
         {
-            var response = await _client.GetRawAsync($"/customers/{customerId}/addresses/{id}");
-            var parser = new ResponseParser(response);
+            HttpResponseMessage response = await _client.GetRaw($"/customers/{customerId}/addresses/{id}");
+            ResponseParser parser = new(response);
 
             return Address.From(parser.GetData());
         }
@@ -40,7 +37,7 @@ namespace PaddleWrapper.Resources.Addresses
         public async Task<Address> CreateAsync(string customerId, CreateAddress createOperation)
         {
             var response = await _client.PostRawAsync($"/customers/{customerId}/addresses", createOperation);
-            var parser = new ResponseParser(response);
+            ResponseParser parser = new(response);
 
             return Address.From(parser.GetData());
         }
@@ -48,7 +45,7 @@ namespace PaddleWrapper.Resources.Addresses
         public async Task<Address> UpdateAsync(string customerId, string id, UpdateAddress operation)
         {
             var response = await _client.PatchRawAsync($"/customers/{customerId}/addresses/{id}", operation);
-            var parser = new ResponseParser(response);
+            ResponseParser parser = new(response);
 
             return Address.From(parser.GetData());
         }
@@ -58,4 +55,4 @@ namespace PaddleWrapper.Resources.Addresses
             return await UpdateAsync(customerId, id, new UpdateAddress { Status = Status.Archived });
         }
     }
-} 
+}

@@ -1,6 +1,6 @@
+using PaddleWrapper.Notifications.Entities.Shared;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Notifications.Entities.Shared;
 
 namespace PaddleWrapper.Notifications.Entities.Transactions;
 
@@ -42,14 +42,14 @@ public class TransactionDetails
 
     public static TransactionDetails FromJson(JsonElement data)
     {
-        var taxRatesUsed = new List<TaxRatesUsed>();
-        foreach (var taxRateUsed in data.GetProperty("tax_rates_used").EnumerateArray())
+        List<TaxRatesUsed> taxRatesUsed = new();
+        foreach (JsonElement taxRateUsed in data.GetProperty("tax_rates_used").EnumerateArray())
         {
             taxRatesUsed.Add(Shared.TaxRatesUsed.FromJson(taxRateUsed));
         }
 
-        var lineItems = new List<TransactionLineItem>();
-        foreach (var lineItem in data.GetProperty("line_items").EnumerateArray())
+        List<TransactionLineItem> lineItems = new();
+        foreach (JsonElement lineItem in data.GetProperty("line_items").EnumerateArray())
         {
             lineItems.Add(TransactionLineItem.FromJson(lineItem));
         }
@@ -57,9 +57,9 @@ public class TransactionDetails
         return new TransactionDetails(
             taxRatesUsed,
             TransactionTotals.FromJson(data.GetProperty("totals")),
-            data.TryGetProperty("adjusted_totals", out var adjustedTotals) ? TransactionTotalsAdjusted.FromJson(adjustedTotals) : null,
-            data.TryGetProperty("payout_totals", out var payoutTotals) ? TransactionPayoutTotals.FromJson(payoutTotals) : null,
-            data.TryGetProperty("adjusted_payout_totals", out var adjustedPayoutTotals) ? TransactionPayoutTotalsAdjusted.FromJson(adjustedPayoutTotals) : null,
+            data.TryGetProperty("adjusted_totals", out JsonElement adjustedTotals) ? TransactionTotalsAdjusted.FromJson(adjustedTotals) : null,
+            data.TryGetProperty("payout_totals", out JsonElement payoutTotals) ? TransactionPayoutTotals.FromJson(payoutTotals) : null,
+            data.TryGetProperty("adjusted_payout_totals", out JsonElement adjustedPayoutTotals) ? TransactionPayoutTotalsAdjusted.FromJson(adjustedPayoutTotals) : null,
             lineItems);
     }
-} 
+}

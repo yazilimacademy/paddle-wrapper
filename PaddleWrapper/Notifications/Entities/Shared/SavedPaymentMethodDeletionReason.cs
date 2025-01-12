@@ -9,4 +9,4 @@ public enum SavedPaymentMethodDeletionReason
     ReplacedByNewerVersion,
     [JsonPropertyName("api")]
     Api
-} 
+}

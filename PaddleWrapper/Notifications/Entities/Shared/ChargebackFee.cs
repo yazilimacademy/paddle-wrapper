@@ -16,7 +16,7 @@ public class ChargebackFee
         return new ChargebackFee
         {
             Amount = data.GetProperty("amount").GetString()!,
-            Original = data.TryGetProperty("original", out var original) ? Original.FromJson(original) : null
+            Original = data.TryGetProperty("original", out JsonElement original) ? Original.FromJson(original) : null
         };
     }
-} 
+}

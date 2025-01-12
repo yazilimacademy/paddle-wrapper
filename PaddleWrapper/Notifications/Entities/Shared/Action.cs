@@ -22,4 +22,4 @@ public enum Action
 
     [JsonPropertyName("chargeback_warning")]
     ChargebackWarning
-} 
+}

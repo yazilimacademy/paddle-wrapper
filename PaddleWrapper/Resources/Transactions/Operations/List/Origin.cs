@@ -22,4 +22,4 @@ namespace PaddleWrapper.Resources.Transactions.Operations.List
         [EnumMember(Value = "web")]
         Web
     }
-} 
+}

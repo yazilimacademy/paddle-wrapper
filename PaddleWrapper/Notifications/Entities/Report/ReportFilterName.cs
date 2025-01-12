@@ -43,4 +43,4 @@ public enum ReportFilterName
 
     [JsonPropertyName("updated_at")]
     UpdatedAt
-} 
+}

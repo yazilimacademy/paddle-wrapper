@@ -16,4 +16,4 @@ namespace PaddleWrapper.Resources.Transactions.Operations.Update
             Quantity = quantity;
         }
     }
-} 
+}

@@ -34,4 +34,4 @@ public class Totals
             element.GetProperty("total").GetString()!
         );
     }
-} 
+}

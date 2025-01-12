@@ -14,7 +14,7 @@ public sealed class AdjustmentCreated : Event
         EventTypeName eventType,
         DateTime occurredAt,
         Adjustment adjustment,
-        string? notificationId) 
+        string? notificationId)
         : base(eventId, eventType, occurredAt, adjustment, notificationId)
     {
         Adjustment = adjustment;
@@ -34,4 +34,4 @@ public sealed class AdjustmentCreated : Event
 
         return new AdjustmentCreated(eventId, eventType, occurredAt, adjustment, notificationId);
     }
-} 
+}

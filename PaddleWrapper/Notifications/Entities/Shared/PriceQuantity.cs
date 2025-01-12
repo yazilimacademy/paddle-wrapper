@@ -24,4 +24,4 @@ public class PriceQuantity
             element.GetProperty("maximum").GetInt32()
         );
     }
-} 
+}

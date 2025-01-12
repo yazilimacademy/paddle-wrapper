@@ -10,4 +10,4 @@ public enum SubscriptionOnPaymentFailure
 
     [JsonPropertyName("apply_change")]
     ApplyChange
-} 
+}

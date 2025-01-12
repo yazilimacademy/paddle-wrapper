@@ -25,4 +25,4 @@ namespace PaddleWrapper.Resources.Transactions.Operations.List
         [EnumMember(Value = "discount")]
         Discount
     }
-} 
+}

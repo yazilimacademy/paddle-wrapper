@@ -16,9 +16,9 @@ public class TransactionProration
         return new TransactionProration
         {
             Rate = data.GetProperty("rate").GetString()!,
-            BillingPeriod = data.TryGetProperty("billing_period", out var billingPeriod) 
-                ? TransactionTimePeriod.FromJson(billingPeriod) 
+            BillingPeriod = data.TryGetProperty("billing_period", out JsonElement billingPeriod)
+                ? TransactionTimePeriod.FromJson(billingPeriod)
                 : null
         };
     }
-} 
+}

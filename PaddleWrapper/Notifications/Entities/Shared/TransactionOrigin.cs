@@ -17,4 +17,4 @@ public enum TransactionOrigin
     SubscriptionUpdate,
     [JsonPropertyName("web")]
     Web
-} 
+}

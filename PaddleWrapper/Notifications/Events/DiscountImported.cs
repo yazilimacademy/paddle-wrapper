@@ -14,7 +14,7 @@ public sealed class DiscountImported : Event
         EventTypeName eventType,
         DateTime occurredAt,
         Discount discount,
-        string? notificationId) 
+        string? notificationId)
         : base(eventId, eventType, occurredAt, discount, notificationId)
     {
         Discount = discount;
@@ -34,4 +34,4 @@ public sealed class DiscountImported : Event
 
         return new DiscountImported(eventId, eventType, occurredAt, discount, notificationId);
     }
-} 
+}

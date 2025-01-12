@@ -1,7 +1,4 @@
 using System.Text.Json.Serialization;
-using PaddleWrapper.Entities.Event;
-using PaddleWrapper.Entities.Simulation;
-using PaddleWrapper.Notifications.Entities;
 
 namespace PaddleWrapper.Resources.Simulations.Operations
 {
@@ -44,4 +41,4 @@ namespace PaddleWrapper.Resources.Simulations.Operations
             Payload = payload;
         }
     }
-} 
+}

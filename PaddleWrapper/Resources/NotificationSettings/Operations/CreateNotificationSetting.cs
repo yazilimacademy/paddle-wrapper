@@ -1,7 +1,4 @@
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Entities.Event;
-using PaddleWrapper.Entities.NotificationSetting;
 
 namespace PaddleWrapper.Resources.NotificationSettings.Operations
 {
@@ -41,4 +38,4 @@ namespace PaddleWrapper.Resources.NotificationSettings.Operations
             ApiVersion = apiVersion;
         }
     }
-} 
+}

@@ -1,7 +1,6 @@
-using System;
+using PaddleWrapper.Notifications.Entities.Shared;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Notifications.Entities.Shared;
 
 namespace PaddleWrapper.Notifications.Entities;
 
@@ -58,4 +57,4 @@ public class PaymentMethod : IEntity
             updatedAt: DateTime.Parse(json.GetProperty("updated_at").GetString()!)
         );
     }
-} 
+}
