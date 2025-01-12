@@ -6,8 +6,6 @@ using System.Text.Json.Serialization;
 using DateTime = PaddleWrapper.Notifications.Entities.DateTime;
 using NotificationEntity = PaddleWrapper.Notifications.Entities.IEntity;
 
-
-
 namespace PaddleWrapper.Entities
 {
     public abstract class Event

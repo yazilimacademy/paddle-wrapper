@@ -1,6 +1,6 @@
 using System;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Entities.Subscription;
+using PaddleWrapper.Entities.Subscriptions;
 
 namespace PaddleWrapper.Resources.Subscriptions.Operations
 {

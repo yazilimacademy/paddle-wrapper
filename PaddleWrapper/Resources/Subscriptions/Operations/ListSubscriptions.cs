@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using PaddleWrapper.Entities.Shared;
-using PaddleWrapper.Entities.Subscription;
+using PaddleWrapper.Entities.Subscriptions;
 using PaddleWrapper.Resources.Shared.Operations.List;
 
 namespace PaddleWrapper.Resources.Subscriptions.Operations

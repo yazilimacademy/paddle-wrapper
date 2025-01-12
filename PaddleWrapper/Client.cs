@@ -39,6 +39,13 @@ public sealed class Client : IDisposable
         return await ResponseParser.ParseResponse<T>(response);
     }
 
+    public async Task<HttpResponseMessage> GetRaw(string endpoint, IDictionary<string, object> parameters = null)
+    {
+        var queryString = BuildQueryString(parameters);
+        var response = await _httpClient.GetAsync($"{endpoint}{queryString}");
+        return response;
+    }
+
     public async Task<IList<T>> GetList<T>(string endpoint, IDictionary<string, object> parameters = null) where T : class
     {
         var queryString = BuildQueryString(parameters);
