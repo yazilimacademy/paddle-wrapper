@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using PaddleWrapper.Notifications.Entities.Shared;
+using SharedAdjustmentType = PaddleWrapper.Notifications.Entities.Shared.AdjustmentType;
 
 namespace PaddleWrapper.Notifications.Entities.Adjustments;
 
@@ -13,7 +14,7 @@ public class AdjustmentItem
     public string ItemId { get; }
 
     [JsonPropertyName("type")]
-    public AdjustmentType Type { get; }
+    public SharedAdjustmentType Type { get; }
 
     [JsonPropertyName("amount")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -26,7 +27,7 @@ public class AdjustmentItem
     [JsonPropertyName("totals")]
     public AdjustmentItemTotals Totals { get; }
 
-    private AdjustmentItem(string id, string itemId, AdjustmentType type, string? amount, AdjustmentProration? proration, AdjustmentItemTotals totals)
+    private AdjustmentItem(string id, string itemId, SharedAdjustmentType type, string? amount, AdjustmentProration? proration, AdjustmentItemTotals totals)
     {
         Id = id;
         ItemId = itemId;
@@ -41,10 +42,10 @@ public class AdjustmentItem
         return new AdjustmentItem(
             id: data.GetProperty("id").GetString()!,
             itemId: data.GetProperty("item_id").GetString()!,
-            type: AdjustmentType.FromJson(data.GetProperty("type")),
+            type: PaddleEnum.FromJson<SharedAdjustmentType>(data.GetProperty("type")),
             amount: data.TryGetProperty("amount", out JsonElement amountElement) ? amountElement.GetString() : null,
-            proration: data.TryGetProperty("proration", out JsonElement prorationElement) && !prorationElement.ValueKind.Equals(JsonValueKind.Null) 
-                ? AdjustmentProration.FromJson(prorationElement) 
+            proration: data.TryGetProperty("proration", out JsonElement prorationElement) && !prorationElement.ValueKind.Equals(JsonValueKind.Null)
+                ? AdjustmentProration.FromJson(prorationElement)
                 : null,
             totals: AdjustmentItemTotals.FromJson(data.GetProperty("totals"))
         );

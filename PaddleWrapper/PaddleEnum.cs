@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
 
 namespace PaddleWrapper;
 
@@ -16,6 +17,11 @@ public abstract class PaddleEnum
     public override string ToString()
     {
         return Value;
+    }
+
+    public static T FromJson<T>(JsonElement element) where T : Enum
+    {
+        return JsonSerializer.Deserialize<T>(element.GetRawText());
     }
 
     protected static T FromString<T>(string value) where T : PaddleEnum

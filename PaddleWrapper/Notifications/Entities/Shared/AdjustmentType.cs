@@ -1,3 +1,4 @@
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Notifications.Entities.Shared;
@@ -16,4 +17,4 @@ public enum AdjustmentType
 
     [JsonPropertyName("proration")]
     Proration
-} 
+}

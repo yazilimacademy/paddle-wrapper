@@ -1,6 +1,6 @@
+using PaddleWrapper.Entities.Subscriptions;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Entities.Subscription;
 
 namespace PaddleWrapper.Resources.Subscriptions.Operations
 {

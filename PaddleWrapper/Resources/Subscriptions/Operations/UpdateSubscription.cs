@@ -1,8 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using PaddleWrapper.Entities.Shared;
-using PaddleWrapper.Entities.Subscription;
+using PaddleWrapper.Entities.Subscriptions;
 using PaddleWrapper.Resources.Subscriptions.Operations.Update;
 
 namespace PaddleWrapper.Resources.Subscriptions.Operations
