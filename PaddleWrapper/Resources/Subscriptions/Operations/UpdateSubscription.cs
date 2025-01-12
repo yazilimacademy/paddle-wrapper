@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using PaddleWrapper.Entities.Shared;
 using PaddleWrapper.Entities.Subscriptions;
-using PaddleWrapper.Resources.Subscriptions.Operations.Update;
+using SubscriptionDiscount = PaddleWrapper.Resources.Subscriptions.Operations.Update.SubscriptionDiscount;
 
 namespace PaddleWrapper.Resources.Subscriptions.Operations
 {

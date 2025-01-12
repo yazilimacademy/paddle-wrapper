@@ -2,7 +2,7 @@ using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using PaddleWrapper.Notifications.Entities.Shared;
-using PaddleWrapper.Notifications.Entities.Transaction;
+using PaddleWrapper.Notifications.Entities.Transactions;
 
 namespace PaddleWrapper.Notifications.Entities;
 

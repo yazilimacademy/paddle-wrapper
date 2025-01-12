@@ -1,7 +1,12 @@
 using PaddleWrapper.Entities.Events;
+using PaddleWrapper.Notifications.Entities;
 using PaddleWrapper.Notifications.Events;
 using System.Reflection;
 using System.Text.Json.Serialization;
+using DateTime = PaddleWrapper.Notifications.Entities.DateTime;
+using NotificationEntity = PaddleWrapper.Notifications.Entities.IEntity;
+
+
 
 namespace PaddleWrapper.Entities
 {

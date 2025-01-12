@@ -1,6 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Notifications.Entities.Discount;
+using PaddleWrapper.Notifications.Entities.Discounts;
 using PaddleWrapper.Notifications.Entities.Shared;
 
 namespace PaddleWrapper.Notifications.Entities;

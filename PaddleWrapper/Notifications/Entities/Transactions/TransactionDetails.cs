@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using PaddleWrapper.Notifications.Entities.Shared;
@@ -41,26 +40,26 @@ public class TransactionDetails
         LineItems = lineItems;
     }
 
-    public static TransactionDetails From(JsonElement data)
+    public static TransactionDetails FromJson(JsonElement data)
     {
         var taxRatesUsed = new List<TaxRatesUsed>();
         foreach (var taxRateUsed in data.GetProperty("tax_rates_used").EnumerateArray())
         {
-            taxRatesUsed.Add(TaxRatesUsed.From(taxRateUsed));
+            taxRatesUsed.Add(Shared.TaxRatesUsed.FromJson(taxRateUsed));
         }
 
         var lineItems = new List<TransactionLineItem>();
         foreach (var lineItem in data.GetProperty("line_items").EnumerateArray())
         {
-            lineItems.Add(TransactionLineItem.From(lineItem));
+            lineItems.Add(TransactionLineItem.FromJson(lineItem));
         }
 
         return new TransactionDetails(
             taxRatesUsed,
-            TransactionTotals.From(data.GetProperty("totals")),
-            data.TryGetProperty("adjusted_totals", out var adjustedTotals) ? TransactionTotalsAdjusted.From(adjustedTotals) : null,
-            data.TryGetProperty("payout_totals", out var payoutTotals) ? TransactionPayoutTotals.From(payoutTotals) : null,
-            data.TryGetProperty("adjusted_payout_totals", out var adjustedPayoutTotals) ? TransactionPayoutTotalsAdjusted.From(adjustedPayoutTotals) : null,
+            TransactionTotals.FromJson(data.GetProperty("totals")),
+            data.TryGetProperty("adjusted_totals", out var adjustedTotals) ? TransactionTotalsAdjusted.FromJson(adjustedTotals) : null,
+            data.TryGetProperty("payout_totals", out var payoutTotals) ? TransactionPayoutTotals.FromJson(payoutTotals) : null,
+            data.TryGetProperty("adjusted_payout_totals", out var adjustedPayoutTotals) ? TransactionPayoutTotalsAdjusted.FromJson(adjustedPayoutTotals) : null,
             lineItems);
     }
 } 

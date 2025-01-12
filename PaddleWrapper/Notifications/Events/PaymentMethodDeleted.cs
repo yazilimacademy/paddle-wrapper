@@ -1,5 +1,6 @@
 using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Events;
+using PaddleWrapper.Notifications.Entities;
 using DateTime = PaddleWrapper.Notifications.Entities.DateTime;
 using IEntity = PaddleWrapper.Notifications.Entities.IEntity;
 

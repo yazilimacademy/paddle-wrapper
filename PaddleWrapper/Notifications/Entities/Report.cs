@@ -1,7 +1,7 @@
 using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Notifications.Entities.Report;
+using PaddleWrapper.Notifications.Entities.Reports;
 
 namespace PaddleWrapper.Notifications.Entities;
 

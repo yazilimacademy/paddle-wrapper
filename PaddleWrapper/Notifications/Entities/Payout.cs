@@ -1,7 +1,7 @@
 using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using PaddleWrapper.Notifications.Entities.Payout;
+using PaddleWrapper.Notifications.Entities.Payouts;
 using PaddleWrapper.Notifications.Entities.Shared;
 
 namespace PaddleWrapper.Notifications.Entities;
