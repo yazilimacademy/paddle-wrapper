@@ -60,11 +60,6 @@ public class Client : IDisposable
     {
         _options = options ?? new Options();
 
-        if (string.IsNullOrWhiteSpace(_options.ApiKey))
-        {
-            throw new ArgumentException("ApiKey is required");
-        }
-
         HttpClient = new HttpClient
         {
             BaseAddress = new Uri(_options.Environment.GetBaseUrl())
