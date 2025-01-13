@@ -1,6 +1,3 @@
-using System.Collections;
-using PaddleWrapper.Entities.Shared;
-
 namespace PaddleWrapper.Entities.Collections
 {
     public abstract class Collection<T> : IEnumerable<T>

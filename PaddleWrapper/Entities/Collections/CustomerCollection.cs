@@ -10,8 +10,8 @@ namespace PaddleWrapper.Entities.Collections
 
         public static CustomerCollection FromJson(JsonElement json, Paginator? paginator = null)
         {
-            var customers = new List<Customer>();
-            foreach (var element in json.EnumerateArray())
+            List<Customer> customers = new();
+            foreach (JsonElement element in json.EnumerateArray())
             {
                 customers.Add(Customer.FromJson(element));
             }

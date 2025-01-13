@@ -33,17 +33,17 @@ namespace PaddleWrapper.Entities.Shared
         public static Pagination FromJson(JsonElement json)
         {
             return new Pagination(
-                perPage: json.TryGetProperty("per_page", out var perPage) ? perPage.GetInt32() : 10,
-                next: json.TryGetProperty("next", out var next) && next.ValueKind != JsonValueKind.Null ? next.GetString() : null,
-                previous: json.TryGetProperty("previous", out var previous) && previous.ValueKind != JsonValueKind.Null ? previous.GetString() : null,
-                hasMore: json.TryGetProperty("has_more", out var hasMore) ? hasMore.GetBoolean() : false,
-                estimatedTotal: json.TryGetProperty("estimated_total", out var estimatedTotal) ? estimatedTotal.GetInt32() : 0
+                perPage: json.TryGetProperty("per_page", out JsonElement perPage) ? perPage.GetInt32() : 10,
+                next: json.TryGetProperty("next", out JsonElement next) && next.ValueKind != JsonValueKind.Null ? next.GetString() : null,
+                previous: json.TryGetProperty("previous", out JsonElement previous) && previous.ValueKind != JsonValueKind.Null ? previous.GetString() : null,
+                hasMore: json.TryGetProperty("has_more", out JsonElement hasMore) && hasMore.GetBoolean(),
+                estimatedTotal: json.TryGetProperty("estimated_total", out JsonElement estimatedTotal) ? estimatedTotal.GetInt32() : 0
             );
         }
 
         public static Pagination From(Dictionary<string, object> data)
         {
-            var json = JsonSerializer.SerializeToElement(data);
+            JsonElement json = JsonSerializer.SerializeToElement(data);
             return FromJson(json);
         }
     }

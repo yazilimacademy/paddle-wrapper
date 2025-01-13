@@ -14,8 +14,7 @@ class Program
 
         // Customers client örneği oluşturun
         CustomersClient customersClient = new(client);
-
-        Console.WriteLine((await customersClient.GetAsync("ctm_01jh8973bvkf4q66za2n0dvnvf")).Name);
+        //CustomersClient customersClient = client.Customers;
 
         try
         {

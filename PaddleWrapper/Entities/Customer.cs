@@ -70,7 +70,7 @@ namespace PaddleWrapper.Entities
                 email: json.GetProperty("email").GetString()!,
                 marketingConsent: json.GetProperty("marketing_consent").GetBoolean(),
                 status: Enum.Parse<Status>(json.GetProperty("status").GetString()!, true),
-                customData: json.GetProperty("custom_data").ValueKind == JsonValueKind.Null ? null : 
+                customData: json.GetProperty("custom_data").ValueKind == JsonValueKind.Null ? null :
                     CustomData.FromJson(json.GetProperty("custom_data")),
                 locale: json.GetProperty("locale").GetString()!,
                 createdAt: DateTime.Parse(json.GetProperty("created_at").GetString()!),
@@ -82,7 +82,7 @@ namespace PaddleWrapper.Entities
 
         public static Customer From(Dictionary<string, object> data)
         {
-            var json = JsonSerializer.SerializeToElement(data);
+            JsonElement json = JsonSerializer.SerializeToElement(data);
             return FromJson(json);
         }
     }
