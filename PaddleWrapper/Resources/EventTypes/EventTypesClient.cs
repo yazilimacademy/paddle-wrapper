@@ -13,7 +13,7 @@ namespace PaddleWrapper.Resources.EventTypes
 
         public async Task<EventTypeCollection> ListAsync()
         {
-            HttpResponseMessage response = await _client.GetRaw("/event-types");
+            HttpResponseMessage response = await _client.GetRawAsync("/event-types");
             ResponseParser parser = new(response);
 
             return EventTypeCollection.From(parser.GetData());

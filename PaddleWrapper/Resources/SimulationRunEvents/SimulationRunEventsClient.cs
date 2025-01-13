@@ -16,7 +16,7 @@ namespace PaddleWrapper.Resources.SimulationRunEvents
         public async Task<SimulationRunEventCollection> ListAsync(string simulationId, string runId, ListSimulationRunEvents listOperation = null)
         {
             listOperation ??= new ListSimulationRunEvents();
-            var response = await _client.GetRaw($"/simulations/{simulationId}/runs/{runId}/events", listOperation);
+            var response = await _client.GetRawAsync($"/simulations/{simulationId}/runs/{runId}/events", listOperation);
             ResponseParser parser = new(response);
 
             return SimulationRunEventCollection.From(
@@ -27,7 +27,7 @@ namespace PaddleWrapper.Resources.SimulationRunEvents
 
         public async Task<SimulationRunEvent> GetAsync(string simulationId, string runId, string id)
         {
-            HttpResponseMessage response = await _client.GetRaw($"/simulations/{simulationId}/runs/{runId}/events/{id}");
+            HttpResponseMessage response = await _client.GetRawAsync($"/simulations/{simulationId}/runs/{runId}/events/{id}");
             ResponseParser parser = new(response);
 
             return SimulationRunEvent.From(parser.GetData());
@@ -35,7 +35,7 @@ namespace PaddleWrapper.Resources.SimulationRunEvents
 
         public async Task<SimulationRunEvent> ReplayAsync(string simulationId, string runId, string id)
         {
-            var response = await _client.PostRaw($"/simulations/{simulationId}/runs/{runId}/events/{id}/replay");
+            var response = await _client.PostRawAsync($"/simulations/{simulationId}/runs/{runId}/events/{id}/replay");
             ResponseParser parser = new(response);
 
             return SimulationRunEvent.From(parser.GetData());

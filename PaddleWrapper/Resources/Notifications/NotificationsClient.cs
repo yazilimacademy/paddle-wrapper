@@ -16,7 +16,7 @@ namespace PaddleWrapper.Resources.Notifications
         public async Task<NotificationCollection> ListAsync(ListNotifications listOperation = null)
         {
             listOperation ??= new ListNotifications();
-            var response = await _client.GetRaw("/notifications", listOperation);
+            var response = await _client.GetRawAsync("/notifications", listOperation);
             ResponseParser parser = new(response);
 
             return NotificationCollection.From(
@@ -27,7 +27,7 @@ namespace PaddleWrapper.Resources.Notifications
 
         public async Task<Notification> GetAsync(string id)
         {
-            HttpResponseMessage response = await _client.GetRaw($"/notifications/{id}");
+            HttpResponseMessage response = await _client.GetRawAsync($"/notifications/{id}");
             ResponseParser parser = new(response);
 
             return Notification.From(parser.GetData());
@@ -35,7 +35,7 @@ namespace PaddleWrapper.Resources.Notifications
 
         public async Task<string> ReplayAsync(string id)
         {
-            var response = await _client.PostRaw($"/notifications/{id}/replay", null);
+            var response = await _client.PostRawAsync($"/notifications/{id}/replay", null);
             ResponseParser parser = new(response);
             var data = parser.GetData();
 

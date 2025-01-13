@@ -15,7 +15,7 @@ namespace PaddleWrapper.Resources.NotificationLogs
         public async Task<NotificationLogCollection> ListAsync(string notificationId, ListNotificationLogs listOperation = null)
         {
             listOperation ??= new ListNotificationLogs();
-            var response = await _client.GetRaw($"/notifications/{notificationId}/logs", listOperation);
+            var response = await _client.GetRawAsync($"/notifications/{notificationId}/logs", listOperation);
             ResponseParser parser = new(response);
 
             return NotificationLogCollection.From(

@@ -16,7 +16,7 @@ namespace PaddleWrapper.Resources.PaymentMethods
         public async Task<PaymentMethodCollection> ListAsync(string customerId, ListPaymentMethods listOperation = null)
         {
             listOperation ??= new ListPaymentMethods();
-            var response = await _client.GetRaw($"/customers/{customerId}/payment-methods", listOperation);
+            var response = await _client.GetRawAsync($"/customers/{customerId}/payment-methods", listOperation);
             ResponseParser parser = new(response);
 
             return PaymentMethodCollection.From(
@@ -27,7 +27,7 @@ namespace PaddleWrapper.Resources.PaymentMethods
 
         public async Task<PaymentMethod> GetAsync(string customerId, string id)
         {
-            HttpResponseMessage response = await _client.GetRaw($"/customers/{customerId}/payment-methods/{id}");
+            HttpResponseMessage response = await _client.GetRawAsync($"/customers/{customerId}/payment-methods/{id}");
             ResponseParser parser = new(response);
 
             return PaymentMethod.From(parser.GetData());

@@ -14,7 +14,7 @@ namespace PaddleWrapper.Resources.PricingPreviews
 
         public async Task<PricePreview> PreviewPricesAsync(PreviewPrice operation)
         {
-            var response = await _client.PostRaw("/pricing-preview", operation);
+            var response = await _client.PostRawAsync("/pricing-preview", operation);
             ResponseParser parser = new(response);
 
             return PricePreview.From(parser.GetData());

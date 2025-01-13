@@ -16,7 +16,7 @@ namespace PaddleWrapper.Resources.NotificationSettings
         public async Task<NotificationSettingCollection> ListAsync(ListNotificationSettings listOperation = null)
         {
             listOperation ??= new ListNotificationSettings();
-            var response = await _client.GetRaw("notification-settings", listOperation);
+            var response = await _client.GetRawAsync("notification-settings", listOperation);
             ResponseParser parser = new(response);
 
             return NotificationSettingCollection.From(
@@ -27,7 +27,7 @@ namespace PaddleWrapper.Resources.NotificationSettings
 
         public async Task<NotificationSetting> GetAsync(string id)
         {
-            HttpResponseMessage response = await _client.GetRaw($"notification-settings/{id}");
+            HttpResponseMessage response = await _client.GetRawAsync($"notification-settings/{id}");
             ResponseParser parser = new(response);
 
             return NotificationSetting.From(parser.GetData());
@@ -35,7 +35,7 @@ namespace PaddleWrapper.Resources.NotificationSettings
 
         public async Task<NotificationSetting> CreateAsync(CreateNotificationSetting createOperation)
         {
-            var response = await _client.PostRaw("notification-settings", createOperation);
+            var response = await _client.PostRawAsync("notification-settings", createOperation);
             ResponseParser parser = new(response);
 
             return NotificationSetting.From(parser.GetData());
@@ -43,7 +43,7 @@ namespace PaddleWrapper.Resources.NotificationSettings
 
         public async Task<NotificationSetting> UpdateAsync(string id, UpdateNotificationSetting operation)
         {
-            var response = await _client.PatchRaw($"notification-settings/{id}", operation);
+            var response = await _client.PatchRawAsync($"notification-settings/{id}", operation);
             ResponseParser parser = new(response);
 
             return NotificationSetting.From(parser.GetData());

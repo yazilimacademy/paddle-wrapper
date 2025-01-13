@@ -17,7 +17,7 @@ namespace PaddleWrapper.Resources.Addresses
         public async Task<AddressCollection> ListAsync(string customerId, ListAddresses listOperation = null)
         {
             listOperation ??= new ListAddresses();
-            var response = await _client.GetRaw($"/customers/{customerId}/addresses", listOperation);
+            var response = await _client.GetRawAsync($"/customers/{customerId}/addresses", listOperation);
             ResponseParser parser = new(response);
 
             return AddressCollection.From(
@@ -28,7 +28,7 @@ namespace PaddleWrapper.Resources.Addresses
 
         public async Task<Address> GetAsync(string customerId, string id)
         {
-            HttpResponseMessage response = await _client.GetRaw($"/customers/{customerId}/addresses/{id}");
+            HttpResponseMessage response = await _client.GetRawAsync($"/customers/{customerId}/addresses/{id}");
             ResponseParser parser = new(response);
 
             return Address.From(parser.GetData());
@@ -36,7 +36,7 @@ namespace PaddleWrapper.Resources.Addresses
 
         public async Task<Address> CreateAsync(string customerId, CreateAddress createOperation)
         {
-            var response = await _client.PostRaw($"/customers/{customerId}/addresses", createOperation);
+            var response = await _client.PostRawAsync($"/customers/{customerId}/addresses", createOperation);
             ResponseParser parser = new(response);
 
             return Address.From(parser.GetData());
@@ -44,7 +44,7 @@ namespace PaddleWrapper.Resources.Addresses
 
         public async Task<Address> UpdateAsync(string customerId, string id, UpdateAddress operation)
         {
-            var response = await _client.PatchRaw($"/customers/{customerId}/addresses/{id}", operation);
+            var response = await _client.PatchRawAsync($"/customers/{customerId}/addresses/{id}", operation);
             ResponseParser parser = new(response);
 
             return Address.From(parser.GetData());

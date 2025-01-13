@@ -15,7 +15,7 @@ namespace PaddleWrapper.Resources.Events
         public async Task<EventCollection> ListAsync(ListEvents listOperation = null)
         {
             listOperation ??= new ListEvents();
-            var response = await _client.GetRaw("/events", listOperation);
+            var response = await _client.GetRawAsync("/events", listOperation);
             ResponseParser parser = new(response);
 
             return EventCollection.From(

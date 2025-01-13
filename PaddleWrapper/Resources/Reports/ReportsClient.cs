@@ -16,7 +16,7 @@ namespace PaddleWrapper.Resources.Reports
         public async Task<ReportCollection> ListAsync(ListReports listOperation = null)
         {
             listOperation ??= new ListReports();
-            var response = await _client.GetRaw("/reports", listOperation);
+            var response = await _client.GetRawAsync("/reports", listOperation);
             ResponseParser parser = new(response);
 
             return ReportCollection.From(
@@ -27,7 +27,7 @@ namespace PaddleWrapper.Resources.Reports
 
         public async Task<Report> GetAsync(string id)
         {
-            HttpResponseMessage response = await _client.GetRaw($"/reports/{id}");
+            HttpResponseMessage response = await _client.GetRawAsync($"/reports/{id}");
             ResponseParser parser = new(response);
 
             return Report.From(parser.GetData());
@@ -35,7 +35,7 @@ namespace PaddleWrapper.Resources.Reports
 
         public async Task<ReportCSV> GetReportCsvAsync(string id)
         {
-            HttpResponseMessage response = await _client.GetRaw($"/reports/{id}/download-url");
+            HttpResponseMessage response = await _client.GetRawAsync($"/reports/{id}/download-url");
             ResponseParser parser = new(response);
 
             return ReportCSV.From(parser.GetData());
@@ -43,7 +43,7 @@ namespace PaddleWrapper.Resources.Reports
 
         public async Task<Report> CreateAsync(CreateReport createOperation)
         {
-            var response = await _client.PostRaw("/reports", createOperation);
+            var response = await _client.PostRawAsync("/reports", createOperation);
             ResponseParser parser = new(response);
 
             return Report.From(parser.GetData());

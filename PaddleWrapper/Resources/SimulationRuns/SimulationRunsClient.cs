@@ -16,7 +16,7 @@ namespace PaddleWrapper.Resources.SimulationRuns
         public async Task<SimulationRunCollection> ListAsync(string simulationId, ListSimulationRuns listOperation = null)
         {
             listOperation ??= new ListSimulationRuns();
-            var response = await _client.GetRaw($"/simulations/{simulationId}/runs", listOperation);
+            var response = await _client.GetRawAsync($"/simulations/{simulationId}/runs", listOperation);
             ResponseParser parser = new(response);
 
             return SimulationRunCollection.From(
@@ -28,7 +28,7 @@ namespace PaddleWrapper.Resources.SimulationRuns
         public async Task<SimulationRun> GetAsync(string simulationId, string id, GetSimulationRuns getOperation = null)
         {
             getOperation ??= new GetSimulationRuns();
-            var response = await _client.GetRaw($"/simulations/{simulationId}/runs/{id}", getOperation);
+            var response = await _client.GetRawAsync($"/simulations/{simulationId}/runs/{id}", getOperation);
             ResponseParser parser = new(response);
 
             return SimulationRun.From(parser.GetData());
@@ -36,7 +36,7 @@ namespace PaddleWrapper.Resources.SimulationRuns
 
         public async Task<SimulationRun> CreateAsync(string simulationId)
         {
-            var response = await _client.PostRaw($"/simulations/{simulationId}/runs");
+            var response = await _client.PostRawAsync($"/simulations/{simulationId}/runs");
             ResponseParser parser = new(response);
 
             return SimulationRun.From(parser.GetData());

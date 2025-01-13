@@ -17,7 +17,7 @@ namespace PaddleWrapper.Resources.Customers
         public async Task<CustomerCollection> ListAsync(ListCustomers listOperation = null)
         {
             listOperation ??= new ListCustomers();
-            var response = await _client.GetRaw("/customers", listOperation);
+            var response = await _client.GetRawAsync("/customers", listOperation);
             ResponseParser parser = new(response);
 
             return CustomerCollection.From(
@@ -28,7 +28,7 @@ namespace PaddleWrapper.Resources.Customers
 
         public async Task<Customer> GetAsync(string id)
         {
-            HttpResponseMessage response = await _client.GetRaw($"/customers/{id}");
+            HttpResponseMessage response = await _client.GetRawAsync($"/customers/{id}");
             ResponseParser parser = new(response);
 
             return Customer.From(parser.GetData());
@@ -36,7 +36,7 @@ namespace PaddleWrapper.Resources.Customers
 
         public async Task<Customer> CreateAsync(CreateCustomer createOperation)
         {
-            var response = await _client.PostRaw("/customers", createOperation);
+            var response = await _client.PostRawAsync("/customers", createOperation);
             ResponseParser parser = new(response);
 
             return Customer.From(parser.GetData());
@@ -44,7 +44,7 @@ namespace PaddleWrapper.Resources.Customers
 
         public async Task<Customer> UpdateAsync(string id, UpdateCustomer operation)
         {
-            var response = await _client.PatchRaw($"/customers/{id}", operation);
+            var response = await _client.PatchRawAsync($"/customers/{id}", operation);
             ResponseParser parser = new(response);
 
             return Customer.From(parser.GetData());
@@ -58,7 +58,7 @@ namespace PaddleWrapper.Resources.Customers
         public async Task<CreditBalanceCollection> GetCreditBalancesAsync(string id, ListCreditBalances operation = null)
         {
             operation ??= new ListCreditBalances();
-            var response = await _client.GetRaw($"/customers/{id}/credit-balances", operation);
+            var response = await _client.GetRawAsync($"/customers/{id}/credit-balances", operation);
             ResponseParser parser = new(response);
 
             return CreditBalanceCollection.From(parser.GetData());
@@ -66,7 +66,7 @@ namespace PaddleWrapper.Resources.Customers
 
         public async Task<CustomerAuthToken> GenerateAuthTokenAsync(string id)
         {
-            var response = await _client.PostRaw($"/customers/{id}/auth-token", null);
+            var response = await _client.PostRawAsync($"/customers/{id}/auth-token", null);
             ResponseParser parser = new(response);
 
             return CustomerAuthToken.From(parser.GetData());

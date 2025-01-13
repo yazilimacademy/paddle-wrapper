@@ -16,7 +16,7 @@ namespace PaddleWrapper.Resources.Simulations
         public async Task<SimulationCollection> ListAsync(ListSimulations listOperation = null)
         {
             listOperation ??= new ListSimulations();
-            var response = await _client.GetRaw("/simulations", listOperation);
+            var response = await _client.GetRawAsync("/simulations", listOperation);
             ResponseParser parser = new(response);
 
             return SimulationCollection.From(
@@ -27,7 +27,7 @@ namespace PaddleWrapper.Resources.Simulations
 
         public async Task<Simulation> GetAsync(string id)
         {
-            HttpResponseMessage response = await _client.GetRaw($"/simulations/{id}");
+            HttpResponseMessage response = await _client.GetRawAsync($"/simulations/{id}");
             ResponseParser parser = new(response);
 
             return Simulation.From(parser.GetData());
@@ -35,7 +35,7 @@ namespace PaddleWrapper.Resources.Simulations
 
         public async Task<Simulation> CreateAsync(CreateSimulation createOperation)
         {
-            var response = await _client.PostRaw("/simulations", createOperation);
+            var response = await _client.PostRawAsync("/simulations", createOperation);
             ResponseParser parser = new(response);
 
             return Simulation.From(parser.GetData());
@@ -43,7 +43,7 @@ namespace PaddleWrapper.Resources.Simulations
 
         public async Task<Simulation> UpdateAsync(string id, UpdateSimulation operation)
         {
-            var response = await _client.PatchRaw($"/simulations/{id}", operation);
+            var response = await _client.PatchRawAsync($"/simulations/{id}", operation);
             ResponseParser parser = new(response);
 
             return Simulation.From(parser.GetData());

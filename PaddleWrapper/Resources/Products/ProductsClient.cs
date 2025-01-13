@@ -18,7 +18,7 @@ namespace PaddleWrapper.Resources.Products
         public async Task<ProductCollection> ListAsync(ListProducts listOperation = null)
         {
             listOperation ??= new ListProducts();
-            var response = await _client.GetRaw("/products", listOperation);
+            var response = await _client.GetRawAsync("/products", listOperation);
             ResponseParser parser = new(response);
 
             return ProductCollection.From(
@@ -43,7 +43,7 @@ namespace PaddleWrapper.Resources.Products
                 parameters["include"] = string.Join(",", includesList.Select(x => x.ToString()));
             }
 
-            HttpResponseMessage response = await _client.GetRaw($"/products/{id}", parameters);
+            HttpResponseMessage response = await _client.GetRawAsync($"/products/{id}", parameters);
             ResponseParser parser = new(response);
 
             return Product.From(parser.GetData());
@@ -51,7 +51,7 @@ namespace PaddleWrapper.Resources.Products
 
         public async Task<Product> CreateAsync(CreateProduct createOperation)
         {
-            var response = await _client.PostRaw("/products", createOperation);
+            var response = await _client.PostRawAsync("/products", createOperation);
             ResponseParser parser = new(response);
 
             return Product.From(parser.GetData());
@@ -59,7 +59,7 @@ namespace PaddleWrapper.Resources.Products
 
         public async Task<Product> UpdateAsync(string id, UpdateProduct operation)
         {
-            var response = await _client.PatchRaw($"/products/{id}", operation);
+            var response = await _client.PatchRawAsync($"/products/{id}", operation);
             ResponseParser parser = new(response);
 
             return Product.From(parser.GetData());
