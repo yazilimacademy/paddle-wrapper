@@ -20,6 +20,7 @@ using PaddleWrapper.Resources.Simulations;
 using PaddleWrapper.Resources.SimulationTypes;
 using PaddleWrapper.Resources.Subscriptions;
 using PaddleWrapper.Resources.Transactions;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -137,7 +138,7 @@ public class Client : IDisposable
                 PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             });
-            request.Content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+            request.Content = new StringContent(json, Encoding.UTF8, "application/json");
         }
 
         _transactionId ??= Guid.NewGuid().ToString();
