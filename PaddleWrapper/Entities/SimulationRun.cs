@@ -1,6 +1,7 @@
 using PaddleWrapper.Entities.Events;
 using PaddleWrapper.Entities.SimulationRuns;
 using PaddleWrapper.Entities.Simulations;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
@@ -39,6 +40,11 @@ namespace PaddleWrapper.Entities
             CreatedAt = createdAt;
             UpdatedAt = updatedAt;
             Events = events;
+        }
+
+        public static SimulationRun FromJson(JsonElement json)
+        {
+            return From(JsonSerializer.Deserialize<Dictionary<string, object>>(json.GetRawText()));
         }
 
         public static SimulationRun From(Dictionary<string, object> data)

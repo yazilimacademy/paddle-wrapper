@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 namespace PaddleWrapper.Entities.Collections
 {
     public class ReportCollection : Collection<Report>
@@ -5,6 +7,11 @@ namespace PaddleWrapper.Entities.Collections
         private ReportCollection(List<Report> items, Paginator? paginator = null)
             : base(items, paginator)
         {
+        }
+
+        public static ReportCollection FromJson(JsonElement json, Paginator? paginator)
+        {
+            return From(JsonSerializer.Deserialize<Dictionary<string, object>>(json.GetRawText()), paginator);
         }
 
         public static new ReportCollection From(Dictionary<string, object> data, Paginator? paginator)

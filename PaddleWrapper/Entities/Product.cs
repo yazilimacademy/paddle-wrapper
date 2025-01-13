@@ -1,4 +1,5 @@
 using PaddleWrapper.Entities.Shared;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
@@ -67,6 +68,11 @@ namespace PaddleWrapper.Entities
             Prices = prices;
             CreatedAt = createdAt;
             UpdatedAt = updatedAt;
+        }
+
+        public static Product FromJson(JsonElement json)
+        {
+            return From(JsonSerializer.Deserialize<Dictionary<string, object>>(json.GetRawText()));
         }
 
         public static Product From(Dictionary<string, object> data)

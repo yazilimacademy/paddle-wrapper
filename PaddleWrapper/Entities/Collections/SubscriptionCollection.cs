@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 namespace PaddleWrapper.Entities.Collections
 {
     public class SubscriptionCollection : Collection<Subscription>
@@ -5,6 +7,11 @@ namespace PaddleWrapper.Entities.Collections
         private SubscriptionCollection(List<Subscription> items, Paginator? paginator = null)
             : base(items, paginator)
         {
+        }
+
+        public static SubscriptionCollection FromJson(JsonElement json, Paginator? paginator)
+        {
+            return From(JsonSerializer.Deserialize<Dictionary<string, object>>(json.GetRawText()), paginator);
         }
 
         public static new SubscriptionCollection From(Dictionary<string, object> data, Paginator? paginator)

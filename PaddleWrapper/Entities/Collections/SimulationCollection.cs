@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 namespace PaddleWrapper.Entities.Collections
 {
     public class SimulationCollection : Collection<Simulation>
@@ -5,6 +7,11 @@ namespace PaddleWrapper.Entities.Collections
         private SimulationCollection(List<Simulation> items, Paginator? paginator = null)
             : base(items, paginator)
         {
+        }
+
+        public static SimulationCollection FromJson(JsonElement json, Paginator? paginator)
+        {
+            return From(JsonSerializer.Deserialize<Dictionary<string, object>>(json.GetRawText()), paginator);
         }
 
         public static new SimulationCollection From(Dictionary<string, object> data, Paginator? paginator)

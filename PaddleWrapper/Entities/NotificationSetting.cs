@@ -1,4 +1,5 @@
 using PaddleWrapper.Entities.NotificationSettings;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
@@ -57,6 +58,11 @@ namespace PaddleWrapper.Entities
             SubscribedEvents = subscribedEvents;
             EndpointSecretKey = endpointSecretKey;
             TrafficSource = trafficSource;
+        }
+
+        public static NotificationSetting FromJson(JsonElement json)
+        {
+            return From(JsonSerializer.Deserialize<Dictionary<string, object>>(json.GetRawText()));
         }
 
         public static NotificationSetting From(Dictionary<string, object> data)

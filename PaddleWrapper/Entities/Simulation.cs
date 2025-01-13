@@ -1,6 +1,7 @@
 using PaddleWrapper.Entities.Events;
 using PaddleWrapper.Entities.Simulations;
 using PaddleWrapper.Notifications.Entities;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using DateTime = PaddleWrapper.Notifications.Entities.DateTime;
 using NotificationEntity = PaddleWrapper.Notifications.Entities.IEntity;
@@ -56,6 +57,11 @@ namespace PaddleWrapper.Entities
             LastRunAt = lastRunAt;
             CreatedAt = createdAt;
             UpdatedAt = updatedAt;
+        }
+
+        public static Simulation FromJson(JsonElement json)
+        {
+            return From(JsonSerializer.Deserialize<Dictionary<string, object>>(json.GetRawText()));
         }
 
         public static Simulation From(Dictionary<string, object> data)

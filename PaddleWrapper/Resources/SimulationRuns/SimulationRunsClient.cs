@@ -1,6 +1,9 @@
 using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Collections;
+using PaddleWrapper.Entities.Shared;
+using PaddleWrapper.Extensions;
 using PaddleWrapper.Resources.SimulationRuns.Operations;
+using System.Text.Json;
 
 namespace PaddleWrapper.Resources.SimulationRuns
 {
@@ -16,30 +19,31 @@ namespace PaddleWrapper.Resources.SimulationRuns
         public async Task<SimulationRunCollection> ListAsync(string simulationId, ListSimulationRuns listOperation = null)
         {
             listOperation ??= new ListSimulationRuns();
-            var response = await _client.GetRawAsync($"/simulations/{simulationId}/runs", listOperation);
-            ResponseParser parser = new(response);
+            HttpResponseMessage response = await _client.GetRawAsync($"/simulations/{simulationId}/runs", listOperation);
+            JsonElement jsonElement = JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
+            JsonElement data = jsonElement.GetProperty("data");
+            JsonElement meta = jsonElement.GetProperty("meta");
 
-            return SimulationRunCollection.From(
-                parser.GetData(),
-                new Paginator(_client, parser.GetPagination(), typeof(SimulationRunCollection))
+            Paginator paginator = new(
+                _client.HttpClient,
+                Pagination.FromJson(meta),
+                typeof(SimulationRunCollection)
             );
+
+            return SimulationRunCollection.FromJson(data, paginator);
         }
 
         public async Task<SimulationRun> GetAsync(string simulationId, string id, GetSimulationRuns getOperation = null)
         {
             getOperation ??= new GetSimulationRuns();
-            var response = await _client.GetRawAsync($"/simulations/{simulationId}/runs/{id}", getOperation);
-            ResponseParser parser = new(response);
-
-            return SimulationRun.From(parser.GetData());
+            JsonDocument response = await _client.Get($"/simulations/{simulationId}/runs/{id}", getOperation);
+            return SimulationRun.FromJson(response.RootElement.GetProperty("data"));
         }
 
         public async Task<SimulationRun> CreateAsync(string simulationId)
         {
-            var response = await _client.PostRawAsync($"/simulations/{simulationId}/runs");
-            ResponseParser parser = new(response);
-
-            return SimulationRun.From(parser.GetData());
+            JsonDocument response = await _client.Post($"/simulations/{simulationId}/runs");
+            return SimulationRun.FromJson(response.RootElement.GetProperty("data"));
         }
     }
 }

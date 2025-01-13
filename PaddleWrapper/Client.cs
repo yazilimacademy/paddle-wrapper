@@ -27,7 +27,7 @@ namespace PaddleWrapper;
 
 public class Client : IDisposable
 {
-    private const string SDK_VERSION = "1.8.0";
+    private const string SDK_VERSION = "1.0.0";
     private readonly Options _options;
     private string? _transactionId;
 

@@ -1,4 +1,5 @@
 using PaddleWrapper.Entities.Reports;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
@@ -47,6 +48,11 @@ namespace PaddleWrapper.Entities
             ExpiresAt = expiresAt;
             CreatedAt = createdAt;
             UpdatedAt = updatedAt;
+        }
+
+        public static Report FromJson(JsonElement json)
+        {
+            return From(JsonSerializer.Deserialize<Dictionary<string, object>>(json.GetRawText()));
         }
 
         public static Report From(Dictionary<string, object> data)

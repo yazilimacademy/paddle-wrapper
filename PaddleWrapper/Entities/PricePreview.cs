@@ -1,5 +1,6 @@
 using PaddleWrapper.Entities.PricingPreview;
 using PaddleWrapper.Entities.Shared;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
@@ -53,6 +54,11 @@ namespace PaddleWrapper.Entities
             CustomerIpAddress = customerIpAddress;
             Details = details;
             AvailablePaymentMethods = availablePaymentMethods;
+        }
+
+        public static PricePreview FromJson(JsonElement json)
+        {
+            return From(JsonSerializer.Deserialize<Dictionary<string, object>>(json.GetRawText()));
         }
 
         public static PricePreview From(Dictionary<string, object> data)

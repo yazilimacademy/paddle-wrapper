@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 namespace PaddleWrapper.Entities.Collections
 {
     public class NotificationSettingCollection : Collection<NotificationSetting>
@@ -5,6 +7,11 @@ namespace PaddleWrapper.Entities.Collections
         private NotificationSettingCollection(List<NotificationSetting> items, Paginator? paginator = null)
             : base(items, paginator)
         {
+        }
+
+        public static NotificationSettingCollection FromJson(JsonElement json, Paginator? paginator)
+        {
+            return From(JsonSerializer.Deserialize<Dictionary<string, object>>(json.GetRawText()), paginator);
         }
 
         public static new NotificationSettingCollection From(Dictionary<string, object> data, Paginator? paginator)

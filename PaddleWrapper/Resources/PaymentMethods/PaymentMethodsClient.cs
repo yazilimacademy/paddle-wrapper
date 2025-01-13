@@ -1,6 +1,9 @@
 using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Collections;
+using PaddleWrapper.Entities.Shared;
+using PaddleWrapper.Extensions;
 using PaddleWrapper.Resources.PaymentMethods.Operations;
+using System.Text.Json;
 
 namespace PaddleWrapper.Resources.PaymentMethods
 {
@@ -16,27 +19,29 @@ namespace PaddleWrapper.Resources.PaymentMethods
         public async Task<PaymentMethodCollection> ListAsync(string customerId, ListPaymentMethods listOperation = null)
         {
             listOperation ??= new ListPaymentMethods();
-            var response = await _client.GetRawAsync($"/customers/{customerId}/payment-methods", listOperation);
-            ResponseParser parser = new(response);
+            HttpResponseMessage response = await _client.GetRawAsync($"/customers/{customerId}/payment-methods", listOperation);
+            JsonElement jsonElement = JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
+            JsonElement data = jsonElement.GetProperty("data");
+            JsonElement meta = jsonElement.GetProperty("meta");
 
-            return PaymentMethodCollection.From(
-                parser.GetData(),
-                new Paginator(_client, parser.GetPagination(), typeof(PaymentMethodCollection))
+            Paginator paginator = new(
+                _client.HttpClient,
+                Pagination.FromJson(meta),
+                typeof(PaymentMethodCollection)
             );
+
+            return PaymentMethodCollection.FromJson(data, paginator);
         }
 
         public async Task<PaymentMethod> GetAsync(string customerId, string id)
         {
-            HttpResponseMessage response = await _client.GetRawAsync($"/customers/{customerId}/payment-methods/{id}");
-            ResponseParser parser = new(response);
-
-            return PaymentMethod.From(parser.GetData());
+            JsonDocument response = await _client.Get($"/customers/{customerId}/payment-methods/{id}");
+            return PaymentMethod.FromJson(response.RootElement.GetProperty("data"));
         }
 
         public async Task DeleteAsync(string customerId, string id)
         {
-            HttpResponseMessage response = await _client.DeleteRawAsync($"/customers/{customerId}/payment-methods/{id}");
-            _ = new ResponseParser(response);
+            await _client.DeleteRawAsync($"/customers/{customerId}/payment-methods/{id}");
         }
     }
 }

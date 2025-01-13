@@ -1,6 +1,9 @@
 using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Collections;
+using PaddleWrapper.Entities.Shared;
+using PaddleWrapper.Extensions;
 using PaddleWrapper.Resources.NotificationSettings.Operations;
+using System.Text.Json;
 
 namespace PaddleWrapper.Resources.NotificationSettings
 {
@@ -16,43 +19,41 @@ namespace PaddleWrapper.Resources.NotificationSettings
         public async Task<NotificationSettingCollection> ListAsync(ListNotificationSettings listOperation = null)
         {
             listOperation ??= new ListNotificationSettings();
-            var response = await _client.GetRawAsync("notification-settings", listOperation);
-            ResponseParser parser = new(response);
+            HttpResponseMessage response = await _client.GetRawAsync("notification-settings", listOperation);
+            JsonElement jsonElement = JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
+            JsonElement data = jsonElement.GetProperty("data");
+            JsonElement meta = jsonElement.GetProperty("meta");
 
-            return NotificationSettingCollection.From(
-                parser.GetData(),
-                new Paginator(_client, parser.GetPagination(), typeof(NotificationSettingCollection))
+            Paginator paginator = new(
+                _client.HttpClient,
+                Pagination.FromJson(meta),
+                typeof(NotificationSettingCollection)
             );
+
+            return NotificationSettingCollection.FromJson(data, paginator);
         }
 
         public async Task<NotificationSetting> GetAsync(string id)
         {
-            HttpResponseMessage response = await _client.GetRawAsync($"notification-settings/{id}");
-            ResponseParser parser = new(response);
-
-            return NotificationSetting.From(parser.GetData());
+            JsonDocument response = await _client.Get($"notification-settings/{id}");
+            return NotificationSetting.FromJson(response.RootElement.GetProperty("data"));
         }
 
         public async Task<NotificationSetting> CreateAsync(CreateNotificationSetting createOperation)
         {
-            var response = await _client.PostRawAsync("notification-settings", createOperation);
-            ResponseParser parser = new(response);
-
-            return NotificationSetting.From(parser.GetData());
+            JsonDocument response = await _client.Post("notification-settings", createOperation);
+            return NotificationSetting.FromJson(response.RootElement.GetProperty("data"));
         }
 
         public async Task<NotificationSetting> UpdateAsync(string id, UpdateNotificationSetting operation)
         {
-            var response = await _client.PatchRawAsync($"notification-settings/{id}", operation);
-            ResponseParser parser = new(response);
-
-            return NotificationSetting.From(parser.GetData());
+            JsonDocument response = await _client.Patch($"notification-settings/{id}", operation);
+            return NotificationSetting.FromJson(response.RootElement.GetProperty("data"));
         }
 
         public async Task DeleteAsync(string id)
         {
-            HttpResponseMessage response = await _client.DeleteRawAsync($"notification-settings/{id}");
-            _ = new ResponseParser(response);
+            await _client.DeleteRawAsync($"notification-settings/{id}");
         }
     }
 }

@@ -1,5 +1,7 @@
 using PaddleWrapper.Entities;
+using PaddleWrapper.Extensions;
 using PaddleWrapper.Resources.PricingPreviews.Operations;
+using System.Text.Json;
 
 namespace PaddleWrapper.Resources.PricingPreviews
 {
@@ -14,10 +16,8 @@ namespace PaddleWrapper.Resources.PricingPreviews
 
         public async Task<PricePreview> PreviewPricesAsync(PreviewPrice operation)
         {
-            var response = await _client.PostRawAsync("/pricing-preview", operation);
-            ResponseParser parser = new(response);
-
-            return PricePreview.From(parser.GetData());
+            JsonDocument response = await _client.Post("/pricing-preview", operation);
+            return PricePreview.FromJson(response.RootElement.GetProperty("data"));
         }
     }
 }

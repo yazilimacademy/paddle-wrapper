@@ -1,5 +1,6 @@
 using PaddleWrapper.Entities.Shared;
 using PaddleWrapper.Entities.Subscriptions;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
@@ -133,6 +134,11 @@ namespace PaddleWrapper.Entities
             NextTransaction = nextTransaction;
             RecurringTransactionDetails = recurringTransactionDetails;
             UpdateSummary = updateSummary;
+        }
+
+        public static SubscriptionPreview FromJson(JsonElement json)
+        {
+            return From(JsonSerializer.Deserialize<Dictionary<string, object>>(json.GetRawText()));
         }
 
         public static SubscriptionPreview From(Dictionary<string, object> data)

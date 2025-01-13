@@ -1,6 +1,9 @@
 using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Collections;
+using PaddleWrapper.Entities.Shared;
+using PaddleWrapper.Extensions;
 using PaddleWrapper.Resources.Reports.Operations;
+using System.Text.Json;
 
 namespace PaddleWrapper.Resources.Reports
 {
@@ -16,37 +19,36 @@ namespace PaddleWrapper.Resources.Reports
         public async Task<ReportCollection> ListAsync(ListReports listOperation = null)
         {
             listOperation ??= new ListReports();
-            var response = await _client.GetRawAsync("/reports", listOperation);
-            ResponseParser parser = new(response);
+            HttpResponseMessage response = await _client.GetRawAsync("/reports", listOperation);
+            JsonElement jsonElement = JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
+            JsonElement data = jsonElement.GetProperty("data");
+            JsonElement meta = jsonElement.GetProperty("meta");
 
-            return ReportCollection.From(
-                parser.GetData(),
-                new Paginator(_client, parser.GetPagination(), typeof(ReportCollection))
+            Paginator paginator = new(
+                _client.HttpClient,
+                Pagination.FromJson(meta),
+                typeof(ReportCollection)
             );
+
+            return ReportCollection.FromJson(data, paginator);
         }
 
         public async Task<Report> GetAsync(string id)
         {
-            HttpResponseMessage response = await _client.GetRawAsync($"/reports/{id}");
-            ResponseParser parser = new(response);
-
-            return Report.From(parser.GetData());
+            JsonDocument response = await _client.Get($"/reports/{id}");
+            return Report.FromJson(response.RootElement.GetProperty("data"));
         }
 
         public async Task<ReportCSV> GetReportCsvAsync(string id)
         {
-            HttpResponseMessage response = await _client.GetRawAsync($"/reports/{id}/download-url");
-            ResponseParser parser = new(response);
-
-            return ReportCSV.From(parser.GetData());
+            JsonDocument response = await _client.Get($"/reports/{id}/download-url");
+            return ReportCSV.FromJson(response.RootElement.GetProperty("data"));
         }
 
         public async Task<Report> CreateAsync(CreateReport createOperation)
         {
-            var response = await _client.PostRawAsync("/reports", createOperation);
-            ResponseParser parser = new(response);
-
-            return Report.From(parser.GetData());
+            JsonDocument response = await _client.Post("/reports", createOperation);
+            return Report.FromJson(response.RootElement.GetProperty("data"));
         }
     }
 }
