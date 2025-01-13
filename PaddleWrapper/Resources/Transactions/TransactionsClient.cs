@@ -20,7 +20,7 @@ public class TransactionsClient
     public async Task<TransactionCollection> ListAsync(ListTransactions listOperation = null)
     {
         listOperation ??= new ListTransactions();
-        HttpResponseMessage response = await _client.GetRawAsyncAsync("/transactions", listOperation);
+        HttpResponseMessage response = await _client.GetRawAsync("/transactions", listOperation);
         JsonElement jsonElement = JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
         JsonElement data = jsonElement.GetProperty("data");
         JsonElement meta = jsonElement.GetProperty("meta");
