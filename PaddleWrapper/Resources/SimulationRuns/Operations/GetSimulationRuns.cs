@@ -11,7 +11,7 @@ namespace PaddleWrapper.Resources.SimulationRuns.Operations
 
         public IDictionary<string, object> GetParameters()
         {
-            var parameters = new Dictionary<string, object>();
+            Dictionary<string, object> parameters = new();
 
             if (_includes.Any())
             {

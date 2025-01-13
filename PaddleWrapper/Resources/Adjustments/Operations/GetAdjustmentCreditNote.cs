@@ -13,7 +13,7 @@ namespace PaddleWrapper.Resources.Adjustments.Operations
 
         public IDictionary<string, object> GetParameters()
         {
-            var parameters = new Dictionary<string, object>();
+            Dictionary<string, object> parameters = new();
 
             if (_disposition.HasValue)
             {

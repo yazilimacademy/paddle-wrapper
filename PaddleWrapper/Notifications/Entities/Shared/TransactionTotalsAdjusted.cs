@@ -56,7 +56,7 @@ public class TransactionTotalsAdjusted
             earnings = earningsElement.GetString();
         }
 
-        var currencyCode = JsonSerializer.Deserialize<CurrencyCode>(json.GetProperty("currency_code").GetRawText())!;
+        CurrencyCode currencyCode = JsonSerializer.Deserialize<CurrencyCode>(json.GetProperty("currency_code").GetRawText())!;
 
         return new TransactionTotalsAdjusted(subtotal, tax, total, grandTotal, fee, earnings, currencyCode);
     }

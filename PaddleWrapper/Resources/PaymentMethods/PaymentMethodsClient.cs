@@ -35,7 +35,7 @@ namespace PaddleWrapper.Resources.PaymentMethods
 
         public async Task DeleteAsync(string customerId, string id)
         {
-            var response = await _client.DeleteRawAsync($"/customers/{customerId}/payment-methods/{id}");
+            HttpResponseMessage response = await _client.DeleteRawAsync($"/customers/{customerId}/payment-methods/{id}");
             _ = new ResponseParser(response);
         }
     }

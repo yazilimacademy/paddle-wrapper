@@ -1,5 +1,6 @@
 using PaddleWrapper.Entities.Shared;
 using PaddleWrapper.Entities.Transactions;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
@@ -153,6 +154,11 @@ namespace PaddleWrapper.Entities
             Customer = customer;
             Discount = discount;
             AvailablePaymentMethods = availablePaymentMethods;
+        }
+
+        public static Transaction FromJson(JsonElement json)
+        {
+            return From(JsonSerializer.Deserialize<Dictionary<string, object>>(json.GetRawText()));
         }
 
         public static Transaction From(Dictionary<string, object> data)

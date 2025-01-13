@@ -1,5 +1,6 @@
 using PaddleWrapper.Entities.Shared;
 using PaddleWrapper.Entities.Transactions;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
@@ -63,6 +64,11 @@ namespace PaddleWrapper.Entities
             Items = items;
             Details = details;
             AvailablePaymentMethods = availablePaymentMethods;
+        }
+
+        public static TransactionPreview FromJson(JsonElement json)
+        {
+            return From(JsonSerializer.Deserialize<Dictionary<string, object>>(json.GetRawText()));
         }
 
         public static TransactionPreview From(Dictionary<string, object> data)

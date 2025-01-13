@@ -29,11 +29,11 @@ namespace PaddleWrapper.Resources.Businesses.Operations
 
         public IDictionary<string, object> GetParameters()
         {
-            var parameters = new Dictionary<string, object>();
+            Dictionary<string, object> parameters = new();
 
             if (_pager != null)
             {
-                foreach (var param in _pager.GetParameters())
+                foreach (KeyValuePair<string, object> param in _pager.GetParameters())
                 {
                     parameters[param.Key] = param.Value;
                 }

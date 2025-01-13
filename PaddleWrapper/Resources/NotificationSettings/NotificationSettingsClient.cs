@@ -51,7 +51,7 @@ namespace PaddleWrapper.Resources.NotificationSettings
 
         public async Task DeleteAsync(string id)
         {
-            var response = await _client.DeleteRawAsync($"notification-settings/{id}");
+            HttpResponseMessage response = await _client.DeleteRawAsync($"notification-settings/{id}");
             _ = new ResponseParser(response);
         }
     }

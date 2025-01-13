@@ -48,7 +48,7 @@ namespace PaddleWrapper.Entities.Transactions
                 taxRatesUsed.Add(Shared.TaxRatesUsed.From((Dictionary<string, object>)item));
             }
 
-            List<TransactionLineItem> lineItems = new List<TransactionLineItem>();
+            List<TransactionLineItem> lineItems = new();
             object[] lineItemsData = (object[])data["line_items"];
             foreach (object item in lineItemsData)
             {

@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 namespace PaddleWrapper.Exceptions
 {
     public class ApiError : SdkException
@@ -20,6 +22,11 @@ namespace PaddleWrapper.Exceptions
             Detail = detail;
             DocsUrl = docsUrl;
             FieldErrors = fieldErrors?.ToList().AsReadOnly() ?? new List<FieldError>().AsReadOnly();
+        }
+
+        public static ApiError FromErrorJson(JsonElement json)
+        {
+            return FromErrorData(JsonSerializer.Deserialize<Dictionary<string, object>>(json.GetRawText()));
         }
 
         public static ApiError FromErrorData(IDictionary<string, object> error)

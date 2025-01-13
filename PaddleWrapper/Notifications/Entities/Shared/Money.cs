@@ -19,12 +19,12 @@ public class Money
 
     public static Money FromJson(JsonElement element)
     {
-        var amount = element.GetProperty("amount").GetString()!;
+        string amount = element.GetProperty("amount").GetString()!;
         CurrencyCode? currencyCode = null;
 
         if (element.TryGetProperty("currency_code", out JsonElement code))
         {
-            var codeStr = code.GetString();
+            string? codeStr = code.GetString();
             if (!string.IsNullOrEmpty(codeStr))
             {
                 currencyCode = JsonSerializer.Deserialize<CurrencyCode>(code.GetRawText());

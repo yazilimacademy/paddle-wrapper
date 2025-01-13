@@ -51,7 +51,7 @@ namespace PaddleWrapper.Entities.Subscriptions
                 }
             }
 
-            List<SubscriptionTransactionLineItem> lineItems = new List<SubscriptionTransactionLineItem>();
+            List<SubscriptionTransactionLineItem> lineItems = new();
             if (data.ContainsKey("line_items"))
             {
                 object[] lineItemsData = (object[])data["line_items"];

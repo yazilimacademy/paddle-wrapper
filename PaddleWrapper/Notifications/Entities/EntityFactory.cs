@@ -11,8 +11,8 @@ public static class EntityFactory
 
     public static IEntity Create(string eventType, Dictionary<string, object> data)
     {
-        var jsonString = JsonSerializer.Serialize(data);
-        var jsonElement = JsonDocument.Parse(jsonString).RootElement;
+        string jsonString = JsonSerializer.Serialize(data);
+        JsonElement jsonElement = JsonDocument.Parse(jsonString).RootElement;
         return Create(eventType, jsonElement);
     }
 

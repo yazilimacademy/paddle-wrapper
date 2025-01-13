@@ -21,7 +21,7 @@ namespace PaddleWrapper.Entities.CustomerPortalSessions
         public static CustomerPortalSessionUrls From(Dictionary<string, object> data)
         {
             CustomerPortalSessionGeneralUrl general = CustomerPortalSessionGeneralUrl.From((Dictionary<string, object>)data["general"]);
-            List<CustomerPortalSessionSubscriptionUrl> subscriptions = new List<CustomerPortalSessionSubscriptionUrl>();
+            List<CustomerPortalSessionSubscriptionUrl> subscriptions = new();
 
             if (data.ContainsKey("subscriptions"))
             {

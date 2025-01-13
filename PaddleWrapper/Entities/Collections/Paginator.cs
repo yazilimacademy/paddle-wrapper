@@ -1,6 +1,5 @@
 using PaddleWrapper.Entities.Shared;
 using PaddleWrapper.Exceptions;
-using System.Reflection;
 using System.Text.Json;
 
 namespace PaddleWrapper.Entities.Collections
@@ -25,25 +24,32 @@ namespace PaddleWrapper.Entities.Collections
 
         public async Task<object> NextPage()
         {
-            HttpResponseMessage response = await _client.Get(_pagination.Next);
+            HttpResponseMessage response = await _client.GetAsync(_pagination.Next);
             string content = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
             {
-                Dictionary<string, object>? error = JsonSerializer.Deserialize<Dictionary<string, object>>(content);
-                throw ApiError.FromErrorData(error!);
+                JsonElement jsonError = JsonDocument.Parse(content).RootElement;
+                throw ApiError.FromErrorJson(jsonError);
             }
 
-            Dictionary<string, object>? data = JsonSerializer.Deserialize<Dictionary<string, object>>(content);
-            MethodInfo? method = _collectionType.GetMethod("From");
+            JsonElement jsonElement = JsonDocument.Parse(content).RootElement;
+            JsonElement data = jsonElement.GetProperty("data");
+            JsonElement meta = jsonElement.GetProperty("meta");
 
             Paginator pagination = new(
                 _client,
-                Pagination.From((Dictionary<string, object>)data["meta"]),
+                Pagination.FromJson(meta),
                 _collectionType
             );
 
-            return method!.Invoke(null, new object[] { data, pagination })!;
+            System.Reflection.MethodInfo? fromJsonMethod = _collectionType.GetMethod("FromJson", new[] { typeof(JsonElement) });
+            if (fromJsonMethod == null)
+            {
+                throw new InvalidOperationException($"Type {_collectionType.Name} does not have a FromJson method");
+            }
+
+            return fromJsonMethod.Invoke(null, new object[] { data })!;
         }
     }
 }

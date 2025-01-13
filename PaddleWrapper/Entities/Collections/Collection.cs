@@ -25,10 +25,9 @@ namespace PaddleWrapper.Entities.Collections
             {
                 if (_pointer >= Items.Count)
                 {
-                    var nextPageTask = Paginator!.NextPage();
+                    Task<object> nextPageTask = Paginator!.NextPage();
                     nextPageTask.Wait(); // Task'i bekle
-                    var nextPage = nextPageTask.Result as Collection<T>;
-                    if (nextPage == null)
+                    if (nextPageTask.Result is not Collection<T> nextPage)
                     {
                         throw new InvalidOperationException("NextPage returned invalid collection type");
                     }

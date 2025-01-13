@@ -13,7 +13,7 @@ namespace PaddleWrapper.Resources.Customers.Operations
 
         public IDictionary<string, object> GetParameters()
         {
-            var parameters = new Dictionary<string, object>();
+            Dictionary<string, object> parameters = new();
 
             if (_currencyCodes.Any())
             {
