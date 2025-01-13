@@ -1,4 +1,5 @@
 using PaddleWrapper.Entities.Shared;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
@@ -62,6 +63,11 @@ namespace PaddleWrapper.Entities
             UpdatedAt = updatedAt;
             CustomData = customData;
             ImportMeta = importMeta;
+        }
+
+        public static Business FromJson(JsonElement json)
+        {
+            return From(JsonSerializer.Deserialize<Dictionary<string, object>>(json.GetRawText()));
         }
 
         public static Business From(Dictionary<string, object> data)

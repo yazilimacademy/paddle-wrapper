@@ -1,4 +1,5 @@
 using PaddleWrapper.Entities.Shared;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
@@ -57,6 +58,11 @@ namespace PaddleWrapper.Entities
             CreatedAt = createdAt;
             UpdatedAt = updatedAt;
             ImportMeta = importMeta;
+        }
+
+        public static Customer FromJson(JsonElement json)
+        {
+            return From(JsonSerializer.Deserialize<Dictionary<string, object>>(json.GetRawText()));
         }
 
         public static Customer From(Dictionary<string, object> data)

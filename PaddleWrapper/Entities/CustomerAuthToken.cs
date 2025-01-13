@@ -1,3 +1,4 @@
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
@@ -16,6 +17,11 @@ namespace PaddleWrapper.Entities
         {
             CustomerAuthTokenValue = customerAuthToken;
             ExpiresAt = expiresAt;
+        }
+
+        public static CustomerAuthToken FromJson(JsonElement json)
+        {
+            return From(JsonSerializer.Deserialize<Dictionary<string, object>>(json.GetRawText()));
         }
 
         public static CustomerAuthToken From(Dictionary<string, object> data)

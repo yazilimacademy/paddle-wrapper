@@ -1,5 +1,6 @@
 using PaddleWrapper.Entities.Adjustments;
 using PaddleWrapper.Entities.Shared;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using Action = PaddleWrapper.Entities.Shared.Action;
 using AdjustmentType = PaddleWrapper.Entities.Adjustments.AdjustmentType;
@@ -90,6 +91,11 @@ namespace PaddleWrapper.Entities
             CreatedAt = createdAt;
             UpdatedAt = updatedAt;
             Type = type;
+        }
+
+        public static Adjustment FromJson(JsonElement json)
+        {
+            return From(JsonSerializer.Deserialize<Dictionary<string, object>>(json.GetRawText()));
         }
 
         public static Adjustment From(Dictionary<string, object> data)

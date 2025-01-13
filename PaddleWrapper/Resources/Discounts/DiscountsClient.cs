@@ -1,6 +1,10 @@
 using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Collections;
+using PaddleWrapper.Entities.Shared;
+using PaddleWrapper.Extensions;
+using PaddleWrapper.Notifications.Entities.Discounts;
 using PaddleWrapper.Resources.Discounts.Operations;
+using System.Text.Json;
 
 namespace PaddleWrapper.Resources.Discounts
 {
@@ -16,37 +20,36 @@ namespace PaddleWrapper.Resources.Discounts
         public async Task<DiscountCollection> ListAsync(ListDiscounts listOperation = null)
         {
             listOperation ??= new ListDiscounts();
-            var response = await _client.GetRawAsync("/discounts", listOperation);
-            ResponseParser parser = new(response);
+            HttpResponseMessage response = await _client.GetRawAsync("/discounts", listOperation);
+            JsonElement jsonElement = JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
+            JsonElement data = jsonElement.GetProperty("data");
+            JsonElement meta = jsonElement.GetProperty("meta");
 
-            return DiscountCollection.From(
-                parser.GetData(),
-                new Paginator(_client, parser.GetPagination(), typeof(DiscountCollection))
+            Paginator paginator = new(
+                _client.HttpClient,
+                Pagination.FromJson(meta),
+                typeof(DiscountCollection)
             );
+
+            return DiscountCollection.FromJson(data, paginator);
         }
 
         public async Task<Discount> GetAsync(string id)
         {
-            HttpResponseMessage response = await _client.GetRawAsync($"/discounts/{id}");
-            ResponseParser parser = new(response);
-
-            return Discount.From(parser.GetData());
+            JsonDocument response = await _client.Get($"/discounts/{id}");
+            return Discount.FromJson(response.RootElement.GetProperty("data"));
         }
 
         public async Task<Discount> CreateAsync(CreateDiscount createOperation)
         {
-            var response = await _client.PostRawAsync("/discounts", createOperation);
-            ResponseParser parser = new(response);
-
-            return Discount.From(parser.GetData());
+            JsonDocument response = await _client.Post("/discounts", createOperation);
+            return Discount.FromJson(response.RootElement.GetProperty("data"));
         }
 
         public async Task<Discount> UpdateAsync(string id, UpdateDiscount operation)
         {
-            var response = await _client.PatchRawAsync($"/discounts/{id}", operation);
-            ResponseParser parser = new(response);
-
-            return Discount.From(parser.GetData());
+            JsonDocument response = await _client.Patch($"/discounts/{id}", operation);
+            return Discount.FromJson(response.RootElement.GetProperty("data"));
         }
 
         public async Task<Discount> ArchiveAsync(string id)

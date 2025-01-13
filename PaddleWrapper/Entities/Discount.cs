@@ -1,5 +1,6 @@
 using PaddleWrapper.Entities.Discounts;
 using PaddleWrapper.Entities.Shared;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
@@ -98,6 +99,11 @@ namespace PaddleWrapper.Entities
             UpdatedAt = updatedAt;
             CustomData = customData;
             ImportMeta = importMeta;
+        }
+
+        public static Discount FromJson(JsonElement json)
+        {
+            return From(JsonSerializer.Deserialize<Dictionary<string, object>>(json.GetRawText()));
         }
 
         public static Discount From(Dictionary<string, object> data)

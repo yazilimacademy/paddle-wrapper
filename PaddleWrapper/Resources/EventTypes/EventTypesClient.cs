@@ -1,4 +1,6 @@
 using PaddleWrapper.Entities.Collections;
+using PaddleWrapper.Extensions;
+using System.Text.Json;
 
 namespace PaddleWrapper.Resources.EventTypes
 {
@@ -13,10 +15,8 @@ namespace PaddleWrapper.Resources.EventTypes
 
         public async Task<EventTypeCollection> ListAsync()
         {
-            HttpResponseMessage response = await _client.GetRawAsync("/event-types");
-            ResponseParser parser = new(response);
-
-            return EventTypeCollection.From(parser.GetData());
+            JsonDocument response = await _client.Get("/event-types");
+            return EventTypeCollection.FromJson(response.RootElement.GetProperty("data"), null);
         }
     }
 }

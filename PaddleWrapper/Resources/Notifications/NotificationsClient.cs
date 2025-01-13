@@ -1,6 +1,9 @@
 using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Collections;
+using PaddleWrapper.Entities.Shared;
+using PaddleWrapper.Extensions;
 using PaddleWrapper.Resources.Notifications.Operations;
+using System.Text.Json;
 
 namespace PaddleWrapper.Resources.Notifications
 {
@@ -16,30 +19,30 @@ namespace PaddleWrapper.Resources.Notifications
         public async Task<NotificationCollection> ListAsync(ListNotifications listOperation = null)
         {
             listOperation ??= new ListNotifications();
-            var response = await _client.GetRawAsync("/notifications", listOperation);
-            ResponseParser parser = new(response);
+            HttpResponseMessage response = await _client.GetRawAsync("/notifications", listOperation);
+            JsonElement jsonElement = JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
+            JsonElement data = jsonElement.GetProperty("data");
+            JsonElement meta = jsonElement.GetProperty("meta");
 
-            return NotificationCollection.From(
-                parser.GetData(),
-                new Paginator(_client, parser.GetPagination(), typeof(NotificationCollection))
+            Paginator paginator = new(
+                _client.HttpClient,
+                Pagination.FromJson(meta),
+                typeof(NotificationCollection)
             );
+
+            return NotificationCollection.FromJson(data, paginator);
         }
 
         public async Task<Notification> GetAsync(string id)
         {
-            HttpResponseMessage response = await _client.GetRawAsync($"/notifications/{id}");
-            ResponseParser parser = new(response);
-
-            return Notification.From(parser.GetData());
+            JsonDocument response = await _client.Get($"/notifications/{id}");
+            return Notification.FromJson(response.RootElement.GetProperty("data"));
         }
 
         public async Task<string> ReplayAsync(string id)
         {
-            var response = await _client.PostRawAsync($"/notifications/{id}/replay", null);
-            ResponseParser parser = new(response);
-            var data = parser.GetData();
-
-            return data.GetProperty("notification_id").GetString() ?? string.Empty;
+            JsonDocument response = await _client.Post($"/notifications/{id}/replay", null);
+            return response.RootElement.GetProperty("data").GetProperty("notification_id").GetString() ?? string.Empty;
         }
     }
 }

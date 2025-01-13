@@ -1,7 +1,9 @@
 using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Collections;
 using PaddleWrapper.Entities.Shared;
+using PaddleWrapper.Extensions;
 using PaddleWrapper.Resources.Addresses.Operations;
+using System.Text.Json;
 
 namespace PaddleWrapper.Resources.Addresses
 {
@@ -17,37 +19,36 @@ namespace PaddleWrapper.Resources.Addresses
         public async Task<AddressCollection> ListAsync(string customerId, ListAddresses listOperation = null)
         {
             listOperation ??= new ListAddresses();
-            var response = await _client.GetRawAsync($"/customers/{customerId}/addresses", listOperation);
-            ResponseParser parser = new(response);
+            HttpResponseMessage response = await _client.GetRawAsync($"/customers/{customerId}/addresses", listOperation);
+            JsonElement jsonElement = JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
+            JsonElement data = jsonElement.GetProperty("data");
+            JsonElement meta = jsonElement.GetProperty("meta");
 
-            return AddressCollection.From(
-                parser.GetData(),
-                new Paginator(_client, parser.GetPagination(), typeof(AddressCollection))
+            Paginator paginator = new(
+                _client.HttpClient,
+                Pagination.FromJson(meta),
+                typeof(AddressCollection)
             );
+
+            return AddressCollection.FromJson(data, paginator);
         }
 
         public async Task<Address> GetAsync(string customerId, string id)
         {
-            HttpResponseMessage response = await _client.GetRawAsync($"/customers/{customerId}/addresses/{id}");
-            ResponseParser parser = new(response);
-
-            return Address.From(parser.GetData());
+            JsonDocument response = await _client.Get($"/customers/{customerId}/addresses/{id}");
+            return Address.FromJson(response.RootElement.GetProperty("data"));
         }
 
         public async Task<Address> CreateAsync(string customerId, CreateAddress createOperation)
         {
-            var response = await _client.PostRawAsync($"/customers/{customerId}/addresses", createOperation);
-            ResponseParser parser = new(response);
-
-            return Address.From(parser.GetData());
+            JsonDocument response = await _client.Post($"/customers/{customerId}/addresses", createOperation);
+            return Address.FromJson(response.RootElement.GetProperty("data"));
         }
 
         public async Task<Address> UpdateAsync(string customerId, string id, UpdateAddress operation)
         {
-            var response = await _client.PatchRawAsync($"/customers/{customerId}/addresses/{id}", operation);
-            ResponseParser parser = new(response);
-
-            return Address.From(parser.GetData());
+            JsonDocument response = await _client.Patch($"/customers/{customerId}/addresses/{id}", operation);
+            return Address.FromJson(response.RootElement.GetProperty("data"));
         }
 
         public async Task<Address> ArchiveAsync(string customerId, string id)

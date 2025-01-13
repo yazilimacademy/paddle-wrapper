@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 namespace PaddleWrapper.Entities.Collections
 {
     public class BusinessCollection : Collection<Business>
@@ -5,6 +7,11 @@ namespace PaddleWrapper.Entities.Collections
         private BusinessCollection(List<Business> items, Paginator? paginator = null)
             : base(items, paginator)
         {
+        }
+
+        public static BusinessCollection FromJson(JsonElement json, Paginator? paginator)
+        {
+            return From(JsonSerializer.Deserialize<Dictionary<string, object>>(json.GetRawText()), paginator);
         }
 
         public static new BusinessCollection From(Dictionary<string, object> data, Paginator? paginator)

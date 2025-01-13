@@ -1,5 +1,6 @@
 using PaddleWrapper.Entities.Events;
 using PaddleWrapper.Entities.Notifications;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
@@ -68,6 +69,11 @@ namespace PaddleWrapper.Entities
             RetryAt = retryAt;
             TimesAttempted = timesAttempted;
             NotificationSettingId = notificationSettingId;
+        }
+
+        public static Notification FromJson(JsonElement json)
+        {
+            return From(JsonSerializer.Deserialize<Dictionary<string, object>>(json.GetRawText()));
         }
 
         public static Notification From(Dictionary<string, object> data)

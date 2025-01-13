@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 namespace PaddleWrapper.Entities.Collections
 {
     public class EventCollection : Collection<Event>
@@ -5,6 +7,11 @@ namespace PaddleWrapper.Entities.Collections
         private EventCollection(List<Event> items, Paginator? paginator = null)
             : base(items, paginator)
         {
+        }
+
+        public static EventCollection FromJson(JsonElement json, Paginator? paginator)
+        {
+            return From(JsonSerializer.Deserialize<Dictionary<string, object>>(json.GetRawText()), paginator);
         }
 
         public static new EventCollection From(Dictionary<string, object> data, Paginator? paginator)

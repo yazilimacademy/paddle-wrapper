@@ -1,4 +1,5 @@
 using PaddleWrapper.Entities.CustomerPortalSessions;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
@@ -27,6 +28,11 @@ namespace PaddleWrapper.Entities
             CustomerId = customerId;
             Urls = urls;
             CreatedAt = createdAt;
+        }
+
+        public static CustomerPortalSession FromJson(JsonElement json)
+        {
+            return From(JsonSerializer.Deserialize<Dictionary<string, object>>(json.GetRawText()));
         }
 
         public static CustomerPortalSession From(Dictionary<string, object> data)

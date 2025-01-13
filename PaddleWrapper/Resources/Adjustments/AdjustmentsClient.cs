@@ -1,6 +1,9 @@
 using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Collections;
+using PaddleWrapper.Entities.Shared;
+using PaddleWrapper.Extensions;
 using PaddleWrapper.Resources.Adjustments.Operations;
+using System.Text.Json;
 
 namespace PaddleWrapper.Resources.Adjustments
 {
@@ -16,30 +19,31 @@ namespace PaddleWrapper.Resources.Adjustments
         public async Task<AdjustmentCollection> ListAsync(ListAdjustments listOperation = null)
         {
             listOperation ??= new ListAdjustments();
-            var response = await _client.GetRawAsync("/adjustments", listOperation);
-            ResponseParser parser = new(response);
+            HttpResponseMessage response = await _client.GetRawAsync("/adjustments", listOperation);
+            JsonElement jsonElement = JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
+            JsonElement data = jsonElement.GetProperty("data");
+            JsonElement meta = jsonElement.GetProperty("meta");
 
-            return AdjustmentCollection.From(
-                parser.GetData(),
-                new Paginator(_client, parser.GetPagination(), typeof(AdjustmentCollection))
+            Paginator paginator = new(
+                _client.HttpClient,
+                Pagination.FromJson(meta),
+                typeof(AdjustmentCollection)
             );
+
+            return AdjustmentCollection.FromJson(data, paginator);
         }
 
         public async Task<Adjustment> CreateAsync(CreateAdjustment createOperation)
         {
-            var response = await _client.PostRawAsync("/adjustments", createOperation);
-            ResponseParser parser = new(response);
-
-            return Adjustment.From(parser.GetData());
+            JsonDocument response = await _client.Post("/adjustments", createOperation);
+            return Adjustment.FromJson(response.RootElement.GetProperty("data"));
         }
 
         public async Task<AdjustmentCreditNote> GetCreditNoteAsync(string id, GetAdjustmentCreditNote getOperation = null)
         {
             getOperation ??= new GetAdjustmentCreditNote();
-            var response = await _client.GetRawAsync($"/adjustments/{id}/credit-note", getOperation);
-            ResponseParser parser = new(response);
-
-            return AdjustmentCreditNote.From(parser.GetData());
+            JsonDocument response = await _client.Get($"/adjustments/{id}/credit-note", getOperation);
+            return AdjustmentCreditNote.FromJson(response.RootElement.GetProperty("data"));
         }
     }
 }

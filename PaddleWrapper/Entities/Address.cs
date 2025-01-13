@@ -1,4 +1,5 @@
 using PaddleWrapper.Entities.Shared;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities
@@ -77,6 +78,11 @@ namespace PaddleWrapper.Entities
             CreatedAt = createdAt;
             UpdatedAt = updatedAt;
             ImportMeta = importMeta;
+        }
+
+        public static Address FromJson(JsonElement json)
+        {
+            return From(JsonSerializer.Deserialize<Dictionary<string, object>>(json.GetRawText()));
         }
 
         public static Address From(Dictionary<string, object> data)
