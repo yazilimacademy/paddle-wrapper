@@ -4,27 +4,19 @@ namespace PaddleWrapper.Entities.Collections
 {
     public class CustomerCollection : Collection<Customer>
     {
-        private CustomerCollection(List<Customer> items, Paginator? paginator = null)
-            : base(items, paginator)
+        public CustomerCollection(IEnumerable<Customer> items, Paginator? paginator = null) : base(items, paginator)
         {
         }
 
-        public static CustomerCollection FromJson(JsonElement json, Paginator? paginator)
+        public static CustomerCollection FromJson(JsonElement json, Paginator? paginator = null)
         {
-            return From(JsonSerializer.Deserialize<Dictionary<string, object>>(json.GetRawText()), paginator);
-        }
-
-        public static new CustomerCollection From(Dictionary<string, object> data, Paginator? paginator)
-        {
-            List<Customer> items = new();
-            object[] dataArray = (object[])data["data"];
-
-            foreach (object item in dataArray)
+            var customers = new List<Customer>();
+            foreach (var element in json.EnumerateArray())
             {
-                items.Add(Customer.From((Dictionary<string, object>)item));
+                customers.Add(Customer.FromJson(element));
             }
 
-            return new CustomerCollection(items, paginator);
+            return new CustomerCollection(customers, paginator);
         }
     }
 }

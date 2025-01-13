@@ -9,7 +9,10 @@ namespace PaddleWrapper.Entities.Shared
         public int PerPage { get; }
 
         [JsonPropertyName("next")]
-        public string Next { get; }
+        public string? Next { get; }
+
+        [JsonPropertyName("previous")]
+        public string? Previous { get; }
 
         [JsonPropertyName("has_more")]
         public bool HasMore { get; }
@@ -18,27 +21,30 @@ namespace PaddleWrapper.Entities.Shared
         public int EstimatedTotal { get; }
 
         [JsonConstructor]
-        public Pagination(int perPage, string next, bool hasMore, int estimatedTotal)
+        public Pagination(int perPage, string? next, string? previous, bool hasMore, int estimatedTotal)
         {
             PerPage = perPage;
             Next = next;
+            Previous = previous;
             HasMore = hasMore;
             EstimatedTotal = estimatedTotal;
         }
 
         public static Pagination FromJson(JsonElement json)
         {
-            return From(JsonSerializer.Deserialize<Dictionary<string, object>>(json.GetRawText()));
+            return new Pagination(
+                perPage: json.TryGetProperty("per_page", out var perPage) ? perPage.GetInt32() : 10,
+                next: json.TryGetProperty("next", out var next) && next.ValueKind != JsonValueKind.Null ? next.GetString() : null,
+                previous: json.TryGetProperty("previous", out var previous) && previous.ValueKind != JsonValueKind.Null ? previous.GetString() : null,
+                hasMore: json.TryGetProperty("has_more", out var hasMore) ? hasMore.GetBoolean() : false,
+                estimatedTotal: json.TryGetProperty("estimated_total", out var estimatedTotal) ? estimatedTotal.GetInt32() : 0
+            );
         }
 
         public static Pagination From(Dictionary<string, object> data)
         {
-            return new Pagination(
-                perPage: (int)data["per_page"],
-                next: data["next"].ToString(),
-                hasMore: (bool)data["has_more"],
-                estimatedTotal: (int)data["estimated_total"]
-            );
+            var json = JsonSerializer.SerializeToElement(data);
+            return FromJson(json);
         }
     }
 }

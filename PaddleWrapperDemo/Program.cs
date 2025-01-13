@@ -13,8 +13,9 @@ class Program
         Client client = new("b9847347b603864b3ac8a5c3bd2b05a40b4fc591dc225e4fd2", options);
 
         // Customers client örneği oluşturun
-        //var customersClient = client.Customers;
         CustomersClient customersClient = new(client);
+
+        Console.WriteLine((await customersClient.GetAsync("ctm_01jh8973bvkf4q66za2n0dvnvf")).Name);
 
         try
         {
@@ -34,6 +35,7 @@ class Program
         catch (Exception ex)
         {
             Console.WriteLine($"Hata oluştu: {ex.Message}");
+            Console.WriteLine($"Stack Trace: {ex.StackTrace}");
         }
 
         Console.WriteLine("İşlem tamamlandı. Çıkmak için bir tuşa basın...");

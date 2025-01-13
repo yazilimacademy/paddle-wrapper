@@ -1,6 +1,8 @@
 using PaddleWrapper.Entities.Shared;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using CustomData = PaddleWrapper.Notifications.Entities.Shared.CustomData;
+using ImportMeta = PaddleWrapper.Notifications.Entities.Shared.ImportMeta;
 
 namespace PaddleWrapper.Entities
 {
@@ -62,25 +64,26 @@ namespace PaddleWrapper.Entities
 
         public static Customer FromJson(JsonElement json)
         {
-            return From(JsonSerializer.Deserialize<Dictionary<string, object>>(json.GetRawText()));
+            return new Customer(
+                id: json.GetProperty("id").GetString()!,
+                name: json.GetProperty("name").ValueKind == JsonValueKind.Null ? null : json.GetProperty("name").GetString(),
+                email: json.GetProperty("email").GetString()!,
+                marketingConsent: json.GetProperty("marketing_consent").GetBoolean(),
+                status: Enum.Parse<Status>(json.GetProperty("status").GetString()!, true),
+                customData: json.GetProperty("custom_data").ValueKind == JsonValueKind.Null ? null : 
+                    CustomData.FromJson(json.GetProperty("custom_data")),
+                locale: json.GetProperty("locale").GetString()!,
+                createdAt: DateTime.Parse(json.GetProperty("created_at").GetString()!),
+                updatedAt: DateTime.Parse(json.GetProperty("updated_at").GetString()!),
+                importMeta: json.GetProperty("import_meta").ValueKind == JsonValueKind.Null ? null :
+                    ImportMeta.FromJson(json.GetProperty("import_meta"))
+            );
         }
 
         public static Customer From(Dictionary<string, object> data)
         {
-            return new Customer(
-                id: (string)data["id"],
-                name: data.ContainsKey("name") ? (string?)data["name"] : null,
-                email: (string)data["email"],
-                marketingConsent: (bool)data["marketing_consent"],
-                status: Enum.Parse<Status>((string)data["status"], true),
-                customData: data.ContainsKey("custom_data") ?
-                    CustomData.From((Dictionary<string, object>)data["custom_data"]) : null,
-                locale: (string)data["locale"],
-                createdAt: DateTime.Parse((string)data["created_at"]),
-                updatedAt: DateTime.Parse((string)data["updated_at"]),
-                importMeta: data.ContainsKey("import_meta") ?
-                    ImportMeta.From((Dictionary<string, object>)data["import_meta"]) : null
-            );
+            var json = JsonSerializer.SerializeToElement(data);
+            return FromJson(json);
         }
     }
 }
