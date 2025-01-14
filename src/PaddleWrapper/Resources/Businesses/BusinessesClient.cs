@@ -18,12 +18,12 @@ namespace PaddleWrapper.Resources.Businesses
             _client = client;
         }
 
-        public async Task<BusinessCollection> ListAsync(ListBusinesses listOperation = null)
+        public async Task<BusinessCollection> ListAsync(string customerId, ListBusinesses listOperation = null)
         {
             try
             {
                 listOperation ??= new ListBusinesses();
-                HttpResponseMessage response = await _client.GetRawAsync("/businesses", listOperation);
+                HttpResponseMessage response = await _client.GetRawAsync($"/customers/{customerId}/businesses", listOperation);
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement jsonElement = JsonDocument.Parse(jsonString).RootElement;
 
@@ -57,11 +57,11 @@ namespace PaddleWrapper.Resources.Businesses
             }
         }
 
-        public async Task<Business> GetAsync(string id)
+        public async Task<Business> GetAsync(string customerId, string id)
         {
             try
             {
-                HttpResponseMessage response = await _client.GetRawAsync($"/businesses/{id}");
+                HttpResponseMessage response = await _client.GetRawAsync($"/customers/{customerId}/businesses/{id}");
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
@@ -86,11 +86,11 @@ namespace PaddleWrapper.Resources.Businesses
             }
         }
 
-        public async Task<Business> CreateAsync(CreateBusiness createOperation)
+        public async Task<Business> CreateAsync(string customerId, CreateBusiness createOperation)
         {
             try
             {
-                HttpResponseMessage response = await _client.PostRawAsync("/businesses", createOperation);
+                HttpResponseMessage response = await _client.PostRawAsync($"/customers/{customerId}/businesses", createOperation);
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
@@ -115,11 +115,11 @@ namespace PaddleWrapper.Resources.Businesses
             }
         }
 
-        public async Task<Business> UpdateAsync(string id, UpdateBusiness operation)
+        public async Task<Business> UpdateAsync(string customerId, string id, UpdateBusiness operation)
         {
             try
             {
-                HttpResponseMessage response = await _client.PatchRawAsync($"/businesses/{id}", operation);
+                HttpResponseMessage response = await _client.PatchRawAsync($"/customers/{customerId}/businesses/{id}", operation);
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
@@ -142,6 +142,11 @@ namespace PaddleWrapper.Resources.Businesses
             {
                 throw new SdkException("An unexpected error occurred", ex);
             }
+        }
+
+        public async Task<Business> ArchiveAsync(string customerId, string id)
+        {
+            return await UpdateAsync(customerId, id, new UpdateBusiness { Status = Status.Archived });
         }
     }
 }

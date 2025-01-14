@@ -9,21 +9,14 @@ using System.Text.Json;
 
 namespace PaddleWrapper.Resources.Addresses
 {
-    public class AddressesClient
+    public class AddressesClient(Client client)
     {
-        private readonly Client _client;
-
-        public AddressesClient(Client client)
-        {
-            _client = client;
-        }
-
-        public async Task<AddressCollection> ListAsync(ListAddresses listOperation = null)
+        public async Task<AddressCollection> ListAsync(string customerId, ListAddresses listOperation = null)
         {
             try
             {
                 listOperation ??= new ListAddresses();
-                HttpResponseMessage response = await _client.GetRawAsync("/addresses", listOperation);
+                HttpResponseMessage response = await client.GetRawAsync($"/customers/{customerId}/addresses", listOperation);
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement jsonElement = JsonDocument.Parse(jsonString).RootElement;
 
@@ -36,7 +29,7 @@ namespace PaddleWrapper.Resources.Addresses
                 JsonElement meta = jsonElement.GetProperty("meta");
 
                 Paginator paginator = new(
-                    _client.HttpClient,
+                    client.HttpClient,
                     Pagination.FromJson(meta),
                     typeof(AddressCollection)
                 );
@@ -57,11 +50,11 @@ namespace PaddleWrapper.Resources.Addresses
             }
         }
 
-        public async Task<Address> GetAsync(string id)
+        public async Task<Address> GetAsync(string customerId, string id)
         {
             try
             {
-                HttpResponseMessage response = await _client.GetRawAsync($"/addresses/{id}");
+                HttpResponseMessage response = await client.GetRawAsync($"/customers/{customerId}/addresses/{id}");
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
@@ -86,11 +79,11 @@ namespace PaddleWrapper.Resources.Addresses
             }
         }
 
-        public async Task<Address> CreateAsync(CreateAddress createOperation)
+        public async Task<Address> CreateAsync(string customerId, CreateAddress createOperation)
         {
             try
             {
-                HttpResponseMessage response = await _client.PostRawAsync("/addresses", createOperation);
+                HttpResponseMessage response = await client.PostRawAsync($"/customers/{customerId}/addresses", createOperation);
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
@@ -115,11 +108,11 @@ namespace PaddleWrapper.Resources.Addresses
             }
         }
 
-        public async Task<Address> UpdateAsync(string id, UpdateAddress operation)
+        public async Task<Address> UpdateAsync(string customerId, string id, UpdateAddress operation)
         {
             try
             {
-                HttpResponseMessage response = await _client.PatchRawAsync($"/addresses/{id}", operation);
+                HttpResponseMessage response = await client.PatchRawAsync($"/customers/{customerId}/addresses/{id}", operation);
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
@@ -142,6 +135,11 @@ namespace PaddleWrapper.Resources.Addresses
             {
                 throw new SdkException("An unexpected error occurred", ex);
             }
+        }
+
+        public async Task<Address> ArchiveAsync(string customerId, string id)
+        {
+            return await UpdateAsync(customerId, id, new UpdateAddress { Status = Status.Archived });
         }
     }
 }

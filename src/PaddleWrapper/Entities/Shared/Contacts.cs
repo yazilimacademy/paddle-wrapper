@@ -1,3 +1,4 @@
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Entities.Shared
@@ -15,6 +16,14 @@ namespace PaddleWrapper.Entities.Shared
         {
             Name = name;
             Email = email;
+        }
+
+        public static Contacts FromJson(JsonElement json)
+        {
+            return new Contacts(
+                name: json.GetProperty("name").GetString() ?? string.Empty,
+                email: json.GetProperty("email").GetString() ?? string.Empty
+            );
         }
 
         public static Contacts From(Dictionary<string, object> data)

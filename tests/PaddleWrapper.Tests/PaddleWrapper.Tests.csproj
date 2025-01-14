@@ -1,11 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <IsPackable>false</IsPackable>
         <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <LangVersion>preview</LangVersion>
+        <AnalysisLevel>preview</AnalysisLevel>
+        <TargetFramework>net9.0</TargetFramework>
+        <RootNamespace>PaddleWrapper.Tests</RootNamespace>
     </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\PaddleWrapper\PaddleWrapper.csproj" />
+    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Moq" Version="4.20.72" />
@@ -13,10 +19,6 @@
         <PackageReference Include="coverlet.collector" Version="6.0.2" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\..\src\PaddleWrapper\PaddleWrapper.csproj" />
     </ItemGroup>
 
     <ItemGroup>

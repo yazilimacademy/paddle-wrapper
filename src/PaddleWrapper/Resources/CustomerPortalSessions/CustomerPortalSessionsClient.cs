@@ -16,11 +16,11 @@ public class CustomerPortalSessionsClient
         _client = client;
     }
 
-    public async Task<CustomerPortalSession> CreateAsync(CreateCustomerPortalSession createOperation)
+    public async Task<CustomerPortalSession> CreateAsync(string customerId, CreateCustomerPortalSession createOperation)
     {
         try
         {
-            HttpResponseMessage response = await _client.PostRawAsync("/customer-portal-sessions", createOperation);
+            HttpResponseMessage response = await _client.PostRawAsync($"/customers/{customerId}/portal-sessions", createOperation);
             string jsonString = await response.Content.ReadAsStringAsync();
             JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 

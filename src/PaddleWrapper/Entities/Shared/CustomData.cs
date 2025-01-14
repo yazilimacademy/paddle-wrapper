@@ -23,6 +23,11 @@ namespace PaddleWrapper.Entities.Shared
             return JsonSerializer.SerializeToElement(_data);
         }
 
+        public static CustomData FromJson(JsonElement json)
+        {
+            return new CustomData(json);
+        }
+
         public static CustomData From(Dictionary<string, object> data)
         {
             return new CustomData(data);

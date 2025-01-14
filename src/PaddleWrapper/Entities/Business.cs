@@ -67,36 +67,35 @@ namespace PaddleWrapper.Entities
 
         public static Business FromJson(JsonElement json)
         {
-            return From(JsonSerializer.Deserialize<Dictionary<string, object>>(json.GetRawText()));
-        }
-
-        public static Business From(Dictionary<string, object> data)
-        {
             List<Contacts> contacts = new();
-            if (data.ContainsKey("contacts"))
+            if (json.TryGetProperty("contacts", out JsonElement contactsElement) &&
+                contactsElement.ValueKind == JsonValueKind.Array)
             {
-                object[] contactsData = (object[])data["contacts"];
-                foreach (object contact in contactsData)
+                foreach (JsonElement contact in contactsElement.EnumerateArray())
                 {
-                    contacts.Add(Shared.Contacts.From((Dictionary<string, object>)contact));
+                    contacts.Add(Shared.Contacts.FromJson(contact));
                 }
             }
 
             return new Business(
-                id: (string)data["id"],
-                name: (string)data["name"],
-                customerId: (string)data["customer_id"],
-                companyNumber: data.ContainsKey("company_number") ? (string?)data["company_number"] : null,
-                taxIdentifier: data.ContainsKey("tax_identifier") ? (string?)data["tax_identifier"] : null,
-                status: Enum.Parse<Status>((string)data["status"], true),
+                id: json.GetProperty("id").GetString()!,
+                name: json.GetProperty("name").GetString()!,
+                customerId: json.GetProperty("customer_id").GetString()!,
+                companyNumber: json.TryGetProperty("company_number", out JsonElement companyNumber) ? companyNumber.GetString() : null,
+                taxIdentifier: json.TryGetProperty("tax_identifier", out JsonElement taxIdentifier) ? taxIdentifier.GetString() : null,
+                status: Enum.Parse<Status>(json.GetProperty("status").GetString()!, true),
                 contacts: contacts,
-                createdAt: DateTime.Parse((string)data["created_at"]),
-                updatedAt: DateTime.Parse((string)data["updated_at"]),
-                customData: data.ContainsKey("custom_data") ?
-                    CustomData.From((Dictionary<string, object>)data["custom_data"]) : null,
-                importMeta: data.ContainsKey("import_meta") ?
-                    ImportMeta.From((Dictionary<string, object>)data["import_meta"]) : null
+                createdAt: DateTime.Parse(json.GetProperty("created_at").GetString()!),
+                updatedAt: DateTime.Parse(json.GetProperty("updated_at").GetString()!),
+                customData: json.TryGetProperty("custom_data", out JsonElement customData) ? CustomData.FromJson(customData) : null,
+                importMeta: json.TryGetProperty("import_meta", out JsonElement importMeta) ? ImportMeta.FromJson(importMeta) : null
             );
+        }
+
+        public static Business From(Dictionary<string, object> data)
+        {
+            JsonElement json = JsonSerializer.SerializeToElement(data);
+            return FromJson(json);
         }
     }
 }

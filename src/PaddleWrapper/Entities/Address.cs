@@ -82,29 +82,27 @@ namespace PaddleWrapper.Entities
 
         public static Address FromJson(JsonElement json)
         {
-            return From(JsonSerializer.Deserialize<Dictionary<string, object>>(json.GetRawText()));
+            return new Address(
+                id: json.GetProperty("id").GetString()!,
+                customerId: json.GetProperty("customer_id").GetString()!,
+                description: json.TryGetProperty("description", out JsonElement description) ? description.GetString() : null,
+                firstLine: json.TryGetProperty("first_line", out JsonElement firstLine) ? firstLine.GetString() : null,
+                secondLine: json.TryGetProperty("second_line", out JsonElement secondLine) ? secondLine.GetString() : null,
+                city: json.TryGetProperty("city", out JsonElement city) ? city.GetString() : null,
+                postalCode: json.TryGetProperty("postal_code", out JsonElement postalCode) ? postalCode.GetString() : null,
+                region: json.TryGetProperty("region", out JsonElement region) ? region.GetString() : null,
+                countryCode: Enum.Parse<CountryCode>(json.GetProperty("country_code").GetString()!, true),
+                customData: json.TryGetProperty("custom_data", out JsonElement customData) ? CustomData.FromJson(customData) : null,
+                status: Enum.Parse<Status>(json.GetProperty("status").GetString()!, true),
+                createdAt: DateTime.Parse(json.GetProperty("created_at").GetString()!),
+                updatedAt: DateTime.Parse(json.GetProperty("updated_at").GetString()!),
+                importMeta: json.TryGetProperty("import_meta", out JsonElement importMeta) ? ImportMeta.FromJson(importMeta) : null);
         }
 
         public static Address From(Dictionary<string, object> data)
         {
-            return new Address(
-                id: (string)data["id"],
-                customerId: (string)data["customer_id"],
-                description: data.ContainsKey("description") ? (string?)data["description"] : null,
-                firstLine: data.ContainsKey("first_line") ? (string?)data["first_line"] : null,
-                secondLine: data.ContainsKey("second_line") ? (string?)data["second_line"] : null,
-                city: data.ContainsKey("city") ? (string?)data["city"] : null,
-                postalCode: data.ContainsKey("postal_code") ? (string?)data["postal_code"] : null,
-                region: data.ContainsKey("region") ? (string?)data["region"] : null,
-                countryCode: Enum.Parse<CountryCode>((string)data["country_code"], true),
-                customData: data.ContainsKey("custom_data") ?
-                    CustomData.From((Dictionary<string, object>)data["custom_data"]) : null,
-                status: Enum.Parse<Status>((string)data["status"], true),
-                createdAt: DateTime.Parse((string)data["created_at"]),
-                updatedAt: DateTime.Parse((string)data["updated_at"]),
-                importMeta: data.ContainsKey("import_meta") ?
-                    ImportMeta.From((Dictionary<string, object>)data["import_meta"]) : null
-            );
+            JsonElement json = JsonSerializer.SerializeToElement(data);
+            return FromJson(json);
         }
     }
 }
