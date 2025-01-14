@@ -18,5 +18,10 @@ namespace PaddleWrapper.Entities.Collections
 
             return new CustomerCollection(customers, paginator);
         }
+
+        public static CustomerCollection From(Dictionary<string, object> data, Paginator? paginator = null)
+        {
+            return FromJson(JsonSerializer.Deserialize<JsonElement>(data), paginator);
+        }
     }
 }
