@@ -3,9 +3,26 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaddleWrapper", "PaddleWrapper\PaddleWrapper.csproj", "{AF6F24AD-ED8C-4B19-BDDF-0CECC41DF68B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AC80F682-3D55-C8F8-4895-A4A9EDD49434}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		global.json = global.json
+		NuGet.Config = NuGet.Config
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaddleWrapperDemo", "PaddleWrapperDemo\PaddleWrapperDemo.csproj", "{8325D632-16AA-051D-CC89-080EDB6A3041}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaddleWrapper", "src\PaddleWrapper\PaddleWrapper.csproj", "{388BCCA4-0111-1F31-74D0-8AF795DD7688}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaddleWrapperDemo", "samples\PaddleWrapperDemo\PaddleWrapperDemo.csproj", "{105401D8-1131-5A83-479C-458760141207}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaddleWrapper.Tests", "tests\PaddleWrapper.Tests\PaddleWrapper.Tests.csproj", "{0AB133CA-07C5-BBDC-90E3-26FE263145AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaddleWrapper.Demo", "samples\PaddleWrapper.Demo\PaddleWrapper.Demo.csproj", "{C16C130A-B682-4ED2-B2AA-5207CD87082D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,16 +30,33 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{AF6F24AD-ED8C-4B19-BDDF-0CECC41DF68B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AF6F24AD-ED8C-4B19-BDDF-0CECC41DF68B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AF6F24AD-ED8C-4B19-BDDF-0CECC41DF68B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AF6F24AD-ED8C-4B19-BDDF-0CECC41DF68B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8325D632-16AA-051D-CC89-080EDB6A3041}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8325D632-16AA-051D-CC89-080EDB6A3041}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8325D632-16AA-051D-CC89-080EDB6A3041}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8325D632-16AA-051D-CC89-080EDB6A3041}.Release|Any CPU.Build.0 = Release|Any CPU
+		{388BCCA4-0111-1F31-74D0-8AF795DD7688}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{388BCCA4-0111-1F31-74D0-8AF795DD7688}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{388BCCA4-0111-1F31-74D0-8AF795DD7688}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{388BCCA4-0111-1F31-74D0-8AF795DD7688}.Release|Any CPU.Build.0 = Release|Any CPU
+		{105401D8-1131-5A83-479C-458760141207}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{105401D8-1131-5A83-479C-458760141207}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{105401D8-1131-5A83-479C-458760141207}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{105401D8-1131-5A83-479C-458760141207}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AB133CA-07C5-BBDC-90E3-26FE263145AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AB133CA-07C5-BBDC-90E3-26FE263145AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AB133CA-07C5-BBDC-90E3-26FE263145AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AB133CA-07C5-BBDC-90E3-26FE263145AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C16C130A-B682-4ED2-B2AA-5207CD87082D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C16C130A-B682-4ED2-B2AA-5207CD87082D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C16C130A-B682-4ED2-B2AA-5207CD87082D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C16C130A-B682-4ED2-B2AA-5207CD87082D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{388BCCA4-0111-1F31-74D0-8AF795DD7688} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{105401D8-1131-5A83-479C-458760141207} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E7}
+		{0AB133CA-07C5-BBDC-90E3-26FE263145AD} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E6}
+		{C16C130A-B682-4ED2-B2AA-5207CD87082D} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E7}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {08AA797B-DF78-426E-BFF3-583B608BAA86}
 	EndGlobalSection
 EndGlobal

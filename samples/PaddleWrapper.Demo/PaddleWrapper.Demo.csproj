@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\PaddleWrapper\PaddleWrapper.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="Controllers\" />
+    </ItemGroup>
+
+</Project>
