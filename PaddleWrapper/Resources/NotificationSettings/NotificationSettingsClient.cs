@@ -1,6 +1,9 @@
 using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Collections;
 using PaddleWrapper.Entities.Shared;
+using PaddleWrapper.Exceptions;
+using PaddleWrapper.Exceptions.ApiErrors;
+using PaddleWrapper.Exceptions.SdkExceptions;
 using PaddleWrapper.Extensions;
 using PaddleWrapper.Resources.NotificationSettings.Operations;
 using System.Text.Json;
@@ -18,42 +21,155 @@ namespace PaddleWrapper.Resources.NotificationSettings
 
         public async Task<NotificationSettingCollection> ListAsync(ListNotificationSettings listOperation = null)
         {
-            listOperation ??= new ListNotificationSettings();
-            HttpResponseMessage response = await _client.GetRawAsync("notification-settings", listOperation);
-            JsonElement jsonElement = JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
-            JsonElement data = jsonElement.GetProperty("data");
-            JsonElement meta = jsonElement.GetProperty("meta");
+            try
+            {
+                listOperation ??= new ListNotificationSettings();
+                HttpResponseMessage response = await _client.GetRawAsync("/notification-settings", listOperation);
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement jsonElement = JsonDocument.Parse(jsonString).RootElement;
 
-            Paginator paginator = new(
-                _client.HttpClient,
-                Pagination.FromJson(meta),
-                typeof(NotificationSettingCollection)
-            );
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw NotificationSettingApiError.FromJson(jsonElement);
+                }
 
-            return NotificationSettingCollection.FromJson(data, paginator);
+                JsonElement data = jsonElement.GetProperty("data");
+                JsonElement meta = jsonElement.GetProperty("meta");
+
+                Paginator paginator = new(
+                    _client.HttpClient,
+                    Pagination.FromJson(meta),
+                    typeof(NotificationSettingCollection)
+                );
+
+                return NotificationSettingCollection.FromJson(data, paginator);
+            }
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (NotificationSettingApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
 
         public async Task<NotificationSetting> GetAsync(string id)
         {
-            JsonDocument response = await _client.Get($"notification-settings/{id}");
-            return NotificationSetting.FromJson(response.RootElement.GetProperty("data"));
+            try
+            {
+                HttpResponseMessage response = await _client.GetRawAsync($"/notification-settings/{id}");
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement root = JsonDocument.Parse(jsonString).RootElement;
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw NotificationSettingApiError.FromJson(root);
+                }
+
+                return NotificationSetting.FromJson(root.GetProperty("data"));
+            }
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (NotificationSettingApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
 
         public async Task<NotificationSetting> CreateAsync(CreateNotificationSetting createOperation)
         {
-            JsonDocument response = await _client.Post("notification-settings", createOperation);
-            return NotificationSetting.FromJson(response.RootElement.GetProperty("data"));
+            try
+            {
+                HttpResponseMessage response = await _client.PostRawAsync("/notification-settings", createOperation);
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement root = JsonDocument.Parse(jsonString).RootElement;
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw NotificationSettingApiError.FromJson(root);
+                }
+
+                return NotificationSetting.FromJson(root.GetProperty("data"));
+            }
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (NotificationSettingApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
 
         public async Task<NotificationSetting> UpdateAsync(string id, UpdateNotificationSetting operation)
         {
-            JsonDocument response = await _client.Patch($"notification-settings/{id}", operation);
-            return NotificationSetting.FromJson(response.RootElement.GetProperty("data"));
+            try
+            {
+                HttpResponseMessage response = await _client.PatchRawAsync($"/notification-settings/{id}", operation);
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement root = JsonDocument.Parse(jsonString).RootElement;
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw NotificationSettingApiError.FromJson(root);
+                }
+
+                return NotificationSetting.FromJson(root.GetProperty("data"));
+            }
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (NotificationSettingApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
 
         public async Task DeleteAsync(string id)
         {
-            await _client.DeleteRawAsync($"notification-settings/{id}");
+            try
+            {
+                HttpResponseMessage response = await _client.DeleteRawAsync($"/notification-settings/{id}");
+                
+                if (!response.IsSuccessStatusCode)
+                {
+                    string jsonString = await response.Content.ReadAsStringAsync();
+                    JsonElement root = JsonDocument.Parse(jsonString).RootElement;
+                    throw NotificationSettingApiError.FromJson(root);
+                }
+            }
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (NotificationSettingApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
     }
 }

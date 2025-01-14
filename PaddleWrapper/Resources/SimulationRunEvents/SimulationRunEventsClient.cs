@@ -1,26 +1,38 @@
 using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Collections;
 using PaddleWrapper.Entities.Shared;
+using PaddleWrapper.Exceptions;
+using PaddleWrapper.Exceptions.ApiErrors;
+using PaddleWrapper.Exceptions.SdkExceptions;
 using PaddleWrapper.Extensions;
 using PaddleWrapper.Resources.SimulationRunEvents.Operations;
 using System.Text.Json;
 
-namespace PaddleWrapper.Resources.SimulationRunEvents
+namespace PaddleWrapper.Resources.SimulationRunEvents;
+
+public class SimulationRunEventsClient
 {
-    public class SimulationRunEventsClient
+    private readonly Client _client;
+
+    public SimulationRunEventsClient(Client client)
     {
-        private readonly Client _client;
+        _client = client;
+    }
 
-        public SimulationRunEventsClient(Client client)
-        {
-            _client = client;
-        }
-
-        public async Task<SimulationRunEventCollection> ListAsync(string simulationId, string runId, ListSimulationRunEvents listOperation = null)
+    public async Task<SimulationRunEventCollection> ListAsync(ListSimulationRunEvents listOperation = null)
+    {
+        try
         {
             listOperation ??= new ListSimulationRunEvents();
-            HttpResponseMessage response = await _client.GetRawAsync($"/simulations/{simulationId}/runs/{runId}/events", listOperation);
-            JsonElement jsonElement = JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
+            HttpResponseMessage response = await _client.GetRawAsync("/simulation-run-events", listOperation);
+            string jsonString = await response.Content.ReadAsStringAsync();
+            JsonElement jsonElement = JsonDocument.Parse(jsonString).RootElement;
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw SimulationRunEventApiError.FromJson(jsonElement);
+            }
+
             JsonElement data = jsonElement.GetProperty("data");
             JsonElement meta = jsonElement.GetProperty("meta");
 
@@ -32,17 +44,46 @@ namespace PaddleWrapper.Resources.SimulationRunEvents
 
             return SimulationRunEventCollection.FromJson(data, paginator);
         }
-
-        public async Task<SimulationRunEvent> GetAsync(string simulationId, string runId, string id)
+        catch (JsonException ex)
         {
-            JsonDocument response = await _client.Get($"/simulations/{simulationId}/runs/{runId}/events/{id}");
-            return SimulationRunEvent.FromJson(response.RootElement.GetProperty("data"));
+            throw new MalformedResponse("Failed to parse API response", ex);
         }
-
-        public async Task<SimulationRunEvent> ReplayAsync(string simulationId, string runId, string id)
+        catch (SimulationRunEventApiError)
         {
-            JsonDocument response = await _client.Post($"/simulations/{simulationId}/runs/{runId}/events/{id}/replay");
-            return SimulationRunEvent.FromJson(response.RootElement.GetProperty("data"));
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new SdkException("An unexpected error occurred", ex);
+        }
+    }
+
+    public async Task<SimulationRunEvent> GetAsync(string id)
+    {
+        try
+        {
+            HttpResponseMessage response = await _client.GetRawAsync($"/simulation-run-events/{id}");
+            string jsonString = await response.Content.ReadAsStringAsync();
+            JsonElement root = JsonDocument.Parse(jsonString).RootElement;
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw SimulationRunEventApiError.FromJson(root);
+            }
+
+            return SimulationRunEvent.FromJson(root.GetProperty("data"));
+        }
+        catch (JsonException ex)
+        {
+            throw new MalformedResponse("Failed to parse API response", ex);
+        }
+        catch (SimulationRunEventApiError)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new SdkException("An unexpected error occurred", ex);
         }
     }
 }

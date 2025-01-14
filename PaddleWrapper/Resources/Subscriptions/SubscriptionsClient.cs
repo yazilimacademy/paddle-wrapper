@@ -1,9 +1,11 @@
 using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Collections;
 using PaddleWrapper.Entities.Shared;
+using PaddleWrapper.Exceptions;
+using PaddleWrapper.Exceptions.ApiErrors;
+using PaddleWrapper.Exceptions.SdkExceptions;
 using PaddleWrapper.Extensions;
 using PaddleWrapper.Resources.Subscriptions.Operations;
-using PaddleWrapper.Resources.Subscriptions.Operations.Get;
 using System.Text.Json;
 
 namespace PaddleWrapper.Resources.Subscriptions
@@ -19,84 +21,331 @@ namespace PaddleWrapper.Resources.Subscriptions
 
         public async Task<SubscriptionCollection> ListAsync(ListSubscriptions listOperation = null)
         {
-            listOperation ??= new ListSubscriptions();
-            HttpResponseMessage response = await _client.GetRawAsync("/subscriptions", listOperation);
-            JsonElement jsonElement = JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
-            JsonElement data = jsonElement.GetProperty("data");
-            JsonElement meta = jsonElement.GetProperty("meta");
+            try
+            {
+                listOperation ??= new ListSubscriptions();
+                HttpResponseMessage response = await _client.GetRawAsync("/subscriptions", listOperation);
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement jsonElement = JsonDocument.Parse(jsonString).RootElement;
 
-            Paginator paginator = new(
-                _client.HttpClient,
-                Pagination.FromJson(meta),
-                typeof(SubscriptionCollection)
-            );
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw SubscriptionApiError.FromJson(jsonElement);
+                }
 
-            return SubscriptionCollection.FromJson(data, paginator);
+                JsonElement data = jsonElement.GetProperty("data");
+                JsonElement meta = jsonElement.GetProperty("meta");
+
+                Paginator paginator = new(
+                    _client.HttpClient,
+                    Pagination.FromJson(meta),
+                    typeof(SubscriptionCollection)
+                );
+
+                return SubscriptionCollection.FromJson(data, paginator);
+            }
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (SubscriptionApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
 
-        public async Task<Subscription> GetAsync(string id, Includes[]? includes = null)
+        public async Task<Subscription> GetAsync(string id)
         {
-            includes ??= Array.Empty<Includes>();
-            var parameters = includes.Length == 0
-                ? null
-                : new { include = string.Join(",", includes.Select(x => x.ToString().ToLower())) };
+            try
+            {
+                HttpResponseMessage response = await _client.GetRawAsync($"/subscriptions/{id}");
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
-            JsonDocument response = await _client.Get($"/subscriptions/{id}", parameters);
-            return Subscription.FromJson(response.RootElement.GetProperty("data"));
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw SubscriptionApiError.FromJson(root);
+                }
+
+                return Subscription.FromJson(root.GetProperty("data"));
+            }
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (SubscriptionApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
 
         public async Task<Subscription> UpdateAsync(string id, UpdateSubscription operation)
         {
-            JsonDocument response = await _client.Patch($"/subscriptions/{id}", operation);
-            return Subscription.FromJson(response.RootElement.GetProperty("data"));
+            try
+            {
+                HttpResponseMessage response = await _client.PatchRawAsync($"/subscriptions/{id}", operation);
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement root = JsonDocument.Parse(jsonString).RootElement;
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw SubscriptionApiError.FromJson(root);
+                }
+
+                return Subscription.FromJson(root.GetProperty("data"));
+            }
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (SubscriptionApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
 
         public async Task<Subscription> PauseAsync(string id, PauseSubscription operation)
         {
-            JsonDocument response = await _client.Post($"/subscriptions/{id}/pause", operation);
-            return Subscription.FromJson(response.RootElement.GetProperty("data"));
+            try
+            {
+                HttpResponseMessage response = await _client.PostRawAsync($"/subscriptions/{id}/pause", operation);
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement root = JsonDocument.Parse(jsonString).RootElement;
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw SubscriptionApiError.FromJson(root);
+                }
+
+                return Subscription.FromJson(root.GetProperty("data"));
+            }
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (SubscriptionApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
 
         public async Task<Subscription> ResumeAsync(string id, ResumeSubscription operation)
         {
-            JsonDocument response = await _client.Post($"/subscriptions/{id}/resume", operation);
-            return Subscription.FromJson(response.RootElement.GetProperty("data"));
+            try
+            {
+                HttpResponseMessage response = await _client.PostRawAsync($"/subscriptions/{id}/resume", operation);
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement root = JsonDocument.Parse(jsonString).RootElement;
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw SubscriptionApiError.FromJson(root);
+                }
+
+                return Subscription.FromJson(root.GetProperty("data"));
+            }
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (SubscriptionApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
 
         public async Task<Subscription> CancelAsync(string id, CancelSubscription operation)
         {
-            JsonDocument response = await _client.Post($"/subscriptions/{id}/cancel", operation);
-            return Subscription.FromJson(response.RootElement.GetProperty("data"));
+            try
+            {
+                HttpResponseMessage response = await _client.PostRawAsync($"/subscriptions/{id}/cancel", operation);
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement root = JsonDocument.Parse(jsonString).RootElement;
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw SubscriptionApiError.FromJson(root);
+                }
+
+                return Subscription.FromJson(root.GetProperty("data"));
+            }
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (SubscriptionApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
 
-        public async Task<Transaction> GetPaymentMethodChangeTransactionAsync(string id)
+        public async Task<PaymentMethodTransaction> GetPaymentMethodChangeTransactionAsync(string id)
         {
-            JsonDocument response = await _client.Get($"/subscriptions/{id}/update-payment-method-transaction");
-            return Transaction.FromJson(response.RootElement.GetProperty("data"));
+            try
+            {
+                HttpResponseMessage response = await _client.GetRawAsync($"/subscriptions/{id}/payment-method-change-transaction");
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement root = JsonDocument.Parse(jsonString).RootElement;
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw SubscriptionApiError.FromJson(root);
+                }
+
+                return PaymentMethodTransaction.FromJson(root.GetProperty("data"));
+            }
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (SubscriptionApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
 
         public async Task<Subscription> ActivateAsync(string id)
         {
-            JsonDocument response = await _client.Post($"/subscriptions/{id}/activate");
-            return Subscription.FromJson(response.RootElement.GetProperty("data"));
+            try
+            {
+                HttpResponseMessage response = await _client.PostRawAsync($"/subscriptions/{id}/activate", null);
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement root = JsonDocument.Parse(jsonString).RootElement;
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw SubscriptionApiError.FromJson(root);
+                }
+
+                return Subscription.FromJson(root.GetProperty("data"));
+            }
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (SubscriptionApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
 
-        public async Task<Subscription> CreateOneTimeChargeAsync(string id, CreateOneTimeCharge operation)
+        public async Task<Transaction> CreateOneTimeChargeAsync(string id, CreateSubscriptionCharge operation)
         {
-            JsonDocument response = await _client.Post($"/subscriptions/{id}/charge", operation);
-            return Subscription.FromJson(response.RootElement.GetProperty("data"));
+            try
+            {
+                HttpResponseMessage response = await _client.PostRawAsync($"/subscriptions/{id}/charge", operation);
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement root = JsonDocument.Parse(jsonString).RootElement;
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw SubscriptionApiError.FromJson(root);
+                }
+
+                return Transaction.FromJson(root.GetProperty("data"));
+            }
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (SubscriptionApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
 
-        public async Task<SubscriptionPreview> PreviewUpdateAsync(string id, PreviewUpdateSubscription operation)
+        public async Task<SubscriptionPreview> PreviewUpdateAsync(string id, PreviewSubscriptionUpdate operation)
         {
-            JsonDocument response = await _client.Patch($"/subscriptions/{id}/preview", operation);
-            return SubscriptionPreview.FromJson(response.RootElement.GetProperty("data"));
+            try
+            {
+                HttpResponseMessage response = await _client.PostRawAsync($"/subscriptions/{id}/preview", operation);
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement root = JsonDocument.Parse(jsonString).RootElement;
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw SubscriptionApiError.FromJson(root);
+                }
+
+                return SubscriptionPreview.FromJson(root.GetProperty("data"));
+            }
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (SubscriptionApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
 
-        public async Task<SubscriptionPreview> PreviewOneTimeChargeAsync(string id, PreviewOneTimeCharge operation)
+        public async Task<SubscriptionPreview> PreviewOneTimeChargeAsync(string id, PreviewSubscriptionCharge operation)
         {
-            JsonDocument response = await _client.Post($"/subscriptions/{id}/charge/preview", operation);
-            return SubscriptionPreview.FromJson(response.RootElement.GetProperty("data"));
+            try
+            {
+                HttpResponseMessage response = await _client.PostRawAsync($"/subscriptions/{id}/charge/preview", operation);
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement root = JsonDocument.Parse(jsonString).RootElement;
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw SubscriptionApiError.FromJson(root);
+                }
+
+                return SubscriptionPreview.FromJson(root.GetProperty("data"));
+            }
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (SubscriptionApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
     }
 }

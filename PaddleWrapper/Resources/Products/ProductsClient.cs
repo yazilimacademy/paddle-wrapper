@@ -1,9 +1,11 @@
 using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Collections;
 using PaddleWrapper.Entities.Shared;
+using PaddleWrapper.Exceptions;
+using PaddleWrapper.Exceptions.ApiErrors;
+using PaddleWrapper.Exceptions.SdkExceptions;
 using PaddleWrapper.Extensions;
 using PaddleWrapper.Resources.Products.Operations;
-using PaddleWrapper.Resources.Products.Operations.List;
 using System.Text.Json;
 
 namespace PaddleWrapper.Resources.Products
@@ -19,54 +21,128 @@ namespace PaddleWrapper.Resources.Products
 
         public async Task<ProductCollection> ListAsync(ListProducts listOperation = null)
         {
-            listOperation ??= new ListProducts();
-            HttpResponseMessage response = await _client.GetRawAsync("/products", listOperation);
-            JsonElement jsonElement = JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
-            JsonElement data = jsonElement.GetProperty("data");
-            JsonElement meta = jsonElement.GetProperty("meta");
+            try
+            {
+                listOperation ??= new ListProducts();
+                HttpResponseMessage response = await _client.GetRawAsync("/products", listOperation);
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement jsonElement = JsonDocument.Parse(jsonString).RootElement;
 
-            Paginator paginator = new(
-                _client.HttpClient,
-                Pagination.FromJson(meta),
-                typeof(ProductCollection)
-            );
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw ProductApiError.FromJson(jsonElement);
+                }
 
-            return ProductCollection.FromJson(data, paginator);
+                JsonElement data = jsonElement.GetProperty("data");
+                JsonElement meta = jsonElement.GetProperty("meta");
+
+                Paginator paginator = new(
+                    _client.HttpClient,
+                    Pagination.FromJson(meta),
+                    typeof(ProductCollection)
+                );
+
+                return ProductCollection.FromJson(data, paginator);
+            }
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (ProductApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
 
-        public async Task<Product> GetAsync(string id, IEnumerable<Includes> includes = null)
+        public async Task<Product> GetAsync(string id)
         {
-            includes ??= Array.Empty<Includes>();
-            List<Includes> includesList = includes.ToList();
-
-            if (includesList.Any(include => include == null))
+            try
             {
-                throw new ArgumentException("includes cannot contain null values", nameof(includes));
+                HttpResponseMessage response = await _client.GetRawAsync($"/products/{id}");
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement root = JsonDocument.Parse(jsonString).RootElement;
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw ProductApiError.FromJson(root);
+                }
+
+                return Product.FromJson(root.GetProperty("data"));
             }
-
-            var parameters = includesList.Any()
-                ? new { include = string.Join(",", includesList.Select(x => x.ToString())) }
-                : null;
-
-            JsonDocument response = await _client.Get($"/products/{id}", parameters);
-            return Product.FromJson(response.RootElement.GetProperty("data"));
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (ProductApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
 
         public async Task<Product> CreateAsync(CreateProduct createOperation)
         {
-            JsonDocument response = await _client.Post("/products", createOperation);
-            return Product.FromJson(response.RootElement.GetProperty("data"));
+            try
+            {
+                HttpResponseMessage response = await _client.PostRawAsync("/products", createOperation);
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement root = JsonDocument.Parse(jsonString).RootElement;
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw ProductApiError.FromJson(root);
+                }
+
+                return Product.FromJson(root.GetProperty("data"));
+            }
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (ProductApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
 
         public async Task<Product> UpdateAsync(string id, UpdateProduct operation)
         {
-            JsonDocument response = await _client.Patch($"/products/{id}", operation);
-            return Product.FromJson(response.RootElement.GetProperty("data"));
-        }
+            try
+            {
+                HttpResponseMessage response = await _client.PatchRawAsync($"/products/{id}", operation);
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
-        public async Task<Product> ArchiveAsync(string id)
-        {
-            return await UpdateAsync(id, new UpdateProduct { Status = Status.Archived });
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw ProductApiError.FromJson(root);
+                }
+
+                return Product.FromJson(root.GetProperty("data"));
+            }
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (ProductApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
     }
 }

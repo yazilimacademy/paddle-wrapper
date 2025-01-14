@@ -1,6 +1,9 @@
 using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Collections;
 using PaddleWrapper.Entities.Shared;
+using PaddleWrapper.Exceptions;
+using PaddleWrapper.Exceptions.ApiErrors;
+using PaddleWrapper.Exceptions.SdkExceptions;
 using PaddleWrapper.Extensions;
 using PaddleWrapper.Resources.Addresses.Operations;
 using System.Text.Json;
@@ -16,44 +19,130 @@ namespace PaddleWrapper.Resources.Addresses
             _client = client;
         }
 
-        public async Task<AddressCollection> ListAsync(string customerId, ListAddresses listOperation = null)
+        public async Task<AddressCollection> ListAsync(ListAddresses listOperation = null)
         {
-            listOperation ??= new ListAddresses();
-            HttpResponseMessage response = await _client.GetRawAsync($"/customers/{customerId}/addresses", listOperation);
-            JsonElement jsonElement = JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
-            JsonElement data = jsonElement.GetProperty("data");
-            JsonElement meta = jsonElement.GetProperty("meta");
+            try
+            {
+                listOperation ??= new ListAddresses();
+                HttpResponseMessage response = await _client.GetRawAsync("/addresses", listOperation);
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement jsonElement = JsonDocument.Parse(jsonString).RootElement;
 
-            Paginator paginator = new(
-                _client.HttpClient,
-                Pagination.FromJson(meta),
-                typeof(AddressCollection)
-            );
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw AddressApiError.FromJson(jsonElement);
+                }
 
-            return AddressCollection.FromJson(data, paginator);
+                JsonElement data = jsonElement.GetProperty("data");
+                JsonElement meta = jsonElement.GetProperty("meta");
+
+                Paginator paginator = new(
+                    _client.HttpClient,
+                    Pagination.FromJson(meta),
+                    typeof(AddressCollection)
+                );
+
+                return AddressCollection.FromJson(data, paginator);
+            }
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (AddressApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
 
-        public async Task<Address> GetAsync(string customerId, string id)
+        public async Task<Address> GetAsync(string id)
         {
-            JsonDocument response = await _client.Get($"/customers/{customerId}/addresses/{id}");
-            return Address.FromJson(response.RootElement.GetProperty("data"));
+            try
+            {
+                HttpResponseMessage response = await _client.GetRawAsync($"/addresses/{id}");
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement root = JsonDocument.Parse(jsonString).RootElement;
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw AddressApiError.FromJson(root);
+                }
+
+                return Address.FromJson(root.GetProperty("data"));
+            }
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (AddressApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
 
-        public async Task<Address> CreateAsync(string customerId, CreateAddress createOperation)
+        public async Task<Address> CreateAsync(CreateAddress createOperation)
         {
-            JsonDocument response = await _client.Post($"/customers/{customerId}/addresses", createOperation);
-            return Address.FromJson(response.RootElement.GetProperty("data"));
+            try
+            {
+                HttpResponseMessage response = await _client.PostRawAsync("/addresses", createOperation);
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement root = JsonDocument.Parse(jsonString).RootElement;
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw AddressApiError.FromJson(root);
+                }
+
+                return Address.FromJson(root.GetProperty("data"));
+            }
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (AddressApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
 
-        public async Task<Address> UpdateAsync(string customerId, string id, UpdateAddress operation)
+        public async Task<Address> UpdateAsync(string id, UpdateAddress operation)
         {
-            JsonDocument response = await _client.Patch($"/customers/{customerId}/addresses/{id}", operation);
-            return Address.FromJson(response.RootElement.GetProperty("data"));
-        }
+            try
+            {
+                HttpResponseMessage response = await _client.PatchRawAsync($"/addresses/{id}", operation);
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
-        public async Task<Address> ArchiveAsync(string customerId, string id)
-        {
-            return await UpdateAsync(customerId, id, new UpdateAddress { Status = Status.Archived });
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw AddressApiError.FromJson(root);
+                }
+
+                return Address.FromJson(root.GetProperty("data"));
+            }
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (AddressApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
     }
 }

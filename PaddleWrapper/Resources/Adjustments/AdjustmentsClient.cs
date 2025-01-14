@@ -1,7 +1,9 @@
 using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Collections;
 using PaddleWrapper.Entities.Shared;
-using PaddleWrapper.Extensions;
+using PaddleWrapper.Exceptions;
+using PaddleWrapper.Exceptions.ApiErrors;
+using PaddleWrapper.Exceptions.SdkExceptions;
 using PaddleWrapper.Resources.Adjustments.Operations;
 using System.Text.Json;
 
@@ -18,32 +20,99 @@ namespace PaddleWrapper.Resources.Adjustments
 
         public async Task<AdjustmentCollection> ListAsync(ListAdjustments listOperation = null)
         {
-            listOperation ??= new ListAdjustments();
-            HttpResponseMessage response = await _client.GetRawAsync("/adjustments", listOperation);
-            JsonElement jsonElement = JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
-            JsonElement data = jsonElement.GetProperty("data");
-            JsonElement meta = jsonElement.GetProperty("meta");
+            try
+            {
+                listOperation ??= new ListAdjustments();
+                HttpResponseMessage response = await _client.GetRawAsync("/adjustments", listOperation);
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement jsonElement = JsonDocument.Parse(jsonString).RootElement;
 
-            Paginator paginator = new(
-                _client.HttpClient,
-                Pagination.FromJson(meta),
-                typeof(AdjustmentCollection)
-            );
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw AdjustmentApiError.FromJson(jsonElement);
+                }
 
-            return AdjustmentCollection.FromJson(data, paginator);
+                JsonElement data = jsonElement.GetProperty("data");
+                JsonElement meta = jsonElement.GetProperty("meta");
+
+                Paginator paginator = new(
+                    _client.HttpClient,
+                    Pagination.FromJson(meta),
+                    typeof(AdjustmentCollection)
+                );
+
+                return AdjustmentCollection.FromJson(data, paginator);
+            }
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (AdjustmentApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
+        }
+
+        public async Task<Adjustment> GetAsync(string id)
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetRawAsync($"/adjustments/{id}");
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement root = JsonDocument.Parse(jsonString).RootElement;
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw AdjustmentApiError.FromJson(root);
+                }
+
+                return Adjustment.FromJson(root.GetProperty("data"));
+            }
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (AdjustmentApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
 
         public async Task<Adjustment> CreateAsync(CreateAdjustment createOperation)
         {
-            JsonDocument response = await _client.Post("/adjustments", createOperation);
-            return Adjustment.FromJson(response.RootElement.GetProperty("data"));
-        }
+            try
+            {
+                HttpResponseMessage response = await _client.PostRawAsync("/adjustments", createOperation);
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
-        public async Task<AdjustmentCreditNote> GetCreditNoteAsync(string id, GetAdjustmentCreditNote getOperation = null)
-        {
-            getOperation ??= new GetAdjustmentCreditNote();
-            JsonDocument response = await _client.Get($"/adjustments/{id}/credit-note", getOperation);
-            return AdjustmentCreditNote.FromJson(response.RootElement.GetProperty("data"));
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw AdjustmentApiError.FromJson(root);
+                }
+
+                return Adjustment.FromJson(root.GetProperty("data"));
+            }
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (AdjustmentApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
     }
 }

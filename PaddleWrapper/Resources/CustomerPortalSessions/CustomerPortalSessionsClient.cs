@@ -1,23 +1,48 @@
 using PaddleWrapper.Entities;
+using PaddleWrapper.Exceptions;
+using PaddleWrapper.Exceptions.ApiErrors;
+using PaddleWrapper.Exceptions.SdkExceptions;
 using PaddleWrapper.Extensions;
 using PaddleWrapper.Resources.CustomerPortalSessions.Operations;
 using System.Text.Json;
 
-namespace PaddleWrapper.Resources.CustomerPortalSessions
+namespace PaddleWrapper.Resources.CustomerPortalSessions;
+
+public class CustomerPortalSessionsClient
 {
-    public class CustomerPortalSessionsClient
+    private readonly Client _client;
+
+    public CustomerPortalSessionsClient(Client client)
     {
-        private readonly Client _client;
+        _client = client;
+    }
 
-        public CustomerPortalSessionsClient(Client client)
+    public async Task<CustomerPortalSession> CreateAsync(CreateCustomerPortalSession createOperation)
+    {
+        try
         {
-            _client = client;
+            HttpResponseMessage response = await _client.PostRawAsync("/customer-portal-sessions", createOperation);
+            string jsonString = await response.Content.ReadAsStringAsync();
+            JsonElement root = JsonDocument.Parse(jsonString).RootElement;
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw CustomerPortalSessionApiError.FromJson(root);
+            }
+
+            return CustomerPortalSession.FromJson(root.GetProperty("data"));
         }
-
-        public async Task<CustomerPortalSession> CreateAsync(string customerId, CreateCustomerPortalSession createOperation)
+        catch (JsonException ex)
         {
-            JsonDocument response = await _client.Post($"/customers/{customerId}/portal-sessions", createOperation);
-            return CustomerPortalSession.FromJson(response.RootElement.GetProperty("data"));
+            throw new MalformedResponse("Failed to parse API response", ex);
+        }
+        catch (CustomerPortalSessionApiError)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new SdkException("An unexpected error occurred", ex);
         }
     }
 }

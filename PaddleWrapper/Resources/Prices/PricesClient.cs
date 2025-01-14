@@ -1,9 +1,11 @@
 using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Collections;
 using PaddleWrapper.Entities.Shared;
+using PaddleWrapper.Exceptions;
+using PaddleWrapper.Exceptions.ApiErrors;
+using PaddleWrapper.Exceptions.SdkExceptions;
 using PaddleWrapper.Extensions;
 using PaddleWrapper.Resources.Prices.Operations;
-using PaddleWrapper.Resources.Prices.Operations.List;
 using System.Text.Json;
 
 namespace PaddleWrapper.Resources.Prices
@@ -19,54 +21,128 @@ namespace PaddleWrapper.Resources.Prices
 
         public async Task<PriceCollection> ListAsync(ListPrices listOperation = null)
         {
-            listOperation ??= new ListPrices();
-            HttpResponseMessage response = await _client.GetRawAsync("/prices", listOperation);
-            JsonElement jsonElement = JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
-            JsonElement data = jsonElement.GetProperty("data");
-            JsonElement meta = jsonElement.GetProperty("meta");
+            try
+            {
+                listOperation ??= new ListPrices();
+                HttpResponseMessage response = await _client.GetRawAsync("/prices", listOperation);
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement jsonElement = JsonDocument.Parse(jsonString).RootElement;
 
-            Paginator paginator = new(
-                _client.HttpClient,
-                Pagination.FromJson(meta),
-                typeof(PriceCollection)
-            );
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw PriceApiError.FromJson(jsonElement);
+                }
 
-            return PriceCollection.FromJson(data, paginator);
+                JsonElement data = jsonElement.GetProperty("data");
+                JsonElement meta = jsonElement.GetProperty("meta");
+
+                Paginator paginator = new(
+                    _client.HttpClient,
+                    Pagination.FromJson(meta),
+                    typeof(PriceCollection)
+                );
+
+                return PriceCollection.FromJson(data, paginator);
+            }
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (PriceApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
 
-        public async Task<Price> GetAsync(string id, IEnumerable<Includes> includes = null)
+        public async Task<Price> GetAsync(string id)
         {
-            includes ??= Array.Empty<Includes>();
-            List<Includes> includesList = includes.ToList();
-
-            if (includesList.Any(include => include == null))
+            try
             {
-                throw new ArgumentException("includes cannot contain null values", nameof(includes));
+                HttpResponseMessage response = await _client.GetRawAsync($"/prices/{id}");
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement root = JsonDocument.Parse(jsonString).RootElement;
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw PriceApiError.FromJson(root);
+                }
+
+                return Price.FromJson(root.GetProperty("data"));
             }
-
-            var parameters = includesList.Any()
-                ? new { include = string.Join(",", includesList.Select(x => x.ToString())) }
-                : null;
-
-            JsonDocument response = await _client.Get($"/prices/{id}", parameters);
-            return Price.FromJson(response.RootElement.GetProperty("data"));
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (PriceApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
 
         public async Task<Price> CreateAsync(CreatePrice createOperation)
         {
-            JsonDocument response = await _client.Post("/prices", createOperation);
-            return Price.FromJson(response.RootElement.GetProperty("data"));
+            try
+            {
+                HttpResponseMessage response = await _client.PostRawAsync("/prices", createOperation);
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement root = JsonDocument.Parse(jsonString).RootElement;
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw PriceApiError.FromJson(root);
+                }
+
+                return Price.FromJson(root.GetProperty("data"));
+            }
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (PriceApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
 
         public async Task<Price> UpdateAsync(string id, UpdatePrice operation)
         {
-            JsonDocument response = await _client.Patch($"/prices/{id}", operation);
-            return Price.FromJson(response.RootElement.GetProperty("data"));
-        }
+            try
+            {
+                HttpResponseMessage response = await _client.PatchRawAsync($"/prices/{id}", operation);
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
-        public async Task<Price> ArchiveAsync(string id)
-        {
-            return await UpdateAsync(id, new UpdatePrice { Status = Status.Archived });
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw PriceApiError.FromJson(root);
+                }
+
+                return Price.FromJson(root.GetProperty("data"));
+            }
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (PriceApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
     }
 }
