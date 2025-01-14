@@ -4,8 +4,6 @@ using PaddleWrapper.Entities.Shared;
 using PaddleWrapper.Exceptions;
 using PaddleWrapper.Exceptions.ApiErrors;
 using PaddleWrapper.Exceptions.SdkExceptions;
-using PaddleWrapper.Extensions;
-using PaddleWrapper.Resources.SimulationRunEvents.Operations;
 using System.Text.Json;
 
 namespace PaddleWrapper.Resources.SimulationRunEvents;
@@ -19,22 +17,21 @@ public class SimulationRunEventsClient
         _client = client;
     }
 
-    public async Task<SimulationRunEventCollection> ListAsync(ListSimulationRunEvents listOperation = null)
+    public async Task<SimulationRunEventCollection> ListAsync()
     {
         try
         {
-            listOperation ??= new ListSimulationRunEvents();
-            HttpResponseMessage response = await _client.GetRawAsync("/simulation-run-events", listOperation);
+            HttpResponseMessage response = await _client.GetRawAsync("/simulation-run-events");
             string jsonString = await response.Content.ReadAsStringAsync();
-            JsonElement jsonElement = JsonDocument.Parse(jsonString).RootElement;
+            JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
             if (!response.IsSuccessStatusCode)
             {
-                throw SimulationRunEventApiError.FromJson(jsonElement);
+                throw SimulationRunEventApiError.FromJson(root);
             }
 
-            JsonElement data = jsonElement.GetProperty("data");
-            JsonElement meta = jsonElement.GetProperty("meta");
+            JsonElement data = root.GetProperty("data");
+            JsonElement meta = root.GetProperty("meta");
 
             Paginator paginator = new(
                 _client.HttpClient,

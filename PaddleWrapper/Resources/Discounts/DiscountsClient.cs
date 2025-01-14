@@ -4,7 +4,6 @@ using PaddleWrapper.Entities.Shared;
 using PaddleWrapper.Exceptions;
 using PaddleWrapper.Exceptions.ApiErrors;
 using PaddleWrapper.Exceptions.SdkExceptions;
-using PaddleWrapper.Extensions;
 using PaddleWrapper.Resources.Discounts.Operations;
 using System.Text.Json;
 

@@ -1,12 +1,9 @@
 using System.Text.Json.Serialization;
 
-namespace PaddleWrapper.Resources.SimulationRuns.Operations;
+namespace PaddleWrapper.Resources.SimulationTypes.Operations;
 
-public class ListSimulationRuns : IHasParameters
+public class ListSimulationTypes : IHasParameters
 {
-    [JsonPropertyName("simulation_id")]
-    public string SimulationId { get; set; }
-
     [JsonPropertyName("per_page")]
     public int? PerPage { get; set; }
 
@@ -16,19 +13,9 @@ public class ListSimulationRuns : IHasParameters
     [JsonPropertyName("order_by")]
     public string? OrderBy { get; set; }
 
-    public ListSimulationRuns(string simulationId)
-    {
-        SimulationId = simulationId;
-    }
-
     public IDictionary<string, object> GetParameters()
     {
         Dictionary<string, object> parameters = new();
-
-        if (!string.IsNullOrEmpty(SimulationId))
-        {
-            parameters.Add("simulation_id", SimulationId);
-        }
 
         if (PerPage.HasValue)
         {

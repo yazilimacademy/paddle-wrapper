@@ -1,10 +1,8 @@
-using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Collections;
 using PaddleWrapper.Entities.Shared;
 using PaddleWrapper.Exceptions;
 using PaddleWrapper.Exceptions.ApiErrors;
 using PaddleWrapper.Exceptions.SdkExceptions;
-using PaddleWrapper.Extensions;
 using PaddleWrapper.Resources.SimulationTypes.Operations;
 using System.Text.Json;
 
@@ -23,18 +21,17 @@ public class SimulationTypesClient
     {
         try
         {
-            listOperation ??= new ListSimulationTypes();
             HttpResponseMessage response = await _client.GetRawAsync("/simulation-types", listOperation);
             string jsonString = await response.Content.ReadAsStringAsync();
-            JsonElement jsonElement = JsonDocument.Parse(jsonString).RootElement;
+            JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
             if (!response.IsSuccessStatusCode)
             {
-                throw SimulationTypeApiError.FromJson(jsonElement);
+                throw SimulationTypeApiError.FromJson(root);
             }
 
-            JsonElement data = jsonElement.GetProperty("data");
-            JsonElement meta = jsonElement.GetProperty("meta");
+            JsonElement data = root.GetProperty("data");
+            JsonElement meta = root.GetProperty("meta");
 
             Paginator paginator = new(
                 _client.HttpClient,

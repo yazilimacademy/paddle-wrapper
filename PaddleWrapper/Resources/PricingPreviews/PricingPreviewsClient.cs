@@ -2,8 +2,6 @@ using PaddleWrapper.Entities;
 using PaddleWrapper.Exceptions;
 using PaddleWrapper.Exceptions.ApiErrors;
 using PaddleWrapper.Exceptions.SdkExceptions;
-using PaddleWrapper.Extensions;
-using PaddleWrapper.Resources.PricingPreviews.Operations;
 using System.Text.Json;
 
 namespace PaddleWrapper.Resources.PricingPreviews;

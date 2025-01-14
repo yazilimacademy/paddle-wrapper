@@ -1,10 +1,10 @@
 ﻿using PaddleWrapper;
 using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Collections;
-using PaddleWrapper.Resources.Customers;
 using PaddleWrapper.Exceptions;
 using PaddleWrapper.Exceptions.ApiErrors;
 using PaddleWrapper.Exceptions.SdkExceptions;
+using PaddleWrapper.Resources.Customers;
 using Environment = PaddleWrapper.Environment;
 
 class Program
@@ -13,7 +13,7 @@ class Program
     {
         // Paddle API anahtarını ayarlayın
         Options options = new(Environment.Sandbox);
-        Client client = new("b9847347b603864b3ac8a5c3bd2b05a40b4fc591dc225e4fd2", options);
+        Client client = new("27bd985432ab87ecdcab4f4bacba4b0458c84818b01731aff0", options);
 
         // Customers client örneği oluşturun
         CustomersClient customersClient = new(client);
@@ -41,11 +41,11 @@ class Program
             Console.WriteLine($"Kod: {ex.Code}");
             Console.WriteLine($"Detay: {ex.Detail}");
             Console.WriteLine($"Dokümantasyon: {ex.DocumentationUrl}");
-            
+
             if (ex.FieldErrors?.Any() == true)
             {
                 Console.WriteLine("Alan Hataları:");
-                foreach (var fieldError in ex.FieldErrors)
+                foreach (FieldError fieldError in ex.FieldErrors)
                 {
                     Console.WriteLine($"- Alan: {fieldError.Field}");
                     Console.WriteLine($"  Kod: {fieldError.Code}");

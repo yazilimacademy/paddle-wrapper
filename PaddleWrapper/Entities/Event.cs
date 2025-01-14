@@ -2,79 +2,107 @@ using PaddleWrapper.Entities.Events;
 using PaddleWrapper.Notifications.Entities;
 using PaddleWrapper.Notifications.Events;
 using System.Reflection;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using DateTime = PaddleWrapper.Notifications.Entities.DateTime;
 using NotificationEntity = PaddleWrapper.Notifications.Entities.IEntity;
 
-namespace PaddleWrapper.Entities
+namespace PaddleWrapper.Entities;
+
+public abstract class Event
 {
-    public abstract class Event
+    [JsonPropertyName("event_id")]
+    public string EventId { get; }
+
+    [JsonPropertyName("event_type")]
+    public EventTypeName EventType { get; }
+
+    [JsonPropertyName("occurred_at")]
+    public DateTime OccurredAt { get; }
+
+    [JsonPropertyName("data")]
+    public NotificationEntity Data { get; }
+
+    [JsonPropertyName("notification_id")]
+    public string? NotificationId { get; }
+
+    protected Event(
+        string eventId,
+        EventTypeName eventType,
+        DateTime occurredAt,
+        NotificationEntity data,
+        string? notificationId = null)
     {
-        [JsonPropertyName("event_id")]
-        public string EventId { get; }
+        EventId = eventId;
+        EventType = eventType;
+        OccurredAt = occurredAt;
+        Data = data;
+        NotificationId = notificationId;
+    }
 
-        [JsonPropertyName("event_type")]
-        public EventTypeName EventType { get; }
+    public static Event From(Dictionary<string, object> data)
+    {
+        string eventTypeStr = (string)data["event_type"];
+        string[] type = eventTypeStr.Split('.');
+        string identifier = string.Join("", type.Select(t => char.ToUpperInvariant(t[0]) + t[1..]));
 
-        [JsonPropertyName("occurred_at")]
-        public DateTime OccurredAt { get; }
-
-        [JsonPropertyName("data")]
-        public NotificationEntity Data { get; }
-
-        [JsonPropertyName("notification_id")]
-        public string? NotificationId { get; }
-
-        protected Event(
-            string eventId,
-            EventTypeName eventType,
-            DateTime occurredAt,
-            NotificationEntity data,
-            string? notificationId = null)
+        Type? eventType = Type.GetType($"PaddleWrapper.Notifications.Events.{identifier}");
+        if (eventType == null || !typeof(Event).IsAssignableFrom(eventType))
         {
-            EventId = eventId;
-            EventType = eventType;
-            OccurredAt = occurredAt;
-            Data = data;
-            NotificationId = notificationId;
+            eventType = typeof(UndefinedEvent);
         }
 
-        public static Event From(Dictionary<string, object> data)
+        MethodInfo? fromEventMethod = eventType.GetMethod(nameof(CreateFromEvent), BindingFlags.Public | BindingFlags.Static);
+        if (fromEventMethod == null)
         {
-            string eventTypeStr = (string)data["event_type"];
-            string[] type = eventTypeStr.Split('.');
-            string identifier = string.Join("", type.Select(t => char.ToUpperInvariant(t[0]) + t[1..]));
-
-            Type? eventType = Type.GetType($"PaddleWrapper.Notifications.Events.{identifier}");
-            if (eventType == null || !typeof(Event).IsAssignableFrom(eventType))
-            {
-                eventType = typeof(UndefinedEvent);
-            }
-
-            MethodInfo? fromEventMethod = eventType.GetMethod(nameof(CreateFromEvent), BindingFlags.Public | BindingFlags.Static);
-            if (fromEventMethod == null)
-            {
-                throw new InvalidOperationException($"Event type {eventType.Name} does not implement CreateFromEvent method");
-            }
-
-            return (Event)fromEventMethod.Invoke(null, new object[]
-            {
-                (string)data["event_id"],
-                Enum.Parse<EventTypeName>(eventTypeStr, true),
-                DateTime.Parse((string)data["occurred_at"]),
-                EntityFactory.Create(eventTypeStr, (Dictionary<string, object>)data["data"]),
-                data.ContainsKey("notification_id") ? (string?)data["notification_id"] : null
-            });
+            throw new InvalidOperationException($"Event type {eventType.Name} does not implement CreateFromEvent method");
         }
 
-        public static Event CreateFromEvent(
-            string eventId,
-            EventTypeName eventType,
-            DateTime occurredAt,
-            NotificationEntity data,
-            string? notificationId = null)
+        return (Event)fromEventMethod.Invoke(null, new object[]
         {
-            throw new NotImplementedException();
+            (string)data["event_id"],
+            Enum.Parse<EventTypeName>(eventTypeStr, true),
+            DateTime.Parse((string)data["occurred_at"]),
+            EntityFactory.Create(eventTypeStr, (Dictionary<string, object>)data["data"]),
+            data.ContainsKey("notification_id") ? (string?)data["notification_id"] : null
+        });
+    }
+
+    public static Event FromJson(JsonElement element)
+    {
+        string eventTypeStr = element.GetProperty("event_type").GetString() ?? string.Empty;
+        string[] type = eventTypeStr.Split('.');
+        string identifier = string.Join("", type.Select(t => char.ToUpperInvariant(t[0]) + t[1..]));
+
+        Type? eventType = Type.GetType($"PaddleWrapper.Notifications.Events.{identifier}");
+        if (eventType == null || !typeof(Event).IsAssignableFrom(eventType))
+        {
+            eventType = typeof(UndefinedEvent);
         }
+
+        MethodInfo? fromEventMethod = eventType.GetMethod(nameof(CreateFromEvent), BindingFlags.Public | BindingFlags.Static);
+        if (fromEventMethod == null)
+        {
+            throw new InvalidOperationException($"Event type {eventType.Name} does not implement CreateFromEvent method");
+        }
+
+        return (Event)fromEventMethod.Invoke(null, new object[]
+        {
+            element.GetProperty("event_id").GetString() ?? string.Empty,
+            Enum.Parse<EventTypeName>(eventTypeStr, true),
+            DateTime.Parse(element.GetProperty("occurred_at").GetString() ?? string.Empty),
+            EntityFactory.Create(eventTypeStr, element.GetProperty("data").Deserialize<Dictionary<string, object>>() ?? new Dictionary<string, object>()),
+            element.TryGetProperty("notification_id", out JsonElement notificationId) ? notificationId.GetString() : null
+        });
+    }
+
+    public static Event CreateFromEvent(
+        string eventId,
+        EventTypeName eventType,
+        DateTime occurredAt,
+        NotificationEntity data,
+        string? notificationId = null)
+    {
+        throw new NotImplementedException();
     }
 }

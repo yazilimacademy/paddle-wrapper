@@ -4,114 +4,109 @@ using PaddleWrapper.Entities.Shared;
 using PaddleWrapper.Exceptions;
 using PaddleWrapper.Exceptions.ApiErrors;
 using PaddleWrapper.Exceptions.SdkExceptions;
-using PaddleWrapper.Extensions;
-using PaddleWrapper.Resources.PaymentMethods.Operations;
 using System.Text.Json;
 
-namespace PaddleWrapper.Resources.PaymentMethods
+namespace PaddleWrapper.Resources.PaymentMethods;
+
+public class PaymentMethodsClient
 {
-    public class PaymentMethodsClient
+    private readonly Client _client;
+
+    public PaymentMethodsClient(Client client)
     {
-        private readonly Client _client;
+        _client = client;
+    }
 
-        public PaymentMethodsClient(Client client)
+    public async Task<PaymentMethodCollection> ListAsync()
+    {
+        try
         {
-            _client = client;
+            HttpResponseMessage response = await _client.GetRawAsync("/payment-methods");
+            string jsonString = await response.Content.ReadAsStringAsync();
+            JsonElement root = JsonDocument.Parse(jsonString).RootElement;
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw PaymentMethodApiError.FromJson(root);
+            }
+
+            JsonElement data = root.GetProperty("data");
+            JsonElement meta = root.GetProperty("meta");
+
+            Paginator paginator = new(
+                _client.HttpClient,
+                Pagination.FromJson(meta),
+                typeof(PaymentMethodCollection)
+            );
+
+            return PaymentMethodCollection.FromJson(data, paginator);
         }
-
-        public async Task<PaymentMethodCollection> ListAsync(ListPaymentMethods listOperation = null)
+        catch (JsonException ex)
         {
-            try
-            {
-                listOperation ??= new ListPaymentMethods();
-                HttpResponseMessage response = await _client.GetRawAsync("/payment-methods", listOperation);
-                string jsonString = await response.Content.ReadAsStringAsync();
-                JsonElement jsonElement = JsonDocument.Parse(jsonString).RootElement;
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    throw PaymentMethodApiError.FromJson(jsonElement);
-                }
-
-                JsonElement data = jsonElement.GetProperty("data");
-                JsonElement meta = jsonElement.GetProperty("meta");
-
-                Paginator paginator = new(
-                    _client.HttpClient,
-                    Pagination.FromJson(meta),
-                    typeof(PaymentMethodCollection)
-                );
-
-                return PaymentMethodCollection.FromJson(data, paginator);
-            }
-            catch (JsonException ex)
-            {
-                throw new MalformedResponse("Failed to parse API response", ex);
-            }
-            catch (PaymentMethodApiError)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                throw new SdkException("An unexpected error occurred", ex);
-            }
+            throw new MalformedResponse("Failed to parse API response", ex);
         }
-
-        public async Task<PaymentMethod> GetAsync(string id)
+        catch (PaymentMethodApiError)
         {
-            try
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new SdkException("An unexpected error occurred", ex);
+        }
+    }
+
+    public async Task<PaymentMethod> GetAsync(string id)
+    {
+        try
+        {
+            HttpResponseMessage response = await _client.GetRawAsync($"/payment-methods/{id}");
+            string jsonString = await response.Content.ReadAsStringAsync();
+            JsonElement root = JsonDocument.Parse(jsonString).RootElement;
+
+            if (!response.IsSuccessStatusCode)
             {
-                HttpResponseMessage response = await _client.GetRawAsync($"/payment-methods/{id}");
+                throw PaymentMethodApiError.FromJson(root);
+            }
+
+            return PaymentMethod.FromJson(root.GetProperty("data"));
+        }
+        catch (JsonException ex)
+        {
+            throw new MalformedResponse("Failed to parse API response", ex);
+        }
+        catch (PaymentMethodApiError)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new SdkException("An unexpected error occurred", ex);
+        }
+    }
+
+    public async Task DeleteAsync(string id)
+    {
+        try
+        {
+            HttpResponseMessage response = await _client.DeleteRawAsync($"/payment-methods/{id}");
+            if (!response.IsSuccessStatusCode)
+            {
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    throw PaymentMethodApiError.FromJson(root);
-                }
-
-                return PaymentMethod.FromJson(root.GetProperty("data"));
-            }
-            catch (JsonException ex)
-            {
-                throw new MalformedResponse("Failed to parse API response", ex);
-            }
-            catch (PaymentMethodApiError)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                throw new SdkException("An unexpected error occurred", ex);
+                throw PaymentMethodApiError.FromJson(root);
             }
         }
-
-        public async Task DeleteAsync(string id)
+        catch (JsonException ex)
         {
-            try
-            {
-                HttpResponseMessage response = await _client.DeleteRawAsync($"/payment-methods/{id}");
-                
-                if (!response.IsSuccessStatusCode)
-                {
-                    string jsonString = await response.Content.ReadAsStringAsync();
-                    JsonElement root = JsonDocument.Parse(jsonString).RootElement;
-                    throw PaymentMethodApiError.FromJson(root);
-                }
-            }
-            catch (JsonException ex)
-            {
-                throw new MalformedResponse("Failed to parse API response", ex);
-            }
-            catch (PaymentMethodApiError)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                throw new SdkException("An unexpected error occurred", ex);
-            }
+            throw new MalformedResponse("Failed to parse API response", ex);
+        }
+        catch (PaymentMethodApiError)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new SdkException("An unexpected error occurred", ex);
         }
     }
 }

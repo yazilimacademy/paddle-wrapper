@@ -4,116 +4,116 @@ using PaddleWrapper.Entities.Shared;
 using PaddleWrapper.Exceptions;
 using PaddleWrapper.Exceptions.ApiErrors;
 using PaddleWrapper.Exceptions.SdkExceptions;
-using PaddleWrapper.Extensions;
 using PaddleWrapper.Resources.SimulationRuns.Operations;
 using System.Text.Json;
 
-namespace PaddleWrapper.Resources.SimulationRuns
+namespace PaddleWrapper.Resources.SimulationRuns;
+
+public class SimulationRunsClient
 {
-    public class SimulationRunsClient
+    private readonly Client _client;
+
+    public SimulationRunsClient(Client client)
     {
-        private readonly Client _client;
+        _client = client;
+    }
 
-        public SimulationRunsClient(Client client)
+    public async Task<SimulationRunCollection> ListAsync(string simulationId, ListSimulationRuns listOperation = null)
+    {
+        try
         {
-            _client = client;
+            listOperation ??= new ListSimulationRuns(simulationId);
+            HttpResponseMessage response = await _client.GetRawAsync($"/simulations/{simulationId}/runs", listOperation);
+            string jsonString = await response.Content.ReadAsStringAsync();
+            JsonElement root = JsonDocument.Parse(jsonString).RootElement;
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw SimulationRunApiError.FromJson(root);
+            }
+
+            JsonElement data = root.GetProperty("data");
+            JsonElement meta = root.GetProperty("meta");
+
+            Paginator paginator = new(
+                _client.HttpClient,
+                Pagination.FromJson(meta),
+                typeof(SimulationRunCollection)
+            );
+
+            return SimulationRunCollection.FromJson(data, paginator);
         }
-
-        public async Task<SimulationRunCollection> ListAsync(ListSimulationRuns listOperation = null)
+        catch (JsonException ex)
         {
-            try
-            {
-                listOperation ??= new ListSimulationRuns();
-                HttpResponseMessage response = await _client.GetRawAsync("/simulation-runs", listOperation);
-                string jsonString = await response.Content.ReadAsStringAsync();
-                JsonElement jsonElement = JsonDocument.Parse(jsonString).RootElement;
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    throw SimulationRunApiError.FromJson(jsonElement);
-                }
-
-                JsonElement data = jsonElement.GetProperty("data");
-                JsonElement meta = jsonElement.GetProperty("meta");
-
-                Paginator paginator = new(
-                    _client.HttpClient,
-                    Pagination.FromJson(meta),
-                    typeof(SimulationRunCollection)
-                );
-
-                return SimulationRunCollection.FromJson(data, paginator);
-            }
-            catch (JsonException ex)
-            {
-                throw new MalformedResponse("Failed to parse API response", ex);
-            }
-            catch (SimulationRunApiError)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                throw new SdkException("An unexpected error occurred", ex);
-            }
+            throw new MalformedResponse("Failed to parse API response", ex);
         }
-
-        public async Task<SimulationRun> GetAsync(string id)
+        catch (SimulationRunApiError)
         {
-            try
-            {
-                HttpResponseMessage response = await _client.GetRawAsync($"/simulation-runs/{id}");
-                string jsonString = await response.Content.ReadAsStringAsync();
-                JsonElement root = JsonDocument.Parse(jsonString).RootElement;
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    throw SimulationRunApiError.FromJson(root);
-                }
-
-                return SimulationRun.FromJson(root.GetProperty("data"));
-            }
-            catch (JsonException ex)
-            {
-                throw new MalformedResponse("Failed to parse API response", ex);
-            }
-            catch (SimulationRunApiError)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                throw new SdkException("An unexpected error occurred", ex);
-            }
+            throw;
         }
-
-        public async Task<SimulationRun> CreateAsync(CreateSimulationRun createOperation)
+        catch (Exception ex)
         {
-            try
-            {
-                HttpResponseMessage response = await _client.PostRawAsync("/simulation-runs", createOperation);
-                string jsonString = await response.Content.ReadAsStringAsync();
-                JsonElement root = JsonDocument.Parse(jsonString).RootElement;
+            throw new SdkException("An unexpected error occurred", ex);
+        }
+    }
 
-                if (!response.IsSuccessStatusCode)
-                {
-                    throw SimulationRunApiError.FromJson(root);
-                }
+    public async Task<SimulationRun> GetAsync(string simulationId, string id, GetSimulationRuns getOperation = null)
+    {
+        try
+        {
+            getOperation ??= new GetSimulationRuns(simulationId, id);
+            HttpResponseMessage response = await _client.GetRawAsync($"/simulations/{simulationId}/runs/{id}", getOperation);
+            string jsonString = await response.Content.ReadAsStringAsync();
+            JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
-                return SimulationRun.FromJson(root.GetProperty("data"));
-            }
-            catch (JsonException ex)
+            if (!response.IsSuccessStatusCode)
             {
-                throw new MalformedResponse("Failed to parse API response", ex);
+                throw SimulationRunApiError.FromJson(root);
             }
-            catch (SimulationRunApiError)
+
+            return SimulationRun.FromJson(root.GetProperty("data"));
+        }
+        catch (JsonException ex)
+        {
+            throw new MalformedResponse("Failed to parse API response", ex);
+        }
+        catch (SimulationRunApiError)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new SdkException("An unexpected error occurred", ex);
+        }
+    }
+
+    public async Task<SimulationRun> CreateAsync(string simulationId)
+    {
+        try
+        {
+            CreateSimulationRun createOperation = new(simulationId);
+            HttpResponseMessage response = await _client.PostRawAsync($"/simulations/{simulationId}/runs", createOperation);
+            string jsonString = await response.Content.ReadAsStringAsync();
+            JsonElement root = JsonDocument.Parse(jsonString).RootElement;
+
+            if (!response.IsSuccessStatusCode)
             {
-                throw;
+                throw SimulationRunApiError.FromJson(root);
             }
-            catch (Exception ex)
-            {
-                throw new SdkException("An unexpected error occurred", ex);
-            }
+
+            return SimulationRun.FromJson(root.GetProperty("data"));
+        }
+        catch (JsonException ex)
+        {
+            throw new MalformedResponse("Failed to parse API response", ex);
+        }
+        catch (SimulationRunApiError)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new SdkException("An unexpected error occurred", ex);
         }
     }
 }

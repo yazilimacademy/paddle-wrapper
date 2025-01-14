@@ -4,7 +4,6 @@ using PaddleWrapper.Entities.Shared;
 using PaddleWrapper.Exceptions;
 using PaddleWrapper.Exceptions.ApiErrors;
 using PaddleWrapper.Exceptions.SdkExceptions;
-using PaddleWrapper.Extensions;
 using PaddleWrapper.Resources.NotificationSettings.Operations;
 using System.Text.Json;
 
@@ -150,7 +149,7 @@ namespace PaddleWrapper.Resources.NotificationSettings
             try
             {
                 HttpResponseMessage response = await _client.DeleteRawAsync($"/notification-settings/{id}");
-                
+
                 if (!response.IsSuccessStatusCode)
                 {
                     string jsonString = await response.Content.ReadAsStringAsync();

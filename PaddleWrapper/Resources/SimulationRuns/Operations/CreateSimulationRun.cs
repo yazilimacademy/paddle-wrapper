@@ -2,18 +2,14 @@ using System.Text.Json.Serialization;
 
 namespace PaddleWrapper.Resources.SimulationRuns.Operations;
 
-public class GetSimulationRuns : IHasParameters
+public class CreateSimulationRun : IHasParameters
 {
     [JsonPropertyName("simulation_id")]
     public string SimulationId { get; set; }
 
-    [JsonPropertyName("id")]
-    public string Id { get; set; }
-
-    public GetSimulationRuns(string simulationId, string id)
+    public CreateSimulationRun(string simulationId)
     {
         SimulationId = simulationId;
-        Id = id;
     }
 
     public IDictionary<string, object> GetParameters()
@@ -23,11 +19,6 @@ public class GetSimulationRuns : IHasParameters
         if (!string.IsNullOrEmpty(SimulationId))
         {
             parameters.Add("simulation_id", SimulationId);
-        }
-
-        if (!string.IsNullOrEmpty(Id))
-        {
-            parameters.Add("id", Id);
         }
 
         return parameters;
