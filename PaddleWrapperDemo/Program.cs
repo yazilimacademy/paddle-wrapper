@@ -13,7 +13,7 @@ class Program
     {
         // Paddle API anahtarını ayarlayın
         Options options = new(Environment.Sandbox);
-        Client client = new("27bd985432ab87ecdcab4f4bacba4b0458c84818b01731aff0", options);
+        Client client = new("MY_BEAUTIFUL_SECRET_KEY", options);
 
         // Customers client örneği oluşturun
         CustomersClient customersClient = new(client);
