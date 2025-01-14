@@ -9,22 +9,16 @@ using System.Text.Json;
 
 namespace PaddleWrapper.Resources.Events
 {
-    public class EventsClient
+    public class EventsClient(Client client)
     {
-        private readonly Client _client;
-
-        public EventsClient(Client client)
-        {
-            _client = client;
-        }
-
         public async Task<EventCollection> ListAsync(ListEvents listOperation = null)
         {
             try
             {
                 listOperation ??= new ListEvents();
-                HttpResponseMessage response = await _client.GetRawAsync("/events", listOperation);
+                HttpResponseMessage response = await client.GetRawAsync("/events", listOperation);
                 string jsonString = await response.Content.ReadAsStringAsync();
+                Console.WriteLine(jsonString);
                 JsonElement jsonElement = JsonDocument.Parse(jsonString).RootElement;
 
                 if (!response.IsSuccessStatusCode)
@@ -36,7 +30,7 @@ namespace PaddleWrapper.Resources.Events
                 JsonElement meta = jsonElement.GetProperty("meta");
 
                 Paginator paginator = new(
-                    _client.HttpClient,
+                    client.HttpClient,
                     Pagination.FromJson(meta),
                     typeof(EventCollection)
                 );
@@ -61,7 +55,7 @@ namespace PaddleWrapper.Resources.Events
         {
             try
             {
-                HttpResponseMessage response = await _client.GetRawAsync($"/events/{id}");
+                HttpResponseMessage response = await client.GetRawAsync($"/events/{id}");
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 

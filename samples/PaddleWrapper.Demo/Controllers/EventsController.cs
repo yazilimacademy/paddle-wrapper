@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Collections;
 using PaddleWrapper.Exceptions;
@@ -30,6 +31,7 @@ public class EventsController(Client client) : ControllerBase
         }
         catch (EventApiError ex)
         {
+            Console.WriteLine(JsonConvert.SerializeObject(ex, Formatting.Indented));
             return StatusCode(500, new
             {
                 code = ex.Code,
@@ -47,6 +49,7 @@ public class EventsController(Client client) : ControllerBase
         }
         catch (ApiError ex)
         {
+            Console.WriteLine(JsonConvert.SerializeObject(ex, Formatting.Indented));
             return StatusCode(500, new
             {
                 error = "API Error",
@@ -58,6 +61,7 @@ public class EventsController(Client client) : ControllerBase
         }
         catch (MalformedResponse ex)
         {
+            Console.WriteLine(JsonConvert.SerializeObject(ex, Formatting.Indented));
             return StatusCode(500, new
             {
                 message = ex.Message,
@@ -67,10 +71,12 @@ public class EventsController(Client client) : ControllerBase
         }
         catch (SdkException ex)
         {
+            Console.WriteLine(JsonConvert.SerializeObject(ex, Formatting.Indented));
             return StatusCode(500, new { error = $"SDK Error: {ex.Message}" });
         }
         catch (Exception ex)
         {
+            Console.WriteLine(JsonConvert.SerializeObject(ex, Formatting.Indented));
             return StatusCode(500, new
             {
                 message = ex.Message,

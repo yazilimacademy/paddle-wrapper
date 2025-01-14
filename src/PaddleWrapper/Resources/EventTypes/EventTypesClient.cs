@@ -4,43 +4,37 @@ using PaddleWrapper.Exceptions.ApiErrors;
 using PaddleWrapper.Exceptions.SdkExceptions;
 using System.Text.Json;
 
-namespace PaddleWrapper.Resources.EventTypes;
-
-public class EventTypesClient
+namespace PaddleWrapper.Resources.EventTypes
 {
-    private readonly Client _client;
-
-    public EventTypesClient(Client client)
+    public class EventTypesClient(Client client)
     {
-        _client = client;
-    }
-
-    public async Task<EventTypeCollection> ListAsync()
-    {
-        try
+        public async Task<EventTypeCollection> ListAsync()
         {
-            HttpResponseMessage response = await _client.GetRawAsync("/event-types");
-            string jsonString = await response.Content.ReadAsStringAsync();
-            JsonElement root = JsonDocument.Parse(jsonString).RootElement;
-
-            if (!response.IsSuccessStatusCode)
+            try
             {
-                throw EventTypeApiError.FromJson(root);
-            }
+                HttpResponseMessage response = await client.GetRawAsync("/event-types");
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
-            return EventTypeCollection.FromJson(root.GetProperty("data"), null);
-        }
-        catch (JsonException ex)
-        {
-            throw new MalformedResponse("Failed to parse API response", ex);
-        }
-        catch (EventTypeApiError)
-        {
-            throw;
-        }
-        catch (Exception ex)
-        {
-            throw new SdkException("An unexpected error occurred", ex);
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw EventTypeApiError.FromJson(root);
+                }
+
+                return EventTypeCollection.FromJson(root.GetProperty("data"), null);
+            }
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (EventTypeApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
     }
 }

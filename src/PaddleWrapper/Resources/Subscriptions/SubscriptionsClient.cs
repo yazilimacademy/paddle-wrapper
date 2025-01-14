@@ -9,21 +9,14 @@ using System.Text.Json;
 
 namespace PaddleWrapper.Resources.Subscriptions
 {
-    public class SubscriptionsClient
+    public class SubscriptionsClient(Client client)
     {
-        private readonly Client _client;
-
-        public SubscriptionsClient(Client client)
-        {
-            _client = client;
-        }
-
         public async Task<SubscriptionCollection> ListAsync(ListSubscriptions listOperation = null)
         {
             try
             {
                 listOperation ??= new ListSubscriptions();
-                HttpResponseMessage response = await _client.GetRawAsync("/subscriptions", listOperation);
+                HttpResponseMessage response = await client.GetRawAsync("/subscriptions", listOperation);
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement jsonElement = JsonDocument.Parse(jsonString).RootElement;
 
@@ -36,7 +29,7 @@ namespace PaddleWrapper.Resources.Subscriptions
                 JsonElement meta = jsonElement.GetProperty("meta");
 
                 Paginator paginator = new(
-                    _client.HttpClient,
+                    client.HttpClient,
                     Pagination.FromJson(meta),
                     typeof(SubscriptionCollection)
                 );
@@ -61,7 +54,7 @@ namespace PaddleWrapper.Resources.Subscriptions
         {
             try
             {
-                HttpResponseMessage response = await _client.GetRawAsync($"/subscriptions/{id}");
+                HttpResponseMessage response = await client.GetRawAsync($"/subscriptions/{id}");
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
@@ -90,7 +83,7 @@ namespace PaddleWrapper.Resources.Subscriptions
         {
             try
             {
-                HttpResponseMessage response = await _client.PatchRawAsync($"/subscriptions/{id}", operation);
+                HttpResponseMessage response = await client.PatchRawAsync($"/subscriptions/{id}", operation);
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
@@ -119,7 +112,7 @@ namespace PaddleWrapper.Resources.Subscriptions
         {
             try
             {
-                HttpResponseMessage response = await _client.PostRawAsync($"/subscriptions/{id}/pause", operation);
+                HttpResponseMessage response = await client.PostRawAsync($"/subscriptions/{id}/pause", operation);
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
@@ -148,7 +141,7 @@ namespace PaddleWrapper.Resources.Subscriptions
         {
             try
             {
-                HttpResponseMessage response = await _client.PostRawAsync($"/subscriptions/{id}/resume", operation);
+                HttpResponseMessage response = await client.PostRawAsync($"/subscriptions/{id}/resume", operation);
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
@@ -177,7 +170,7 @@ namespace PaddleWrapper.Resources.Subscriptions
         {
             try
             {
-                HttpResponseMessage response = await _client.PostRawAsync($"/subscriptions/{id}/cancel", operation);
+                HttpResponseMessage response = await client.PostRawAsync($"/subscriptions/{id}/cancel", operation);
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
@@ -206,7 +199,7 @@ namespace PaddleWrapper.Resources.Subscriptions
         {
             try
             {
-                HttpResponseMessage response = await _client.GetRawAsync($"/subscriptions/{id}/payment-method-change-transaction");
+                HttpResponseMessage response = await client.GetRawAsync($"/subscriptions/{id}/payment-method-change-transaction");
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
@@ -235,7 +228,7 @@ namespace PaddleWrapper.Resources.Subscriptions
         {
             try
             {
-                HttpResponseMessage response = await _client.PostRawAsync($"/subscriptions/{id}/activate", null);
+                HttpResponseMessage response = await client.PostRawAsync($"/subscriptions/{id}/activate", null);
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
@@ -264,7 +257,7 @@ namespace PaddleWrapper.Resources.Subscriptions
         {
             try
             {
-                HttpResponseMessage response = await _client.PostRawAsync($"/subscriptions/{id}/charge", operation);
+                HttpResponseMessage response = await client.PostRawAsync($"/subscriptions/{id}/charge", operation);
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
@@ -293,7 +286,7 @@ namespace PaddleWrapper.Resources.Subscriptions
         {
             try
             {
-                HttpResponseMessage response = await _client.PostRawAsync($"/subscriptions/{id}/preview", operation);
+                HttpResponseMessage response = await client.PostRawAsync($"/subscriptions/{id}/preview", operation);
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
@@ -322,7 +315,7 @@ namespace PaddleWrapper.Resources.Subscriptions
         {
             try
             {
-                HttpResponseMessage response = await _client.PostRawAsync($"/subscriptions/{id}/charge/preview", operation);
+                HttpResponseMessage response = await client.PostRawAsync($"/subscriptions/{id}/charge/preview", operation);
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 

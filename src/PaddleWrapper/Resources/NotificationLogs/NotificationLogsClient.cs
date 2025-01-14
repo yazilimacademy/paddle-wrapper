@@ -9,21 +9,14 @@ using System.Text.Json;
 
 namespace PaddleWrapper.Resources.NotificationLogs
 {
-    public class NotificationLogsClient
+    public class NotificationLogsClient(Client client)
     {
-        private readonly Client _client;
-
-        public NotificationLogsClient(Client client)
-        {
-            _client = client;
-        }
-
         public async Task<NotificationLogCollection> ListAsync(ListNotificationLogs listOperation = null)
         {
             try
             {
                 listOperation ??= new ListNotificationLogs();
-                HttpResponseMessage response = await _client.GetRawAsync("/notification-logs", listOperation);
+                HttpResponseMessage response = await client.GetRawAsync("/notification-logs", listOperation);
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement jsonElement = JsonDocument.Parse(jsonString).RootElement;
 
@@ -36,7 +29,7 @@ namespace PaddleWrapper.Resources.NotificationLogs
                 JsonElement meta = jsonElement.GetProperty("meta");
 
                 Paginator paginator = new(
-                    _client.HttpClient,
+                    client.HttpClient,
                     Pagination.FromJson(meta),
                     typeof(NotificationLogCollection)
                 );
@@ -61,7 +54,7 @@ namespace PaddleWrapper.Resources.NotificationLogs
         {
             try
             {
-                HttpResponseMessage response = await _client.GetRawAsync($"/notification-logs/{id}");
+                HttpResponseMessage response = await client.GetRawAsync($"/notification-logs/{id}");
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 

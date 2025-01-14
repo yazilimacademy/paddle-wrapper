@@ -7,111 +7,105 @@ using PaddleWrapper.Exceptions.SdkExceptions;
 using PaddleWrapper.Resources.Notifications.Operations;
 using System.Text.Json;
 
-namespace PaddleWrapper.Resources.Notifications;
-
-public class NotificationsClient
+namespace PaddleWrapper.Resources.Notifications
 {
-    private readonly Client _client;
-
-    public NotificationsClient(Client client)
+    public class NotificationsClient(Client client)
     {
-        _client = client;
-    }
-
-    public async Task<NotificationCollection> ListAsync(ListNotifications listOperation = null)
-    {
-        try
+        public async Task<NotificationCollection> ListAsync(ListNotifications listOperation = null)
         {
-            listOperation ??= new ListNotifications();
-            HttpResponseMessage response = await _client.GetRawAsync("/notifications", listOperation);
-            string jsonString = await response.Content.ReadAsStringAsync();
-            JsonElement jsonElement = JsonDocument.Parse(jsonString).RootElement;
-
-            if (!response.IsSuccessStatusCode)
+            try
             {
-                throw NotificationApiError.FromJson(jsonElement);
+                listOperation ??= new ListNotifications();
+                HttpResponseMessage response = await client.GetRawAsync("/notifications", listOperation);
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement jsonElement = JsonDocument.Parse(jsonString).RootElement;
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw NotificationApiError.FromJson(jsonElement);
+                }
+
+                JsonElement data = jsonElement.GetProperty("data");
+                JsonElement meta = jsonElement.GetProperty("meta");
+
+                Paginator paginator = new(
+                    client.HttpClient,
+                    Pagination.FromJson(meta),
+                    typeof(NotificationCollection)
+                );
+
+                return NotificationCollection.FromJson(data, paginator);
             }
-
-            JsonElement data = jsonElement.GetProperty("data");
-            JsonElement meta = jsonElement.GetProperty("meta");
-
-            Paginator paginator = new(
-                _client.HttpClient,
-                Pagination.FromJson(meta),
-                typeof(NotificationCollection)
-            );
-
-            return NotificationCollection.FromJson(data, paginator);
-        }
-        catch (JsonException ex)
-        {
-            throw new MalformedResponse("Failed to parse API response", ex);
-        }
-        catch (NotificationApiError)
-        {
-            throw;
-        }
-        catch (Exception ex)
-        {
-            throw new SdkException("An unexpected error occurred", ex);
-        }
-    }
-
-    public async Task<Notification> GetAsync(string id)
-    {
-        try
-        {
-            HttpResponseMessage response = await _client.GetRawAsync($"/notifications/{id}");
-            string jsonString = await response.Content.ReadAsStringAsync();
-            JsonElement root = JsonDocument.Parse(jsonString).RootElement;
-
-            if (!response.IsSuccessStatusCode)
+            catch (JsonException ex)
             {
-                throw NotificationApiError.FromJson(root);
+                throw new MalformedResponse("Failed to parse API response", ex);
             }
-
-            return Notification.FromJson(root.GetProperty("data"));
-        }
-        catch (JsonException ex)
-        {
-            throw new MalformedResponse("Failed to parse API response", ex);
-        }
-        catch (NotificationApiError)
-        {
-            throw;
-        }
-        catch (Exception ex)
-        {
-            throw new SdkException("An unexpected error occurred", ex);
-        }
-    }
-
-    public async Task<Notification> ReplayAsync(string id)
-    {
-        try
-        {
-            HttpResponseMessage response = await _client.PostRawAsync($"/notifications/{id}/replay", null);
-            string jsonString = await response.Content.ReadAsStringAsync();
-            JsonElement root = JsonDocument.Parse(jsonString).RootElement;
-
-            if (!response.IsSuccessStatusCode)
+            catch (NotificationApiError)
             {
-                throw NotificationApiError.FromJson(root);
+                throw;
             }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
+        }
 
-            return Notification.FromJson(root.GetProperty("data"));
-        }
-        catch (JsonException ex)
+        public async Task<Notification> GetAsync(string id)
         {
-            throw new MalformedResponse("Failed to parse API response", ex);
+            try
+            {
+                HttpResponseMessage response = await client.GetRawAsync($"/notifications/{id}");
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement root = JsonDocument.Parse(jsonString).RootElement;
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw NotificationApiError.FromJson(root);
+                }
+
+                return Notification.FromJson(root.GetProperty("data"));
+            }
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (NotificationApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
-        catch (NotificationApiError)
+
+        public async Task<Notification> ReplayAsync(string id)
         {
-            throw;
-        }
-        catch (Exception ex)
-        {
-            throw new SdkException("An unexpected error occurred", ex);
+            try
+            {
+                HttpResponseMessage response = await client.PostRawAsync($"/notifications/{id}/replay", null);
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement root = JsonDocument.Parse(jsonString).RootElement;
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw NotificationApiError.FromJson(root);
+                }
+
+                return Notification.FromJson(root.GetProperty("data"));
+            }
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (NotificationApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
     }
 }

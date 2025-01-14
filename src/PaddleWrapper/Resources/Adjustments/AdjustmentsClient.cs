@@ -9,21 +9,14 @@ using System.Text.Json;
 
 namespace PaddleWrapper.Resources.Adjustments
 {
-    public class AdjustmentsClient
+    public class AdjustmentsClient(Client client)
     {
-        private readonly Client _client;
-
-        public AdjustmentsClient(Client client)
-        {
-            _client = client;
-        }
-
         public async Task<AdjustmentCollection> ListAsync(ListAdjustments listOperation = null)
         {
             try
             {
                 listOperation ??= new ListAdjustments();
-                HttpResponseMessage response = await _client.GetRawAsync("/adjustments", listOperation);
+                HttpResponseMessage response = await client.GetRawAsync("/adjustments", listOperation);
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement jsonElement = JsonDocument.Parse(jsonString).RootElement;
 
@@ -36,7 +29,7 @@ namespace PaddleWrapper.Resources.Adjustments
                 JsonElement meta = jsonElement.GetProperty("meta");
 
                 Paginator paginator = new(
-                    _client.HttpClient,
+                    client.HttpClient,
                     Pagination.FromJson(meta),
                     typeof(AdjustmentCollection)
                 );
@@ -61,7 +54,7 @@ namespace PaddleWrapper.Resources.Adjustments
         {
             try
             {
-                HttpResponseMessage response = await _client.GetRawAsync($"/adjustments/{id}");
+                HttpResponseMessage response = await client.GetRawAsync($"/adjustments/{id}");
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
@@ -90,7 +83,7 @@ namespace PaddleWrapper.Resources.Adjustments
         {
             try
             {
-                HttpResponseMessage response = await _client.PostRawAsync("/adjustments", createOperation);
+                HttpResponseMessage response = await client.PostRawAsync("/adjustments", createOperation);
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 

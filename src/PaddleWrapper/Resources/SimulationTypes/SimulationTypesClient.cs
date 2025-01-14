@@ -6,52 +6,46 @@ using PaddleWrapper.Exceptions.SdkExceptions;
 using PaddleWrapper.Resources.SimulationTypes.Operations;
 using System.Text.Json;
 
-namespace PaddleWrapper.Resources.SimulationTypes;
-
-public class SimulationTypesClient
+namespace PaddleWrapper.Resources.SimulationTypes
 {
-    private readonly Client _client;
-
-    public SimulationTypesClient(Client client)
+    public class SimulationTypesClient(Client client)
     {
-        _client = client;
-    }
-
-    public async Task<SimulationTypeCollection> ListAsync(ListSimulationTypes listOperation = null)
-    {
-        try
+        public async Task<SimulationTypeCollection> ListAsync(ListSimulationTypes listOperation = null)
         {
-            HttpResponseMessage response = await _client.GetRawAsync("/simulation-types", listOperation);
-            string jsonString = await response.Content.ReadAsStringAsync();
-            JsonElement root = JsonDocument.Parse(jsonString).RootElement;
-
-            if (!response.IsSuccessStatusCode)
+            try
             {
-                throw SimulationTypeApiError.FromJson(root);
+                HttpResponseMessage response = await client.GetRawAsync("/simulation-types", listOperation);
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement root = JsonDocument.Parse(jsonString).RootElement;
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw SimulationTypeApiError.FromJson(root);
+                }
+
+                JsonElement data = root.GetProperty("data");
+                JsonElement meta = root.GetProperty("meta");
+
+                Paginator paginator = new(
+                    client.HttpClient,
+                    Pagination.FromJson(meta),
+                    typeof(SimulationTypeCollection)
+                );
+
+                return SimulationTypeCollection.FromJson(data, paginator);
             }
-
-            JsonElement data = root.GetProperty("data");
-            JsonElement meta = root.GetProperty("meta");
-
-            Paginator paginator = new(
-                _client.HttpClient,
-                Pagination.FromJson(meta),
-                typeof(SimulationTypeCollection)
-            );
-
-            return SimulationTypeCollection.FromJson(data, paginator);
-        }
-        catch (JsonException ex)
-        {
-            throw new MalformedResponse("Failed to parse API response", ex);
-        }
-        catch (SimulationTypeApiError)
-        {
-            throw;
-        }
-        catch (Exception ex)
-        {
-            throw new SdkException("An unexpected error occurred", ex);
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (SimulationTypeApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
     }
 }

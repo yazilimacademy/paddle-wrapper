@@ -9,21 +9,14 @@ using System.Text.Json;
 
 namespace PaddleWrapper.Resources.NotificationSettings
 {
-    public class NotificationSettingsClient
+    public class NotificationSettingsClient(Client client)
     {
-        private readonly Client _client;
-
-        public NotificationSettingsClient(Client client)
-        {
-            _client = client;
-        }
-
         public async Task<NotificationSettingCollection> ListAsync(ListNotificationSettings listOperation = null)
         {
             try
             {
                 listOperation ??= new ListNotificationSettings();
-                HttpResponseMessage response = await _client.GetRawAsync("/notification-settings", listOperation);
+                HttpResponseMessage response = await client.GetRawAsync("/notification-settings", listOperation);
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement jsonElement = JsonDocument.Parse(jsonString).RootElement;
 
@@ -36,7 +29,7 @@ namespace PaddleWrapper.Resources.NotificationSettings
                 JsonElement meta = jsonElement.GetProperty("meta");
 
                 Paginator paginator = new(
-                    _client.HttpClient,
+                    client.HttpClient,
                     Pagination.FromJson(meta),
                     typeof(NotificationSettingCollection)
                 );
@@ -61,7 +54,7 @@ namespace PaddleWrapper.Resources.NotificationSettings
         {
             try
             {
-                HttpResponseMessage response = await _client.GetRawAsync($"/notification-settings/{id}");
+                HttpResponseMessage response = await client.GetRawAsync($"/notification-settings/{id}");
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
@@ -90,7 +83,7 @@ namespace PaddleWrapper.Resources.NotificationSettings
         {
             try
             {
-                HttpResponseMessage response = await _client.PostRawAsync("/notification-settings", createOperation);
+                HttpResponseMessage response = await client.PostRawAsync("/notification-settings", createOperation);
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
@@ -119,7 +112,7 @@ namespace PaddleWrapper.Resources.NotificationSettings
         {
             try
             {
-                HttpResponseMessage response = await _client.PatchRawAsync($"/notification-settings/{id}", operation);
+                HttpResponseMessage response = await client.PatchRawAsync($"/notification-settings/{id}", operation);
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
@@ -148,7 +141,7 @@ namespace PaddleWrapper.Resources.NotificationSettings
         {
             try
             {
-                HttpResponseMessage response = await _client.DeleteRawAsync($"/notification-settings/{id}");
+                HttpResponseMessage response = await client.DeleteRawAsync($"/notification-settings/{id}");
 
                 if (!response.IsSuccessStatusCode)
                 {

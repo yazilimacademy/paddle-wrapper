@@ -5,43 +5,37 @@ using PaddleWrapper.Exceptions.SdkExceptions;
 using PaddleWrapper.Resources.CustomerPortalSessions.Operations;
 using System.Text.Json;
 
-namespace PaddleWrapper.Resources.CustomerPortalSessions;
-
-public class CustomerPortalSessionsClient
+namespace PaddleWrapper.Resources.CustomerPortalSessions
 {
-    private readonly Client _client;
-
-    public CustomerPortalSessionsClient(Client client)
+    public class CustomerPortalSessionsClient(Client client)
     {
-        _client = client;
-    }
-
-    public async Task<CustomerPortalSession> CreateAsync(string customerId, CreateCustomerPortalSession createOperation)
-    {
-        try
+        public async Task<CustomerPortalSession> CreateAsync(string customerId, CreateCustomerPortalSession createOperation)
         {
-            HttpResponseMessage response = await _client.PostRawAsync($"/customers/{customerId}/portal-sessions", createOperation);
-            string jsonString = await response.Content.ReadAsStringAsync();
-            JsonElement root = JsonDocument.Parse(jsonString).RootElement;
-
-            if (!response.IsSuccessStatusCode)
+            try
             {
-                throw CustomerPortalSessionApiError.FromJson(root);
-            }
+                HttpResponseMessage response = await client.PostRawAsync($"/customers/{customerId}/portal-sessions", createOperation);
+                string jsonString = await response.Content.ReadAsStringAsync();
+                JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
-            return CustomerPortalSession.FromJson(root.GetProperty("data"));
-        }
-        catch (JsonException ex)
-        {
-            throw new MalformedResponse("Failed to parse API response", ex);
-        }
-        catch (CustomerPortalSessionApiError)
-        {
-            throw;
-        }
-        catch (Exception ex)
-        {
-            throw new SdkException("An unexpected error occurred", ex);
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw CustomerPortalSessionApiError.FromJson(root);
+                }
+
+                return CustomerPortalSession.FromJson(root.GetProperty("data"));
+            }
+            catch (JsonException ex)
+            {
+                throw new MalformedResponse("Failed to parse API response", ex);
+            }
+            catch (CustomerPortalSessionApiError)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new SdkException("An unexpected error occurred", ex);
+            }
         }
     }
 }

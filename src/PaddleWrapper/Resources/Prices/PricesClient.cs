@@ -9,21 +9,14 @@ using System.Text.Json;
 
 namespace PaddleWrapper.Resources.Prices
 {
-    public class PricesClient
+    public class PricesClient(Client client)
     {
-        private readonly Client _client;
-
-        public PricesClient(Client client)
-        {
-            _client = client;
-        }
-
         public async Task<PriceCollection> ListAsync(ListPrices listOperation = null)
         {
             try
             {
                 listOperation ??= new ListPrices();
-                HttpResponseMessage response = await _client.GetRawAsync("/prices", listOperation);
+                HttpResponseMessage response = await client.GetRawAsync("/prices", listOperation);
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement jsonElement = JsonDocument.Parse(jsonString).RootElement;
 
@@ -36,7 +29,7 @@ namespace PaddleWrapper.Resources.Prices
                 JsonElement meta = jsonElement.GetProperty("meta");
 
                 Paginator paginator = new(
-                    _client.HttpClient,
+                    client.HttpClient,
                     Pagination.FromJson(meta),
                     typeof(PriceCollection)
                 );
@@ -61,7 +54,7 @@ namespace PaddleWrapper.Resources.Prices
         {
             try
             {
-                HttpResponseMessage response = await _client.GetRawAsync($"/prices/{id}");
+                HttpResponseMessage response = await client.GetRawAsync($"/prices/{id}");
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
@@ -90,7 +83,7 @@ namespace PaddleWrapper.Resources.Prices
         {
             try
             {
-                HttpResponseMessage response = await _client.PostRawAsync("/prices", createOperation);
+                HttpResponseMessage response = await client.PostRawAsync("/prices", createOperation);
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
@@ -119,7 +112,7 @@ namespace PaddleWrapper.Resources.Prices
         {
             try
             {
-                HttpResponseMessage response = await _client.PatchRawAsync($"/prices/{id}", operation);
+                HttpResponseMessage response = await client.PatchRawAsync($"/prices/{id}", operation);
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 

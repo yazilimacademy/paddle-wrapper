@@ -17,11 +17,26 @@ public class TimePeriod
         Frequency = frequency;
     }
 
-    public static TimePeriod FromJson(JsonElement element)
+    public static TimePeriod? FromJson(JsonElement element)
     {
+        if (element.ValueKind == JsonValueKind.Null)
+        {
+            return null;
+        }
+
+        if (!element.TryGetProperty("interval", out JsonElement intervalElement))
+        {
+            throw new JsonException("TimePeriod interval is required");
+        }
+
+        if (!element.TryGetProperty("frequency", out JsonElement frequencyElement))
+        {
+            throw new JsonException("TimePeriod frequency is required");
+        }
+
         return new TimePeriod(
-            JsonSerializer.Deserialize<Interval>(element.GetProperty("interval").GetRawText()),
-            element.GetProperty("frequency").GetInt32()
+            JsonSerializer.Deserialize<Interval>(intervalElement.GetRawText()),
+            frequencyElement.GetInt32()
         );
     }
 }

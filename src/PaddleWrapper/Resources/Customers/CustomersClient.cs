@@ -10,21 +10,14 @@ using System.Text.Json;
 
 namespace PaddleWrapper.Resources.Customers
 {
-    public class CustomersClient
+    public class CustomersClient(Client client)
     {
-        private readonly Client _client;
-
-        public CustomersClient(Client client)
-        {
-            _client = client;
-        }
-
         public async Task<CustomerCollection> ListAsync(ListCustomers listOperation = null)
         {
             try
             {
                 listOperation ??= new ListCustomers();
-                HttpResponseMessage response = await _client.GetRawAsync("/customers", listOperation);
+                HttpResponseMessage response = await client.GetRawAsync("/customers", listOperation);
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement jsonElement = JsonDocument.Parse(jsonString).RootElement;
 
@@ -37,7 +30,7 @@ namespace PaddleWrapper.Resources.Customers
                 JsonElement meta = jsonElement.GetProperty("meta");
 
                 Paginator paginator = new(
-                    _client.HttpClient,
+                    client.HttpClient,
                     Pagination.FromJson(meta),
                     typeof(CustomerCollection)
                 );
@@ -62,7 +55,7 @@ namespace PaddleWrapper.Resources.Customers
         {
             try
             {
-                HttpResponseMessage response = await _client.GetRawAsync($"/customers/{id}");
+                HttpResponseMessage response = await client.GetRawAsync($"/customers/{id}");
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
@@ -91,7 +84,7 @@ namespace PaddleWrapper.Resources.Customers
         {
             try
             {
-                HttpResponseMessage response = await _client.PostRawAsync("/customers", createOperation);
+                HttpResponseMessage response = await client.PostRawAsync("/customers", createOperation);
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
@@ -120,7 +113,7 @@ namespace PaddleWrapper.Resources.Customers
         {
             try
             {
-                HttpResponseMessage response = await _client.PatchRawAsync($"/customers/{id}", operation);
+                HttpResponseMessage response = await client.PatchRawAsync($"/customers/{id}", operation);
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
@@ -153,13 +146,13 @@ namespace PaddleWrapper.Resources.Customers
         public async Task<CreditBalanceCollection> GetCreditBalancesAsync(string id, ListCreditBalances operation = null)
         {
             operation ??= new ListCreditBalances();
-            JsonDocument response = await _client.Get($"/customers/{id}/credit-balances", operation);
+            JsonDocument response = await client.Get($"/customers/{id}/credit-balances", operation);
             return CreditBalanceCollection.FromJson(response.RootElement.GetProperty("data"), null);
         }
 
         public async Task<CustomerAuthToken> GenerateAuthTokenAsync(string id)
         {
-            JsonDocument response = await _client.Post($"/customers/{id}/auth-token", null);
+            JsonDocument response = await client.Post($"/customers/{id}/auth-token", null);
             return CustomerAuthToken.FromJson(response.RootElement.GetProperty("data"));
         }
     }

@@ -9,21 +9,14 @@ using System.Text.Json;
 
 namespace PaddleWrapper.Resources.Businesses
 {
-    public class BusinessesClient
+    public class BusinessesClient(Client client)
     {
-        private readonly Client _client;
-
-        public BusinessesClient(Client client)
-        {
-            _client = client;
-        }
-
         public async Task<BusinessCollection> ListAsync(string customerId, ListBusinesses listOperation = null)
         {
             try
             {
                 listOperation ??= new ListBusinesses();
-                HttpResponseMessage response = await _client.GetRawAsync($"/customers/{customerId}/businesses", listOperation);
+                HttpResponseMessage response = await client.GetRawAsync($"/customers/{customerId}/businesses", listOperation);
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement jsonElement = JsonDocument.Parse(jsonString).RootElement;
 
@@ -36,7 +29,7 @@ namespace PaddleWrapper.Resources.Businesses
                 JsonElement meta = jsonElement.GetProperty("meta");
 
                 Paginator paginator = new(
-                    _client.HttpClient,
+                    client.HttpClient,
                     Pagination.FromJson(meta),
                     typeof(BusinessCollection)
                 );
@@ -61,7 +54,7 @@ namespace PaddleWrapper.Resources.Businesses
         {
             try
             {
-                HttpResponseMessage response = await _client.GetRawAsync($"/customers/{customerId}/businesses/{id}");
+                HttpResponseMessage response = await client.GetRawAsync($"/customers/{customerId}/businesses/{id}");
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
@@ -90,7 +83,7 @@ namespace PaddleWrapper.Resources.Businesses
         {
             try
             {
-                HttpResponseMessage response = await _client.PostRawAsync($"/customers/{customerId}/businesses", createOperation);
+                HttpResponseMessage response = await client.PostRawAsync($"/customers/{customerId}/businesses", createOperation);
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
@@ -119,7 +112,7 @@ namespace PaddleWrapper.Resources.Businesses
         {
             try
             {
-                HttpResponseMessage response = await _client.PatchRawAsync($"/customers/{customerId}/businesses/{id}", operation);
+                HttpResponseMessage response = await client.PatchRawAsync($"/customers/{customerId}/businesses/{id}", operation);
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 

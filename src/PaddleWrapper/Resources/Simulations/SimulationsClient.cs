@@ -9,21 +9,14 @@ using System.Text.Json;
 
 namespace PaddleWrapper.Resources.Simulations
 {
-    public class SimulationsClient
+    public class SimulationsClient(Client client)
     {
-        private readonly Client _client;
-
-        public SimulationsClient(Client client)
-        {
-            _client = client;
-        }
-
         public async Task<SimulationCollection> ListAsync(ListSimulations listOperation = null)
         {
             try
             {
                 listOperation ??= new ListSimulations();
-                HttpResponseMessage response = await _client.GetRawAsync("/simulations", listOperation);
+                HttpResponseMessage response = await client.GetRawAsync("/simulations", listOperation);
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement jsonElement = JsonDocument.Parse(jsonString).RootElement;
 
@@ -36,7 +29,7 @@ namespace PaddleWrapper.Resources.Simulations
                 JsonElement meta = jsonElement.GetProperty("meta");
 
                 Paginator paginator = new(
-                    _client.HttpClient,
+                    client.HttpClient,
                     Pagination.FromJson(meta),
                     typeof(SimulationCollection)
                 );
@@ -61,7 +54,7 @@ namespace PaddleWrapper.Resources.Simulations
         {
             try
             {
-                HttpResponseMessage response = await _client.GetRawAsync($"/simulations/{id}");
+                HttpResponseMessage response = await client.GetRawAsync($"/simulations/{id}");
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
@@ -90,7 +83,7 @@ namespace PaddleWrapper.Resources.Simulations
         {
             try
             {
-                HttpResponseMessage response = await _client.PostRawAsync("/simulations", createOperation);
+                HttpResponseMessage response = await client.PostRawAsync("/simulations", createOperation);
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
@@ -119,7 +112,7 @@ namespace PaddleWrapper.Resources.Simulations
         {
             try
             {
-                HttpResponseMessage response = await _client.PatchRawAsync($"/simulations/{id}", operation);
+                HttpResponseMessage response = await client.PatchRawAsync($"/simulations/{id}", operation);
                 string jsonString = await response.Content.ReadAsStringAsync();
                 JsonElement root = JsonDocument.Parse(jsonString).RootElement;
 
