@@ -2,9 +2,9 @@ using System.Text.Json;
 
 namespace PaddleWrapper.Exceptions.ApiErrors
 {
-    public class BusinessApiError : ApiError
+    public class ReportApiError : ApiError
     {
-        public BusinessApiError(
+        public ReportApiError(
             string type,
             string code,
             string detail,
@@ -14,10 +14,10 @@ namespace PaddleWrapper.Exceptions.ApiErrors
         {
         }
 
-        public static new BusinessApiError FromJson(JsonElement json)
+        public static new ReportApiError FromJson(JsonElement json)
         {
             JsonElement error = json.GetProperty("error");
-            return new BusinessApiError(
+            return new ReportApiError(
                 type: error.GetProperty("type").GetString(),
                 code: error.GetProperty("code").GetString(),
                 detail: error.GetProperty("detail").GetString(),

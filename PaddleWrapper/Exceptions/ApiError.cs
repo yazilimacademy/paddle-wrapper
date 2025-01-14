@@ -2,48 +2,45 @@ using System.Text.Json;
 
 namespace PaddleWrapper.Exceptions
 {
-    public class ApiError : SdkException
+    public class ApiError : Exception
     {
         public string Type { get; }
-        public string ErrorCode { get; }
+        public string Code { get; }
         public string Detail { get; }
-        public string DocsUrl { get; }
-        public IReadOnlyList<FieldError> FieldErrors { get; }
+        public string DocumentationUrl { get; }
+        public List<FieldError> FieldErrors { get; }
 
         public ApiError(
             string type,
-            string errorCode,
+            string code,
             string detail,
-            string docsUrl,
-            IEnumerable<FieldError> fieldErrors = null) : base(detail)
+            string documentationUrl,
+            List<FieldError> fieldErrors = null) : base(detail)
         {
             Type = type;
-            ErrorCode = errorCode;
+            Code = code;
             Detail = detail;
-            DocsUrl = docsUrl;
-            FieldErrors = fieldErrors?.ToList().AsReadOnly() ?? new List<FieldError>().AsReadOnly();
+            DocumentationUrl = documentationUrl;
+            FieldErrors = fieldErrors ?? new List<FieldError>();
         }
 
-        public static ApiError FromErrorJson(JsonElement json)
+        public static ApiError FromJson(JsonElement json)
         {
-            return FromErrorData(JsonSerializer.Deserialize<Dictionary<string, object>>(json.GetRawText()));
-        }
-
-        public static ApiError FromErrorData(IDictionary<string, object> error)
-        {
-            IEnumerable<FieldError> fieldErrors = error.ContainsKey("errors")
-                ? ((IEnumerable<IDictionary<string, object>>)error["errors"])
-                    .Select(fe => new FieldError(
-                        fe["field"].ToString(),
-                        fe["message"].ToString()))
-                : Enumerable.Empty<FieldError>();
-
+            JsonElement error = json.GetProperty("error");
             return new ApiError(
-                error["type"].ToString(),
-                error["code"].ToString(),
-                error["detail"].ToString(),
-                error["documentation_url"].ToString(),
-                fieldErrors);
+                type: error.GetProperty("type").GetString(),
+                code: error.GetProperty("code").GetString(),
+                detail: error.GetProperty("detail").GetString(),
+                documentationUrl: error.GetProperty("documentation_url").GetString(),
+                fieldErrors: error.TryGetProperty("field_errors", out JsonElement fieldErrors)
+                    ? fieldErrors.EnumerateArray()
+                        .Select(fe => new FieldError(
+                            field: fe.GetProperty("field").GetString(),
+                            code: fe.GetProperty("code").GetString(),
+                            message: fe.GetProperty("message").GetString()))
+                        .ToList()
+                    : null
+            );
         }
     }
 }

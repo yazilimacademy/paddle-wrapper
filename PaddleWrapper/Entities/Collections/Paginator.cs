@@ -30,7 +30,7 @@ namespace PaddleWrapper.Entities.Collections
             if (!response.IsSuccessStatusCode)
             {
                 JsonElement jsonError = JsonDocument.Parse(content).RootElement;
-                throw ApiError.FromErrorJson(jsonError);
+                throw ApiError.FromJson(jsonError);
             }
 
             JsonElement jsonElement = JsonDocument.Parse(content).RootElement;

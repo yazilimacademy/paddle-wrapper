@@ -1,15 +1,13 @@
-using System.Text.Json;
-
 namespace PaddleWrapper.Exceptions.SdkExceptions
 {
     public class MalformedResponse : SdkException
     {
-        public JsonException JsonException { get; }
-
-        public MalformedResponse(JsonException exception)
-            : base(exception.Message, exception)
+        public MalformedResponse(string message) : base(message)
         {
-            JsonException = exception;
+        }
+
+        public MalformedResponse(string message, Exception innerException) : base(message, innerException)
+        {
         }
     }
 }

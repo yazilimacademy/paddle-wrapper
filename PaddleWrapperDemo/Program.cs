@@ -2,6 +2,9 @@
 using PaddleWrapper.Entities;
 using PaddleWrapper.Entities.Collections;
 using PaddleWrapper.Resources.Customers;
+using PaddleWrapper.Exceptions;
+using PaddleWrapper.Exceptions.ApiErrors;
+using PaddleWrapper.Exceptions.SdkExceptions;
 using Environment = PaddleWrapper.Environment;
 
 class Program
@@ -31,9 +34,48 @@ class Program
                 Console.WriteLine("------------------------");
             }
         }
+        catch (CustomerApiError ex)
+        {
+            Console.WriteLine($"Müşteri API Hatası:");
+            Console.WriteLine($"Tip: {ex.Type}");
+            Console.WriteLine($"Kod: {ex.Code}");
+            Console.WriteLine($"Detay: {ex.Detail}");
+            Console.WriteLine($"Dokümantasyon: {ex.DocumentationUrl}");
+            
+            if (ex.FieldErrors?.Any() == true)
+            {
+                Console.WriteLine("Alan Hataları:");
+                foreach (var fieldError in ex.FieldErrors)
+                {
+                    Console.WriteLine($"- Alan: {fieldError.Field}");
+                    Console.WriteLine($"  Kod: {fieldError.Code}");
+                    Console.WriteLine($"  Mesaj: {fieldError.Message}");
+                }
+            }
+        }
+        catch (ApiError ex)
+        {
+            Console.WriteLine($"API Hatası:");
+            Console.WriteLine($"Tip: {ex.Type}");
+            Console.WriteLine($"Kod: {ex.Code}");
+            Console.WriteLine($"Detay: {ex.Detail}");
+            Console.WriteLine($"Dokümantasyon: {ex.DocumentationUrl}");
+        }
+        catch (MalformedResponse ex)
+        {
+            Console.WriteLine($"Hatalı Yanıt Hatası: {ex.Message}");
+            if (ex.InnerException != null)
+            {
+                Console.WriteLine($"İç Hata: {ex.InnerException.Message}");
+            }
+        }
+        catch (SdkException ex)
+        {
+            Console.WriteLine($"SDK Hatası: {ex.Message}");
+        }
         catch (Exception ex)
         {
-            Console.WriteLine($"Hata oluştu: {ex.Message}");
+            Console.WriteLine($"Beklenmeyen Hata: {ex.Message}");
             Console.WriteLine($"Stack Trace: {ex.StackTrace}");
         }
 

@@ -1,15 +1,36 @@
+using System.Text.Json;
+
 namespace PaddleWrapper.Exceptions.ApiErrors
 {
     public class TransactionApiError : ApiError
     {
         public TransactionApiError(
             string type,
-            string errorCode,
+            string code,
             string detail,
-            string docsUrl,
-            IEnumerable<FieldError> fieldErrors = null)
-            : base(type, errorCode, detail, docsUrl, fieldErrors)
+            string documentationUrl,
+            List<FieldError> fieldErrors = null)
+            : base(type, code, detail, documentationUrl, fieldErrors)
         {
+        }
+
+        public static new TransactionApiError FromJson(JsonElement json)
+        {
+            JsonElement error = json.GetProperty("error");
+            return new TransactionApiError(
+                type: error.GetProperty("type").GetString(),
+                code: error.GetProperty("code").GetString(),
+                detail: error.GetProperty("detail").GetString(),
+                documentationUrl: error.GetProperty("documentation_url").GetString(),
+                fieldErrors: error.TryGetProperty("field_errors", out JsonElement fieldErrors)
+                    ? fieldErrors.EnumerateArray()
+                        .Select(fe => new FieldError(
+                            field: fe.GetProperty("field").GetString(),
+                            code: fe.GetProperty("code").GetString(),
+                            message: fe.GetProperty("message").GetString()))
+                        .ToList()
+                    : null
+            );
         }
     }
 }
