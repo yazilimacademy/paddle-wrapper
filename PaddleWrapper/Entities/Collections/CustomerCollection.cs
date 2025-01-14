@@ -21,7 +21,8 @@ namespace PaddleWrapper.Entities.Collections
 
         public static CustomerCollection From(Dictionary<string, object> data, Paginator? paginator = null)
         {
-            return FromJson(JsonSerializer.Deserialize<JsonElement>(data), paginator);
+            JsonElement json = JsonSerializer.SerializeToElement(data);
+            return FromJson(json, paginator);
         }
     }
 }
