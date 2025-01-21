@@ -18,7 +18,6 @@ namespace PaddleWrapper.Resources.Events
                 listOperation ??= new ListEvents();
                 HttpResponseMessage response = await client.GetRawAsync("/events", listOperation);
                 string jsonString = await response.Content.ReadAsStringAsync();
-                Console.WriteLine(jsonString);
                 JsonElement jsonElement = JsonDocument.Parse(jsonString).RootElement;
 
                 if (!response.IsSuccessStatusCode)
